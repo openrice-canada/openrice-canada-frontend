@@ -1,0 +1,88 @@
+{
+  "name": "openrice-frontend",
+  "homepage": "https://github.cantek-openrice.io/openrice-can-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "@supabase/supabase-js": "^2.38.4",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.57",
+    "@types/react": "^18.2.24",
+    "@types/react-dom": "^18.2.8",
+    "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.5.1",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.51.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "mapbox-gl": "^2.15.0",
+    "notistack": "^3.0.1",
+    "react": "^18.2.0",
+    "react-content-loader": "^6.2.1",
+    "react-datepicker": "^4.21.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "react-icons": "^4.11.0",
+    "react-map-gl": "^7.1.6",
+    "react-router-dom": "^6.16.0",
+    "react-scripts": "5.0.1",
+    "react-select": "^5.7.7",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "dev": "BROWSER=NONE PORT=3865 react-scripts start",
+    "start": "BROWSER=NONE PORT=3870 react-scripts start",
+    "build": "react-scripts build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "no-empty-function": "off",
+      "no-unused-vars": "off",
+      "indent": [
+        "error",
+        2,
+        {}
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not safari < 10",
+      "not chrome < 51",
+      "not android < 5",
+      "not ie < 12"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/google.maps": "^3.54.3",
+    "@types/react-datepicker": "^4.19.1",
+    "tailwindcss": "^3.3.3"
+  }
+}

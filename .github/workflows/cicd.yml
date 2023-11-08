@@ -1,0 +1,23 @@
+name: cicd
+on:
+  push:
+    branches:
+      - production
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install and Build
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
