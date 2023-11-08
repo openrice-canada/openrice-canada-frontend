@@ -1,7 +1,7 @@
 {
-  "name": "openrice-frontend",
-  "homepage": "https://github.cantek-openrice.io/openrice-can-frontend",
-  "version": "0.1.0",
+  "name": "openrice_canada_frontend",
+  "homepage": "https://openricecanadafrontend.vercel.app",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
