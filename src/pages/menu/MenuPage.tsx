@@ -100,7 +100,7 @@ const MenuPage = () => {
         {userList &&
           userList.length > 0 &&
           userList.map((user) => (
-            <div key={user.userId}>
+            <div key={user.user_id}>
               <p>{user.username}</p>
               <div className="text-center">
                 <textarea className="border border-black px-3 py-2 rounded-md max-w-xl w-full h-40"></textarea>

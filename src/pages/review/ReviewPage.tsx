@@ -49,7 +49,7 @@ const ReviewPage: React.FC = () => {
     <div className="container justify-center mb-8 px-4 gap-8 mx-auto mt-10">
       <div className="relative">
         <img
-          src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${review?.restaurantId}.jpg`}
+          src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${review?.restaurant_id}.jpg`}
           alt="hero"
           className="w-full h-80 object-cover rounded-lg mb-4 grayscale-[50%]"
         />
@@ -66,12 +66,12 @@ const ReviewPage: React.FC = () => {
           )}
           <div>
             {review && (
-              <div className="p-4" key={review.restaurantId}>
+              <div className="p-4" key={review.restaurant_id}>
                 <p className="text-justify">{review.content}</p>
                 <ReviewRow
                   text={
                     "Created at " +
-                    format(new Date(review.createdAt), "dd MMM yyyy HH:mm:ss")
+                    format(new Date(review.created_at), "dd MMM yyyy HH:mm:ss")
                   }
                   icon={<IoTime />}
                 />
@@ -111,7 +111,7 @@ const ReviewPage: React.FC = () => {
                 Visited Date
               </h5>
               <ReviewRow
-                text={format(new Date(review.createdAt), "dd MMM yyyy")}
+                text={format(new Date(review.created_at), "dd MMM yyyy")}
                 icon={<IoTime />}
               />
               <h5 className="border-b border-orange-500 my-2 text-lg">

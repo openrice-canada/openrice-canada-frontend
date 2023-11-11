@@ -1,25 +1,25 @@
 export type Review = {
-  reviewId: string;
-  userId: string;
-  restaurantId: string;
+  review_id: string;
+  user_id: string;
+  restaurant_id: string;
   rating: number;
   title: string;
-  visitDate: string;
+  visit_date: string;
   content: string;
   spending: number;
-  createdAt: string;
-  modifiedAt: string;
+  created_at: string;
+  modified_at: string;
   active: boolean;
   username: string;
   restaurantName: string;
 };
 
 export type CreateReviewRequest = {
-  userId: string;
-  restaurantId: string;
+  user_id: string;
+  restaurant_id: string;
   rating: number;
   title: string;
-  visitDate: Date;
+  visit_date: Date;
   content: string;
   spending: number;
-}
+};

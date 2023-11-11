@@ -1,9 +1,9 @@
 export type User = {
-    userId: string;
-    email: string;
-    username: string;
-    password: string;
-    createdAt: Date;
-    modifiedAt: Date;
-    restaurantId: string;
+  user_id: string;
+  email: string;
+  username: string;
+  password: string;
+  created_at: Date;
+  modified_at: Date;
+  restaurant_id: string;
 };

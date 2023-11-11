@@ -1,5 +1,5 @@
 export type Dish = {
-    dishId: string;
-    name: string;
-    createdAt: Date;
+  dish_id: string;
+  name: string;
+  created_at: Date;
 };

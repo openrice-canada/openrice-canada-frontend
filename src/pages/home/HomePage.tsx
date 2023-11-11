@@ -64,7 +64,7 @@ export default function HomePage(): JSX.Element {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {restaurantList.map((restaurant) => (
-            <RestaurantCard {...restaurant} key={restaurant.restaurantId} />
+            <RestaurantCard {...restaurant} key={restaurant.restaurant_id} />
           ))}
         </div>
       </div>

@@ -16,13 +16,13 @@ type AddReviewModalProps = {
   isShown: boolean;
   setIsShown: React.Dispatch<React.SetStateAction<boolean>>;
   formRef: React.MutableRefObject<HTMLDivElement | null>;
-  restaurantId?: string;
+  restaurant_id?: string;
 };
 
 export type ReviewForm = {
   rating: number;
   title: string;
-  visitDate: string;
+  visit_date: string;
   content: string;
   spending: number;
   photo?: any;
@@ -39,42 +39,40 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
       content: "",
       spending: 0,
       rating: 0,
-      visitDate: "",
+      visit_date: "",
       photo: "",
     } as ReviewForm,
   });
 
   const addReview = async (review: ReviewForm) => {
-    const res = await postReview({
-      title: review.title,
-      content: review.content,
-      spending: review.spending,
-      rating: review.rating,
-      restaurantId: props?.restaurantId as string,
-      userId: context?.userInfo?.userId as string,
-      visitDate: new Date(review.visitDate),
-    });
-    // console.log(res);
-    // console.log(review.photo);
-    await uploadImage(
-      review.photo,
-      props?.restaurantId as string,
-      "reviews",
-      res.reviewId
-    );
-    await uploadImage(
-      review.photo,
-      props?.restaurantId as string,
-      "menus",
-      res.reviewId
-    );
-    // navigate(`/restaurant/${props?.restaurantId}`);
-    // navigate(0);
-    enqueueSnackbar("Review added successfully!", { variant: "success" });
-    setTimeout(() => {
-      navigate(`/restaurant/${props?.restaurantId}`);
-      navigate(0);
-    }, 1000);
+    if (context?.userInfo?.user_id) {
+      const res = await postReview({
+        title: review.title,
+        content: review.content,
+        spending: review.spending,
+        rating: review.rating,
+        restaurant_id: props?.restaurant_id as string,
+        user_id: context?.userInfo?.user_id as string,
+        visit_date: new Date(review.visit_date),
+      });
+      await uploadImage(
+        review.photo,
+        props?.restaurant_id as string,
+        "reviews",
+        res.review_id
+      );
+      await uploadImage(
+        review.photo,
+        props?.restaurant_id as string,
+        "menus",
+        res.review_id
+      );
+      enqueueSnackbar("Review added successfully!", { variant: "success" });
+      setTimeout(() => {
+        navigate(`/restaurant/${props?.restaurant_id}`);
+        navigate(0);
+      }, 1000);
+    }
   };
 
   if (!props.isShown) return null;
@@ -163,7 +161,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
               />
               <Controller
                 control={control}
-                name="visitDate"
+                name="visit_date"
                 render={({ field }) => (
                   <TextInput
                     value={field.value}
