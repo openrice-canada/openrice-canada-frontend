@@ -6,11 +6,11 @@ export type User = {
 };
 
 export type UserEntity = {
-  userId: string;
+  user_id: string;
   email: string;
   username: string;
   password: string;
-  createdAt: string;
+  created_at: string;
   modifiedAt: string;
   active: boolean;
   role: string;
@@ -23,8 +23,7 @@ export type UserEntity = {
   accountNonExpired: boolean;
   accountNonLocked: boolean;
   credentialsNonExpired: boolean;
-}
-
+};
 
 export type AuthenticateResponse = {
   token?: string;

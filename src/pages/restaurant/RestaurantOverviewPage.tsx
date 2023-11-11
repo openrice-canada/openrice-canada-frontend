@@ -54,14 +54,14 @@ const RestaurantOverviewPage: React.FC = () => {
     setPhotos(
       reviews.map(
         (review) =>
-          `${process.env.REACT_APP_IMAGE_PREFIX}/reviews/${id}/${review.reviewId}.jpg`
+          `${process.env.REACT_APP_IMAGE_PREFIX}/reviews/${id}/${review.review_id}.jpg`
       )
     );
     setMenus(
       reviews
         .map(
           (review) =>
-            `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.reviewId}.jpg`
+            `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.review_id}.jpg`
         )
         .sort((a, b) => a.localeCompare(b))
     );
@@ -86,7 +86,7 @@ const RestaurantOverviewPage: React.FC = () => {
         isShown={isShownAddReviewModal}
         setIsShown={setIsShownAddReviewModal}
         formRef={formRef}
-        restaurantId={id}
+        restaurant_id={id}
       />
       <div className="max-w-5xl mx-auto px-3 py-3">
         <div className="flex font-semibold justify-between">
@@ -94,7 +94,7 @@ const RestaurantOverviewPage: React.FC = () => {
             <div className="relative w-[400px] h-auto shrink-0 rounded-md overflow-hidden">
               {restaurantDetail && (
                 <img
-                  src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${restaurantDetail.restaurantId}.jpg`}
+                  src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${restaurantDetail.restaurant_id}.jpg`}
                   alt=""
                   width="object-cover"
                 />
@@ -152,7 +152,7 @@ const RestaurantOverviewPage: React.FC = () => {
             {reviews.length > 0 && (
               <div className="grid grid-cols-1 gap-4">
                 {reviews.map((review) => (
-                  <ReviewCard {...review} key={review.reviewId} />
+                  <ReviewCard {...review} key={review.review_id} />
                 ))}
               </div>
             )}

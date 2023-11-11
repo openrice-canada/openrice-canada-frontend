@@ -21,12 +21,12 @@ const ReviewRow = ({ text, icon }: { text: string; icon: React.ReactNode }) => (
 
 const ReviewCard: React.FC<ReviewCardProps> = (props: ReviewCardProps) => {
   return (
-    <Link to={`/review/${props.reviewId}`} className="rounded-md shadow-lg">
+    <Link to={`/review/${props.review_id}`} className="rounded-md shadow-lg">
       <div className="flex flex-col gap-1 px-4 py-6">
         <ReviewRow text={props.username} icon={<IoPerson />} />
         <ReviewRow text={props.title} icon={<IoRestaurant />} />
         <ReviewRow text={props.content} icon={<IoChatbubbleEllipsesSharp />} />
-        <ReviewRow text={props.createdAt} icon={<IoTime />} />
+        <ReviewRow text={props.created_at} icon={<IoTime />} />
         <div className="flex gap-2 items-start">
           <div>{<IoThumbsUpSharp />}</div>
           {Array.from({ length: props.rating }).map((_, index) => (
@@ -38,7 +38,7 @@ const ReviewCard: React.FC<ReviewCardProps> = (props: ReviewCardProps) => {
         <ReviewRow
           text={
             "Created at " +
-            format(new Date(props.createdAt), "dd MMM yyyy HH:mm:ss")
+            format(new Date(props.created_at), "dd MMM yyyy HH:mm:ss")
           }
           icon={<IoTime />}
         />

@@ -1,5 +1,5 @@
 export type PaymentMethod = {
-    paymentMethodId: string;
-    name: string;
-    createdAt: Date;
+  payment_method_id: string;
+  name: string;
+  created_at: Date;
 };

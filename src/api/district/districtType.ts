@@ -1,5 +1,5 @@
 export type District = {
-    districtId: string;
-    name: string;
-    createdAt: Date;
+  district_id: string;
+  name: string;
+  created_at: Date;
 };
