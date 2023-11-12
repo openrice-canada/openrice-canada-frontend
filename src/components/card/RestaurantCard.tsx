@@ -18,7 +18,7 @@ const RestaurantCard: React.FC<Restaurant> = (props: Restaurant) => {
   return (
     <Link
       to={`/restaurant/${props.restaurant_id}`}
-      className="rounded-md shadow-lg hover:bg-slate-200 hover:scale-110 duration-300"
+      className="rounded-md shadow-lg hover:bg-slate-200 hover:scale-110 duration-500"
     >
       <img
         src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${props.restaurant_id}.jpg`}

@@ -19,7 +19,7 @@ const SearchInput: React.FC<SearchInputProps> = (props) => {
       />
       <button
         type="submit"
-        className="bg-gray-700 h-full w-14 flex justify-center items-center rounded-tr-md rounded-br-md hover:scale-110 hover:rounded-sm duration-300"
+        className="bg-gray-700 h-full w-14 flex justify-center items-center rounded-tr-md rounded-br-md hover:scale-110 hover:rounded-sm duration-500"
       >
         <IoSearch color="#FFFFFF" />
       </button>
