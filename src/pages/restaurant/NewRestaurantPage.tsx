@@ -21,8 +21,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
-
-const NewRestaurantPage = () => {
+const NewRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
   const [dishes, setDishes] = useState<Dish[]>([]);

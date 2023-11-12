@@ -56,7 +56,7 @@ export default function HomePage(): JSX.Element {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-center font-bold text-2xl">Latest Restaurants</h1>
           <button
-            className="text-slate-600 hover:text-slate-700 font-semibold"
+            className="text-slate-600 hover:text-slate-700 font-semibold hover:bg-slate-200 rounded-lg p-2"
             onClick={() => navigate("/restaurant")}
           >
             View More

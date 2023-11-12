@@ -20,9 +20,9 @@ export type UserEntity = {
       authority: string;
     }
   ];
-  accountNonExpired: boolean;
-  accountNonLocked: boolean;
-  credentialsNonExpired: boolean;
+  accountNonExpired?: boolean;
+  accountNonLocked?: boolean;
+  credentialsNonExpired?: boolean;
 };
 
 export type AuthenticateResponse = {

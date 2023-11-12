@@ -109,20 +109,9 @@ const RestaurantOverviewPage: React.FC = () => {
                 <div className="text-lg font-semibold">
                   {restaurantDetail?.address}
                 </div>
-                <div>{restaurantDetail.intro}</div>
+                <div className="text-justify">{restaurantDetail.intro}</div>
               </div>
             )}
-          </div>
-          <div className="flex gap-4">
-            {/* <button className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50">
-              <IoBookmarkOutline size={20} />
-            </button> */}
-            <button
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50"
-              onClick={() => setIsShownAddReviewModal(true)}
-            >
-              <IoChatbubbleOutline size={20} />
-            </button>
           </div>
         </div>
         <div className="flex justify-center">
@@ -141,12 +130,14 @@ const RestaurantOverviewPage: React.FC = () => {
           <>
             <div className="flex gap-4 items-center my-4">
               <h1 className="text-2xl font-bold">Review</h1>
-              {/* <button
-                type="button"
-                className="bg-slate-600 text-white px-2 py-1 rounded-md"
-              >
-                Add Review
-              </button> */}
+              <div className="flex gap-4">
+                <button
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50"
+                  onClick={() => setIsShownAddReviewModal(true)}
+                >
+                  <IoChatbubbleOutline size={20} />
+                </button>
+              </div>
             </div>
             {reviews.length === 0 && <div>No review in this restaurant</div>}
             {reviews.length > 0 && (
@@ -166,7 +157,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {photos.map((photo, index) => (
                   <div
-                    className="shadow-md cursor-pointer hover:bg-slate-50"
+                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200 hover:scale-110 transition duration-500"
                     onClick={() => openPopUp(photo)}
                     key={`photo${index}`}
                   >
@@ -199,7 +190,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {menus.map((menu, index) => (
                   <div
-                    className="shadow-md cursor-pointer hover:bg-slate-50"
+                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200 hover:scale-110 transition duration-500"
                     onClick={() => openPopUp(menu)}
                     key={`menu${index}`}
                   >
