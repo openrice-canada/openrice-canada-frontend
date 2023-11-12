@@ -1,30 +1,47 @@
 import { useForm, Controller } from "react-hook-form";
 import TextInput from "../../components/Input/TextInput";
-import { postUserRegister } from "../../api/auth/authApiIndex";
 import { useNavigate } from "react-router-dom";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../redux/auth/authSlice";
+import { useEffect } from "react";
+import { AppDispatch, IRootState } from "../../store";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const registerSuccess = useSelector(
+    (state: IRootState) => state.auth.registerSuccess
+  );
+  const message = useSelector((state: IRootState) => state.auth.message);
 
   const userRegister = async (user: {
     email: string;
     username: string;
     password: string;
   }) => {
-    const token = await postUserRegister(user);
-    enqueueSnackbar("Sign up successfully", { variant: "success" });
-    if (token.message) {
-      console.error(token.message);
-    } else {
+    dispatch(register(user));
+  };
+
+  useEffect(() => {
+    if (registerSuccess) {
+      enqueueSnackbar("Sign up successfully", { variant: "success" });
       setTimeout(() => {
-        sessionStorage.setItem("jwt", token.token || "");
         navigate("/");
         navigate(0);
       }, 1000);
+    } else if (registerSuccess === false) {
+      enqueueSnackbar(message, {
+        variant: "error",
+      });
     }
-  };
+
+    setTimeout(() => {
+      closeSnackbar();
+    }, 2000);
+  }, [registerSuccess, navigate, message]);
 
   return (
     <form

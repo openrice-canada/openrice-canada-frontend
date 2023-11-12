@@ -1,10 +1,10 @@
-import { AxiosApiClientBuilder } from "../axiosApiIndex";
+import { AxiosApiClientBuilder } from "../axiosIndex";
 import { District } from "./districtType";
 
 const apiClient = new AxiosApiClientBuilder()
   .withResourceName("/district")
   .build();
 
-export const getDistrictList = async (): Promise<District[]> => {
+export const getDistricts = async (): Promise<District[]> => {
   return apiClient.get("");
 };

@@ -6,7 +6,7 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import RestaurantOverviewButton from "../../components/button/RestaurantOverviewButton";
 import ReviewCard from "../../components/card/ReviewCard";
 import { Review } from "../../api/review/ReviewType";
-import { getReviewListByRestaurantId } from "../../api/review/reviewApiIndex";
+import { getReviewsByRestaurantId } from "../../api/review/reviewApiIndex";
 import AddReviewModal from "../../components/modal/AddReviewModal";
 import RestaurantDetailSkeletonLoader from "../../components/loader/RestaurantDetailSkeletonLoader";
 import PhotoModal from "../../components/modal/PhotoModal";
@@ -42,7 +42,7 @@ const RestaurantOverviewPage: React.FC = () => {
 
     const fetchRestaurantReview = async () => {
       if (!id || !isUUID(id)) return;
-      const data = await getReviewListByRestaurantId(id);
+      const data = await getReviewsByRestaurantId(id);
       setReviews(data);
     };
 
@@ -113,17 +113,6 @@ const RestaurantOverviewPage: React.FC = () => {
               </div>
             )}
           </div>
-          {/* <div className="flex gap-4">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50">
-              <IoBookmarkOutline size={20} />
-            </button>
-            <button
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50"
-              onClick={() => setIsShownAddReviewModal(true)}
-            >
-              <IoChatbubbleOutline size={20} />
-            </button>
-          </div> */}
         </div>
         <div className="flex justify-center">
           <div className="flex gap-16">
@@ -141,12 +130,6 @@ const RestaurantOverviewPage: React.FC = () => {
           <>
             <div className="flex gap-4 items-center my-4">
               <h1 className="text-2xl font-bold">Review</h1>
-              {/* <button
-                type="button"
-                className="bg-slate-600 text-white px-2 py-1 rounded-md"
-              >
-                Add Review
-              </button> */}
               <div className="flex gap-4">
                 <button
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50"

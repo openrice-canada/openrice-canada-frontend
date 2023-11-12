@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
 import SearchInput from "../../components/Input/SearchInput";
-import { getRestaurantList } from "../../api/restaurant/restaurantApiIndex";
+import { getRestaurants } from "../../api/restaurant/restaurantApiIndex";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
 import { useNavigate } from "react-router-dom";
 import RestaurantCard from "../../components/card/RestaurantCard";
@@ -9,15 +9,15 @@ import RestaurantCard from "../../components/card/RestaurantCard";
 export default function HomePage(): JSX.Element {
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm();
-  const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
-  const fetchRestaurantList = async () => {
-    const data = await getRestaurantList({ limit: 6 });
-    setRestaurantList(data);
+  const fetchRestaurants = async () => {
+    const data = await getRestaurants({ limit: 6 });
+    setRestaurants(data);
   };
 
   useEffect(() => {
-    fetchRestaurantList();
+    fetchRestaurants();
   }, []);
 
   return (
@@ -63,7 +63,7 @@ export default function HomePage(): JSX.Element {
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {restaurantList.map((restaurant) => (
+          {restaurants.map((restaurant) => (
             <RestaurantCard {...restaurant} key={restaurant.restaurant_id} />
           ))}
         </div>

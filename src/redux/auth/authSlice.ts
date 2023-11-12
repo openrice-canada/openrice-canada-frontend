@@ -1,17 +1,25 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserLogin } from "../../api/auth/authType";
-import { postUserAuth, postUserRegister } from "../../api/auth/authApiIndex";
+import {
+  getCurrentUserCheck,
+  postUserAuth,
+  postUserRegister,
+} from "../../api/auth/authApiIndex";
 
 export interface IAuthState {
   users: UserLogin[];
   currentUser: UserLogin | null;
   message: string;
+  registerSuccess: boolean | null;
+  loginSuccess: boolean | null;
 }
 
 const initialState: IAuthState = {
   users: [],
   currentUser: null,
   message: "",
+  registerSuccess: null,
+  loginSuccess: null,
 };
 
 export const register = createAsyncThunk(
@@ -26,6 +34,14 @@ export const login = createAsyncThunk(
   "auth/login",
   async (user: { username: string; password: string }) => {
     const response = await postUserAuth(user);
+    return response;
+  }
+);
+
+export const checkCurrentUser = createAsyncThunk(
+  "auth/checkCurrentUser",
+  async () => {
+    const response = await getCurrentUserCheck();
     return response;
   }
 );
@@ -62,13 +78,32 @@ const toDoItemReducer = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(register.fulfilled, (state, action) => {
+      if (action.payload?.token) {
+        sessionStorage.setItem("jwt", action.payload?.token);
+        state.registerSuccess = true;
+      }
+      if (action.payload?.message) {
+        state.message = action.payload.message;
+        state.registerSuccess = false;
+      }
+    });
+
     builder.addCase(login.fulfilled, (state, action) => {
+      if (action.payload?.user) {
+        state.currentUser = action.payload.user;
+        state.loginSuccess = true;
+      }
+      sessionStorage.setItem("jwt", action.payload?.token || "");
+      if (action.payload?.message) {
+        state.message = action.payload.message;
+        state.loginSuccess = false;
+      }
+    });
+
+    builder.addCase(checkCurrentUser.fulfilled, (state, action) => {
       if (action.payload.user) {
         state.currentUser = action.payload.user;
-      }
-      sessionStorage.setItem("jwt", action.payload.token || "");
-      if (action.payload.message) {
-        state.message = action.payload.message;
       }
     });
   },

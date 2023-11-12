@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { getRestaurantList } from "../../api/restaurant/restaurantApiIndex";
+import { getRestaurants } from "../../api/restaurant/restaurantApiIndex";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
 import SearchInput from "../../components/Input/SearchInput";
@@ -17,7 +17,7 @@ const RestaurantListPage = () => {
   });
 
   const fetchRestaurants = useCallback(async () => {
-    const response = await getRestaurantList({
+    const response = await getRestaurants({
       name: searchParams.get("search") || "",
     });
     setRestaurantList(response);
