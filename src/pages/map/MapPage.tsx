@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MapComponent from "../../components/map/MapComponent";
-import { getRestaurantList } from "../../api/restaurant";
+import { getRestaurantList } from "../../api/restaurant/restaurantApiIndex";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
 
 const MapPage = () => {

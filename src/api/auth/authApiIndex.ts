@@ -1,4 +1,4 @@
-import { AxiosApiClientBuilder } from "..";
+import { AxiosApiClientBuilder } from "../axiosApiIndex";
 import { User, AuthenticateResponse } from "./authType";
 
 const apiClient = new AxiosApiClientBuilder()

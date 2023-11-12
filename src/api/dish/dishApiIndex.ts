@@ -1,4 +1,4 @@
-import { AxiosApiClientBuilder } from "..";
+import { AxiosApiClientBuilder } from "../axiosApiIndex";
 import { Dish } from "./dishType";
 
 const apiClient = new AxiosApiClientBuilder().withResourceName("/dish").build();

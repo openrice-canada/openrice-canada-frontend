@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import TextInput from "../../components/Input/TextInput";
-import { postUserRegister } from "../../api/auth";
+import { postUserRegister } from "../../api/auth/authApiIndex";
 import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 
