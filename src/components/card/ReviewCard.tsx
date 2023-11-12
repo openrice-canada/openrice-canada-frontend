@@ -21,7 +21,7 @@ const ReviewRow = ({ text, icon }: { text: string; icon: React.ReactNode }) => (
 
 const ReviewCard: React.FC<ReviewCardProps> = (props: ReviewCardProps) => {
   return (
-    <Link to={`/review/${props.review_id}`} className="rounded-md shadow-lg">
+    <Link to={`/review/${props.review_id}`} className="rounded-md shadow-lg hover:bg-slate-200">
       <div className="flex flex-col gap-1 px-4 py-6">
         <ReviewRow text={props.username} icon={<IoPerson />} />
         <ReviewRow text={props.title} icon={<IoRestaurant />} />

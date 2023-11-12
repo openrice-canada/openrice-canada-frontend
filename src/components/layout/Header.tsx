@@ -57,11 +57,11 @@ const Header = () => {
 					</button>
 				</div>
 			) : (
-				<div className='flex items-center gap-4'>
-					<Link to='/sign-up' className='text-lg font-bold'>
+				<div className='flex items-center gap-4 justify-between'>
+					<Link to='/sign-up' className='text-lg font-bold hover:bg-slate-200 rounded-full p-3'>
 						<IoPersonAddOutline />
 					</Link>
-					<Link to='/login' className='text-lg font-bold'>
+					<Link to='/login' className='text-lg font-bold hover:bg-slate-200 rounded-full p-3'>
 						<IoLogInOutline />
 					</Link>
 				</div>
