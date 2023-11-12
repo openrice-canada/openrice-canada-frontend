@@ -11,7 +11,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
 
-  const userLogin = async (user: { email: string; password: string }) => {
+  const userLogin = async (user: { username: string; password: string }) => {
     const response = await postUserAuth(user);
     if (response.message) {
       console.error(response.message);
@@ -33,7 +33,7 @@ function LoginPage() {
     <form
       className="h-screen flex flex-col gap-6 justify-center max-w-sm mx-auto px-4"
       onSubmit={handleSubmit((user) =>
-        userLogin(user as { email: string; password: string })
+        userLogin(user as { username: string; password: string })
       )}
     >
       <p className="text-3xl font-bold">Log in to Openrice</p>
@@ -41,14 +41,14 @@ function LoginPage() {
         New to Openrice? <Link to="/sign-up">Sign-up</Link>
       </p>
       <Controller
-        name="emailOrUsername"
+        name="username"
         control={control}
         defaultValue={""}
         render={({ field }) => (
           <TextInput
-            label="Email Or Username"
+            label="Username"
             type="text"
-            placeholder="Enter your email or username"
+            placeholder="Enter your username"
             value={field.value}
             onChange={field.onChange}
           />
