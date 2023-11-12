@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextareaInput } from "../../components/Input/TextareaInput";
-// import { postRating } from "../../api/review";
-// import { Review } from "../../api/review/ReviewType";
 
 function UserInput() {
   const { handleSubmit, control } = useForm();
@@ -26,14 +24,8 @@ function UserInput() {
         </span>
       );
     }
-    return (
-      <div className="flex justify-center items-center">{stars}</div> // Center-align stars
-    );
+    return <div className="flex justify-center items-center">{stars}</div>;
   };
-
-  // const submitRating = async (data: Review) => {
-  //   await postRating(data, rating);
-  // };
 
   return (
     <form
@@ -42,7 +34,6 @@ function UserInput() {
         handleSubmit((data) => {
           console.log(data);
         });
-        // submitRating(rating);
       }}
     >
       <p className="text-3xl font-bold">
@@ -60,7 +51,6 @@ function UserInput() {
           />
         )}
       />
-      {/* <textarea className="border border-black px-3 py-2 rounded-md"></textarea> */}
       <p className="text-3xl font-bold">How would you rate this restaurant?</p>
       {renderStars()}
       <button

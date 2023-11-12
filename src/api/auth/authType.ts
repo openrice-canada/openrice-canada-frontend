@@ -28,5 +28,12 @@ export type UserEntity = {
 export type AuthenticateResponse = {
   token?: string;
   message?: string;
-  userEntity?: UserEntity;
+  user?: UserLogin;
 };
+
+export interface UserLogin {
+  user_id: string;
+  username: string;
+  email: string;
+  role: string;
+}

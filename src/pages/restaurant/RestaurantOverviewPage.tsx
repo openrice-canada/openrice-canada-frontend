@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getRestaurantDetail } from "../../api/restaurant";
+import { getRestaurantDetail } from "../../api/restaurant/restaurantApiIndex";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import RestaurantOverviewButton from "../../components/button/RestaurantOverviewButton";
 import ReviewCard from "../../components/card/ReviewCard";
 import { Review } from "../../api/review/ReviewType";
-import { getReviewListByRestaurantId } from "../../api/review";
+import { getReviewsByRestaurantId } from "../../api/review/reviewApiIndex";
 import AddReviewModal from "../../components/modal/AddReviewModal";
 import RestaurantDetailSkeletonLoader from "../../components/loader/RestaurantDetailSkeletonLoader";
 import PhotoModal from "../../components/modal/PhotoModal";
@@ -42,7 +42,7 @@ const RestaurantOverviewPage: React.FC = () => {
 
     const fetchRestaurantReview = async () => {
       if (!id || !isUUID(id)) return;
-      const data = await getReviewListByRestaurantId(id);
+      const data = await getReviewsByRestaurantId(id);
       setReviews(data);
     };
 

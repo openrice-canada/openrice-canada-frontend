@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import MapComponent from "../../components/map/MapComponent";
-import { getRestaurantList } from "../../api/restaurant";
+import { getRestaurants } from "../../api/restaurant/restaurantApiIndex";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
 
 const MapPage = () => {
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
 
   const fetchRestaurantList = async () => {
-    const data = await getRestaurantList({});
+    const data = await getRestaurants({});
     setRestaurantList(data);
   };
 

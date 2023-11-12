@@ -1,59 +1,61 @@
 import { Controller, useForm } from "react-hook-form";
 import TextInput from "../../components/Input/TextInput";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../App";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SelectInput from "../../components/Input/SelectInput";
 import NumberInput from "../../components/Input/NumberInput";
 import { TextareaInput } from "../../components/Input/TextareaInput";
 import { Dish } from "../../api/dish/dishType";
 import { District } from "../../api/district/districtType";
-import { getDishList } from "../../api/dish";
-import { getDistrictList } from "../../api/district";
-import { getPaymentMethodList } from "../../api/payment";
+import { getDishes } from "../../api/dish/dishApiIndex";
+import { getDistricts } from "../../api/district/districtApiIndex";
+import { getPaymentMethods } from "../../api/payment/paymentApiIndex";
 import { PaymentMethod } from "../../api/payment/paymentMethodType";
 import {
   postRestaurant,
   postRestaurantDIsh,
   postRestaurantPaymentMethod,
-} from "../../api/restaurant";
+} from "../../api/restaurant/restaurantApiIndex";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
 
 const NewRestaurantPage = () => {
-  const context = useContext(UserContext);
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
+
   useEffect(() => {
     const fetchDishList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
-      const data = await getDishList();
+      if (user?.role !== "Admin") return;
+      const data = await getDishes();
       if (data) {
         setDishes(data);
       }
     };
 
     const fetchDistrictList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
-      const data = await getDistrictList();
+      if (user?.role !== "Admin") return;
+      const data = await getDistricts();
       setDistricts(data);
     };
 
     const fetchPaymentMethodList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
-      const data = await getPaymentMethodList();
+      if (user?.role !== "Admin") return;
+      const data = await getPaymentMethods();
       setPaymentMethods(data);
     };
 
     fetchDishList();
     fetchDistrictList();
     fetchPaymentMethodList();
-  }, [context?.userInfo?.role]);
+  }, [user?.role]);
 
   const newRestaurant = async (
     restaurant: {
@@ -81,7 +83,6 @@ const NewRestaurantPage = () => {
       saturday: { from: start_time, to: end_time },
       sunday: { from: start_time, to: end_time },
     });
-    // console.log(restaurant, dish, paymentMethod);
     const res = await postRestaurant(restaurant);
     if (res.restaurant_id) {
       await postRestaurantDIsh({
@@ -97,18 +98,14 @@ const NewRestaurantPage = () => {
         navigate(`/restaurant/${res.restaurant_id}`);
         navigate(0);
       }, 1000);
+
+      setTimeout(() => {
+        closeSnackbar();
+      }, 2000);
     }
-    // const token = await postUserRegister(restaurant);
-    // if (token.message) {
-    // 	console.error(token.message);
-    // } else {
-    // 	sessionStorage.setItem('jwt', token.token || '');
-    // 	navigate('/');
-    // 	navigate(0);
-    // }
   };
 
-  return context?.userInfo?.role === "ADMIN" ? (
+  return user?.role === "Admin" ? (
     <form
       className="grid grid-cols-2 gap-3 px-6"
       onSubmit={handleSubmit((restaurant) =>
@@ -269,13 +266,6 @@ const NewRestaurantPage = () => {
                 rules={{ required: true }}
                 render={({ field }) => {
                   return (
-                    // <TextareaInput
-                    // 	label='Opening Hours'
-                    // 	placeholder='Enter restaurant opening hours'
-                    // 	value={field.value}
-                    // 	onChange={field.onChange}
-                    // 	className='border border-gray-400 p-2 mt-1 rounded-md'
-                    // />
                     <>
                       <DatePicker
                         placeholderText="Opening Hour"
@@ -300,13 +290,6 @@ const NewRestaurantPage = () => {
                 rules={{ required: true }}
                 render={({ field }) => {
                   return (
-                    // <TextareaInput
-                    // 	label='Opening Hours'
-                    // 	placeholder='Enter restaurant opening hours'
-                    // 	value={field.value}
-                    // 	onChange={field.onChange}
-                    // 	className='border border-gray-400 p-2 mt-1 rounded-md'
-                    // />
                     <>
                       <DatePicker
                         placeholderText="Closing Hour"

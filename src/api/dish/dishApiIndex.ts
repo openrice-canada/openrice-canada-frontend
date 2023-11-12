@@ -1,8 +1,8 @@
-import { AxiosApiClientBuilder } from "..";
+import { AxiosApiClientBuilder } from "../axiosIndex";
 import { Dish } from "./dishType";
 
 const apiClient = new AxiosApiClientBuilder().withResourceName("/dish").build();
 
-export const getDishList = async (): Promise<Dish[]> => {
+export const getDishes = async (): Promise<Dish[]> => {
   return apiClient.get("");
 };
