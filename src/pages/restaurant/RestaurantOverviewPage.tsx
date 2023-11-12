@@ -109,7 +109,7 @@ const RestaurantOverviewPage: React.FC = () => {
                 <div className="text-lg font-semibold">
                   {restaurantDetail?.address}
                 </div>
-                <div>{restaurantDetail.intro}</div>
+                <div className="text-justify">{restaurantDetail.intro}</div>
               </div>
             )}
           </div>
@@ -166,7 +166,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {photos.map((photo, index) => (
                   <div
-                    className="shadow-md cursor-pointer hover:bg-slate-50"
+                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200 hover:scale-110 transition duration-500"
                     onClick={() => openPopUp(photo)}
                     key={`photo${index}`}
                   >
@@ -199,7 +199,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {menus.map((menu, index) => (
                   <div
-                    className="shadow-md cursor-pointer hover:bg-slate-50"
+                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200 hover:scale-110 transition duration-500"
                     onClick={() => openPopUp(menu)}
                     key={`menu${index}`}
                   >
