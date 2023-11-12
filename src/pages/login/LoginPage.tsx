@@ -13,9 +13,6 @@ function LoginPage() {
 
   const userLogin = async (user: { email: string; password: string }) => {
     const response = await postUserAuth(user);
-    // if (response?.userEntity) {
-    //   context?.setUserInfo(response.userEntity);
-    // }
     if (response.message) {
       console.error(response.message);
     } else {
@@ -24,7 +21,7 @@ function LoginPage() {
         sessionStorage.setItem("userInfo", JSON.stringify(response.userEntity));
         context?.setUserInfo(response.userEntity);
       }
-      enqueueSnackbar("Login successfully!", { variant: "success" });
+      enqueueSnackbar("Login successfully", { variant: "success" });
       setTimeout(() => {
         navigate("/");
         navigate(0);
