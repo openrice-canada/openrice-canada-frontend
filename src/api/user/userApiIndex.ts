@@ -1,4 +1,4 @@
-import { AxiosApiClientBuilder } from "..";
+import { AxiosApiClientBuilder } from "../axiosApiIndex";
 import { User } from "./UserType";
 
 const apiClient = new AxiosApiClientBuilder().withResourceName("/user").build();

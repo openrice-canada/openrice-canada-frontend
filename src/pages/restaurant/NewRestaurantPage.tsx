@@ -1,28 +1,29 @@
 import { Controller, useForm } from "react-hook-form";
 import TextInput from "../../components/Input/TextInput";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../App";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SelectInput from "../../components/Input/SelectInput";
 import NumberInput from "../../components/Input/NumberInput";
 import { TextareaInput } from "../../components/Input/TextareaInput";
 import { Dish } from "../../api/dish/dishType";
 import { District } from "../../api/district/districtType";
-import { getDishList } from "../../api/dish";
-import { getDistrictList } from "../../api/district";
-import { getPaymentMethodList } from "../../api/payment";
+import { getDishList } from "../../api/dish/dishApiIndex";
+import { getDistrictList } from "../../api/district/districtApiIndex";
+import { getPaymentMethodList } from "../../api/payment/paymentApiIndex";
 import { PaymentMethod } from "../../api/payment/paymentMethodType";
 import {
   postRestaurant,
   postRestaurantDIsh,
   postRestaurantPaymentMethod,
-} from "../../api/restaurant";
+} from "../../api/restaurant/restaurantApiIndex";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
 
 const NewRestaurantPage = () => {
-  const context = useContext(UserContext);
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
   const [dishes, setDishes] = useState<Dish[]>([]);
@@ -31,7 +32,7 @@ const NewRestaurantPage = () => {
 
   useEffect(() => {
     const fetchDishList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
+      if (user?.role !== "ADMIN") return;
       const data = await getDishList();
       if (data) {
         setDishes(data);
@@ -39,13 +40,13 @@ const NewRestaurantPage = () => {
     };
 
     const fetchDistrictList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
+      if (user?.role !== "ADMIN") return;
       const data = await getDistrictList();
       setDistricts(data);
     };
 
     const fetchPaymentMethodList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
+      if (user?.role !== "ADMIN") return;
       const data = await getPaymentMethodList();
       setPaymentMethods(data);
     };
@@ -53,7 +54,7 @@ const NewRestaurantPage = () => {
     fetchDishList();
     fetchDistrictList();
     fetchPaymentMethodList();
-  }, [context?.userInfo?.role]);
+  }, [user?.role]);
 
   const newRestaurant = async (
     restaurant: {
@@ -108,7 +109,7 @@ const NewRestaurantPage = () => {
     // }
   };
 
-  return context?.userInfo?.role === "ADMIN" ? (
+  return user?.role === "ADMIN" ? (
     <form
       className="grid grid-cols-2 gap-3 px-6"
       onSubmit={handleSubmit((restaurant) =>

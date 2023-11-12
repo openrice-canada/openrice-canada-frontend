@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Review } from "../../api/review/ReviewType";
-import { getReviewByReviewId } from "../../api/review";
+import { getReviewByReviewId } from "../../api/review/reviewApiIndex";
 import {
   IoCashOutline,
   IoPerson,

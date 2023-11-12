@@ -20,13 +20,20 @@ export type UserEntity = {
       authority: string;
     }
   ];
-  accountNonExpired: boolean;
-  accountNonLocked: boolean;
-  credentialsNonExpired: boolean;
+  accountNonExpired?: boolean;
+  accountNonLocked?: boolean;
+  credentialsNonExpired?: boolean;
 };
 
 export type AuthenticateResponse = {
   token?: string;
   message?: string;
-  userEntity?: UserEntity;
+  user?: UserLogin;
 };
+
+export interface UserLogin {
+  user_id: string;
+  username: string;
+  email: string;
+  role: string;
+}

@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
 import SearchInput from "../../components/Input/SearchInput";
-import { getRestaurantList } from "../../api/restaurant";
+import { getRestaurantList } from "../../api/restaurant/restaurantApiIndex";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
 import { useNavigate } from "react-router-dom";
 import RestaurantCard from "../../components/card/RestaurantCard";

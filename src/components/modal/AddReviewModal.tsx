@@ -2,15 +2,15 @@
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import TextInput from "../Input/TextInput";
-import { postReview } from "../../api/review";
-import { useContext } from "react";
-import { UserContext } from "../../App";
+import { postReview } from "../../api/review/reviewApiIndex";
 import { TextareaInput } from "../Input/TextareaInput";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../Input/FIleInput";
 import { uploadImage } from "../../utils/imageService";
 import NumberInput from "../Input/NumberInput";
 import { enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
 
 type AddReviewModalProps = {
   isShown: boolean;
@@ -32,7 +32,6 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
   props: AddReviewModalProps
 ) => {
   const navigate = useNavigate();
-  const context = useContext(UserContext);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       title: "",
@@ -44,15 +43,17 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
     } as ReviewForm,
   });
 
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
+
   const addReview = async (review: ReviewForm) => {
-    if (context?.userInfo?.user_id) {
+    if (user && user.user_id) {
       const res = await postReview({
         title: review.title,
         content: review.content,
         spending: review.spending,
         rating: review.rating,
         restaurant_id: props?.restaurant_id as string,
-        user_id: context?.userInfo?.user_id as string,
+        user_id: user.user_id,
         visit_date: new Date(review.visit_date),
       });
       await uploadImage(

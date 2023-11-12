@@ -1,32 +1,24 @@
 import { useForm, Controller } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import TextInput from "../../components/Input/TextInput";
-import { postUserAuth } from "../../api/auth";
-import { useContext } from "react";
-import { UserContext } from "../../App";
 import { enqueueSnackbar } from "notistack";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/auth/authSlice";
+import { AppDispatch } from "../../store";
+
+import TextInput from "../../components/Input/TextInput";
 
 function LoginPage() {
-  const context = useContext(UserContext);
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
+  const dispatch = useDispatch<AppDispatch>();
 
   const userLogin = async (user: { username: string; password: string }) => {
-    const response = await postUserAuth(user);
-    if (response.message) {
-      console.error(response.message);
-    } else {
-      sessionStorage.setItem("jwt", response.token || "");
-      if (response.userEntity) {
-        sessionStorage.setItem("userInfo", JSON.stringify(response.userEntity));
-        context?.setUserInfo(response.userEntity);
-      }
-      enqueueSnackbar("Login successfully", { variant: "success" });
-      setTimeout(() => {
-        navigate("/");
-        navigate(0);
-      }, 1000);
-    }
+    dispatch(login(user));
+    enqueueSnackbar("Login successfully", { variant: "success" });
+    setTimeout(() => {
+      navigate("/");
+      navigate(0);
+    }, 1000);
   };
 
   return (

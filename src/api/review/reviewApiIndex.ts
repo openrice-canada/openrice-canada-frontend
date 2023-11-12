@@ -1,4 +1,4 @@
-import { AxiosApiClientBuilder } from "..";
+import { AxiosApiClientBuilder } from "../axiosApiIndex";
 import { CreateReviewRequest, Review } from "./ReviewType";
 
 const apiClient = new AxiosApiClientBuilder()
