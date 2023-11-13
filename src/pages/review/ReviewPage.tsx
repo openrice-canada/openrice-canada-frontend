@@ -1,11 +1,5 @@
 import { useParams } from "react-router-dom";
-<<<<<<< Updated upstream
-import { useEffect, useState } from "react";
-import { Review } from "../../api/review/ReviewType";
-import { getReviewByReviewId } from "../../api/review/reviewApiIndex";
-=======
 import { useEffect } from "react";
->>>>>>> Stashed changes
 import {
   IoCashOutline,
   IoPerson,
@@ -16,7 +10,7 @@ import {
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
-import { getReviewByID } from "../../redux/reviews/reviewsSlice";
+import { getReviewThunk } from "../../redux/reviews/reviewsSlice";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -33,39 +27,17 @@ const ReviewRow = ({ text, icon }: { text: string; icon: React.ReactNode }) => (
 
 const ReviewPage: React.FC = () => {
   const { id } = useParams();
-<<<<<<< Updated upstream
-  const [review, setReview] = useState<Review>();
-  // const [userList, setUserList] = useState<User[]>([]);
-  // const fetchUserList = async () => {
-  //   const data = await getUserList();
-  //   setUserList(data);
-  // };
-=======
 
   const dispatch = useDispatch<AppDispatch>();
   const review = useSelector((state: IRootState) => state.review.review);
->>>>>>> Stashed changes
 
   useEffect(() => {
     const fetchReview = async () => {
       if (!id || !isUUID(id)) return;
-<<<<<<< Updated upstream
-      const data = await getReviewByReviewId(id);
-      if (data) {
-        setReview(data);
-      }
-=======
-      dispatch(getReviewByID(id));
->>>>>>> Stashed changes
+      dispatch(getReviewThunk(id));
     };
-
     fetchReview();
-<<<<<<< Updated upstream
-    // fetchUserList();
-  }, [id]);
-=======
   }, [id, dispatch]);
->>>>>>> Stashed changes
 
   return (
     <div className="container justify-center mb-8 px-4 gap-8 mx-auto mt-10">
@@ -100,18 +72,6 @@ const ReviewPage: React.FC = () => {
               </div>
             )}
           </div>
-          {/* <div className="mt-3"> */}
-          {/* {userList.map((user) => ( */}
-          {/* <div key={user.userId}>
-            <p>{user.username}</p> */}
-          {/* <div> */}
-          {/* <p>{user.username}</p> */}
-          {/* <div className="text-center"> */}
-          {/* <textarea className="border border-black px-3 py-2 rounded-md max-w-xl w-full h-40"></textarea> */}
-          {/* </div> */}
-          {/* </div> */}
-          {/* ))} */}
-          {/* </div> */}
         </div>
         <div className="p-4 col-span-2 h-fit rounded-md shadow-md md:col-span-1">
           {review && (
@@ -146,14 +106,6 @@ const ReviewPage: React.FC = () => {
             </>
           )}
         </div>
-        {/* <div className="relative"> */}
-        {/* <img
-          src={process.env.PUBLIC_URL + "/restaurant.jpeg"}
-          alt="hero"
-          className="w-full"
-        /> */}
-        {/* <div className="absolute top-0 left-0 w-full h-full bg-opacity-50 bg-black"></div> */}
-        {/* </div> */}
       </div>
     </div>
   );

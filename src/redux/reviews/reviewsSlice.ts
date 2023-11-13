@@ -15,7 +15,7 @@ const initialState: IReviewsState = {
   review: null,
 };
 
-export const getReviews = createAsyncThunk(
+export const getReviewsThunk = createAsyncThunk(
   "review/restaurantStatus",
   async (id: string) => {
     const response = await getReviewsByRestaurantID(id);
@@ -23,7 +23,7 @@ export const getReviews = createAsyncThunk(
   }
 );
 
-export const getReviewByID = createAsyncThunk(
+export const getReviewThunk = createAsyncThunk(
   "review/IDStatus",
   async (id: string) => {
     const response = await getReview(id);
@@ -32,17 +32,17 @@ export const getReviewByID = createAsyncThunk(
 );
 
 const reviewsReducer = createSlice({
-  name: "review",
+  name: "reviews",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getReviews.fulfilled, (state, action) => {
+    builder.addCase(getReviewsThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.reviews = action.payload;
       }
     });
 
-    builder.addCase(getReviewByID.fulfilled, (state, action) => {
+    builder.addCase(getReviewThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.review = action.payload;
       }

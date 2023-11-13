@@ -3,10 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
+import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
 
 import RestaurantCard from "../../components/card/RestaurantCard";
 import SearchInput from "../../components/Input/SearchInput";
-import { getRestaurantsByQuery } from "../../redux/restaurant/restaurantSlice";
 
 const RestaurantHomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +26,7 @@ const RestaurantHomePage = () => {
   useEffect(() => {
     const fetchRestaurants = () => {
       dispatch(
-        getRestaurantsByQuery({
+        getRestaurantsByQueryThunk({
           name: searchParams.get("search") || "",
         })
       );

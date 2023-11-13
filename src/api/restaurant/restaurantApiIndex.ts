@@ -1,4 +1,4 @@
-import { AxiosApiClientBuilder } from "../axiosApiIndex";
+import { AxiosApiClientBuilder } from "../axiosIndex";
 import {
   Restaurant,
   RestaurantDish,
@@ -10,7 +10,7 @@ const apiClient = new AxiosApiClientBuilder()
   .withResourceName("/restaurant")
   .build();
 
-export const getRestaurantList = async (
+export const getRestaurants = async (
   input: SearchRestaurantQuery
 ): Promise<Restaurant[]> => {
   return apiClient.get("", { params: input });

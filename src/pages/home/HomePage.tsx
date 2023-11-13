@@ -1,16 +1,9 @@
 import { useForm, Controller } from "react-hook-form";
-<<<<<<< Updated upstream
-import { useEffect, useState } from "react";
-import SearchInput from "../../components/Input/SearchInput";
-import { getRestaurantList } from "../../api/restaurant/restaurantApiIndex";
-import { Restaurant } from "../../api/restaurant/RestaurantType";
-=======
 import { useEffect } from "react";
->>>>>>> Stashed changes
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
-import { getRestaurantsByQuery } from "../../redux/restaurant/restaurantSlice";
+import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
 
 import RestaurantCard from "../../components/card/RestaurantCard";
 import SearchInput from "../../components/Input/SearchInput";
@@ -18,18 +11,6 @@ import SearchInput from "../../components/Input/SearchInput";
 export default function HomePage(): JSX.Element {
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm();
-<<<<<<< Updated upstream
-  const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
-
-  const fetchRestaurantList = async () => {
-    const data = await getRestaurantList({ limit: 6 });
-    setRestaurantList(data);
-  };
-
-  useEffect(() => {
-    fetchRestaurantList();
-  }, []);
-=======
 
   const dispatch = useDispatch<AppDispatch>();
   const restaurants = useSelector(
@@ -38,12 +19,11 @@ export default function HomePage(): JSX.Element {
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      dispatch(getRestaurantsByQuery({ limit: 6 }));
+      dispatch(getRestaurantsByQueryThunk({ limit: 6 }));
     };
 
     fetchRestaurants();
   }, [dispatch]);
->>>>>>> Stashed changes
 
   return (
     <div>
@@ -80,15 +60,15 @@ export default function HomePage(): JSX.Element {
       <div className="max-w-6xl mx-auto px-4 my-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-center font-bold text-2xl">Latest Restaurants</h1>
-          <button
+          <Link
             className="text-slate-600 hover:text-slate-700 font-semibold hover:bg-slate-200 rounded-lg p-2"
-            onClick={() => navigate("/restaurant")}
+            to="/restaurants"
           >
             View More
-          </button>
+          </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {restaurantList.map((restaurant) => (
+          {restaurants.map((restaurant) => (
             <RestaurantCard {...restaurant} key={restaurant.restaurant_id} />
           ))}
         </div>

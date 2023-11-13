@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getRestaurantsByQuery } from "../../redux/restaurant/restaurantSlice";
+import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
 
@@ -13,7 +13,7 @@ const MapPage = () => {
 
   useEffect(() => {
     const fetchRestaurantList = async () => {
-      dispatch(getRestaurantsByQuery({}));
+      dispatch(getRestaurantsByQueryThunk({}));
     };
 
     fetchRestaurantList();

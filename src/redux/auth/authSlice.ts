@@ -1,20 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserLogin } from "../../api/auth/authType";
-import { postUserAuth, postUserRegister } from "../../api/auth/authApiIndex";
+import {
+  getCurrentUser,
+  postUserAuth,
+  postUserRegister,
+} from "../../api/auth/authApiIndex";
 
 export interface IAuthState {
   users: UserLogin[];
   currentUser: UserLogin | null;
   message: string;
+  registerSuccess: boolean | null;
+  loginSuccess: boolean | null;
 }
 
 const initialState: IAuthState = {
   users: [],
   currentUser: null,
   message: "",
+  registerSuccess: null,
+  loginSuccess: null,
 };
 
-export const register = createAsyncThunk(
+export const registerThunk = createAsyncThunk(
   "auth/register",
   async (user: { email: string; username: string; password: string }) => {
     const response = await postUserRegister(user);
@@ -22,7 +30,7 @@ export const register = createAsyncThunk(
   }
 );
 
-export const login = createAsyncThunk(
+export const loginThunk = createAsyncThunk(
   "auth/login",
   async (user: { username: string; password: string }) => {
     const response = await postUserAuth(user);
@@ -30,19 +38,15 @@ export const login = createAsyncThunk(
   }
 );
 
-<<<<<<< Updated upstream
-const toDoItemReducer = createSlice({
-=======
-export const checkCurrentUser = createAsyncThunk(
-  "auth/checkCurrentUser",
+export const getCurrentUserThunk = createAsyncThunk(
+  "auth/getCurrentUser",
   async () => {
-    const response = await getCurrentUserCheck();
+    const response = await getCurrentUser();
     return response;
   }
 );
 
 const authSlice = createSlice({
->>>>>>> Stashed changes
   name: "auth",
   initialState,
   reducers: {
@@ -71,13 +75,32 @@ const authSlice = createSlice({
     // },
   },
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(registerThunk.fulfilled, (state, action) => {
+      if (action.payload?.token) {
+        sessionStorage.setItem("jwt", action.payload?.token);
+        state.registerSuccess = true;
+      }
+      if (action.payload?.message) {
+        state.message = action.payload.message;
+        state.registerSuccess = false;
+      }
+    });
+
+    builder.addCase(loginThunk.fulfilled, (state, action) => {
+      if (action.payload?.user) {
+        state.currentUser = action.payload.user;
+        state.loginSuccess = true;
+      }
+      sessionStorage.setItem("jwt", action.payload?.token || "");
+      if (action.payload?.message) {
+        state.message = action.payload.message;
+        state.loginSuccess = false;
+      }
+    });
+
+    builder.addCase(getCurrentUserThunk.fulfilled, (state, action) => {
       if (action.payload.user) {
         state.currentUser = action.payload.user;
-      }
-      sessionStorage.setItem("jwt", action.payload.token || "");
-      if (action.payload.message) {
-        state.message = action.payload.message;
       }
     });
   },

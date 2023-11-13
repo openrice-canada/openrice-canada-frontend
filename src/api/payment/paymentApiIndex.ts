@@ -1,10 +1,10 @@
-import { AxiosApiClientBuilder } from "../axiosApiIndex";
+import { AxiosApiClientBuilder } from "../axiosIndex";
 import { PaymentMethod } from "./paymentMethodType";
 
 const apiClient = new AxiosApiClientBuilder()
   .withResourceName("/payment-method")
   .build();
 
-export const getPaymentMethodList = async (): Promise<PaymentMethod[]> => {
+export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
   return apiClient.get("");
 };

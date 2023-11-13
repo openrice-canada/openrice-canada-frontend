@@ -6,17 +6,27 @@ import {
   IoLogOutOutline,
   IoPersonAddOutline,
 } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getCurrentUserThunk } from "../../redux/auth/authSlice";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
-  const user = useSelector((state: IRootState) => state.auth.currentUser);
   const userLogout = () => {
     sessionStorage.removeItem("jwt");
     sessionStorage.removeItem("userInfo");
     window.location.reload();
   };
+
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("jwt")) {
+      dispatch(getCurrentUserThunk());
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,17 +59,10 @@ const Header = () => {
         <h1 className="text-2xl font-bold">OpenRice</h1>
       </Link>
       {sessionStorage.getItem("jwt") ? (
-<<<<<<< Updated upstream
-        <div className="flex items-center">
-          {user?.username}
-          {user?.role === "ADMIN" && (
-            <Link to="/new-restaurant" className="text-lg font-bold">
-=======
         <div className="flex items-center gap-3 text-sm">
           {user && user.username}
           {user?.role === "Admin" && (
             <Link to="/restaurants/create" className="text-lg font-bold">
->>>>>>> Stashed changes
               <IoCreateOutline />
             </Link>
           )}
@@ -68,7 +71,7 @@ const Header = () => {
             onClick={userLogout}
             className="flex items-center gap-1"
           >
-            <IoLogOutOutline />
+            <IoLogOutOutline size={20} />
           </button>
         </div>
       ) : (

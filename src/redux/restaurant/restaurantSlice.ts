@@ -15,7 +15,7 @@ const initialState: IRestaurantState = {
   restaurants: [],
 };
 
-export const getRestaurant = createAsyncThunk(
+export const getRestaurantThunk = createAsyncThunk(
   "restaurant/detail",
   async (id: string) => {
     const response = await getRestaurantDetail(id);
@@ -23,7 +23,7 @@ export const getRestaurant = createAsyncThunk(
   }
 );
 
-export const getRestaurantsByQuery = createAsyncThunk(
+export const getRestaurantsByQueryThunk = createAsyncThunk(
   "restaurant/restaurants",
   async (query?: { name?: string; limit?: number; offset?: number }) => {
     if (query) {
@@ -41,13 +41,13 @@ const restaurantSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getRestaurant.fulfilled, (state, action) => {
+    builder.addCase(getRestaurantThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.restaurant = action.payload;
       }
     });
 
-    builder.addCase(getRestaurantsByQuery.fulfilled, (state, action) => {
+    builder.addCase(getRestaurantsByQueryThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.restaurants = action.payload;
       }
