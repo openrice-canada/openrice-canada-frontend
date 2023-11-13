@@ -114,7 +114,7 @@ const RestaurantOverviewPage: React.FC = () => {
                 <div className="text-lg font-semibold">
                   {restaurantDetail?.address}
                 </div>
-                <div className="text-justify">{restaurantDetail.intro}</div>
+                <div>{restaurantDetail.intro}</div>
               </div>
             )}
           </div>

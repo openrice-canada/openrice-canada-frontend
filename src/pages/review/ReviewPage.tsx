@@ -61,7 +61,7 @@ const ReviewPage: React.FC = () => {
           <div>
             {review && (
               <div className="p-4" key={review.restaurant_id}>
-                <p className="text-justify">{review.content}</p>
+                <div>{review.content}</div>
                 <ReviewRow
                   text={
                     "Created at " +
