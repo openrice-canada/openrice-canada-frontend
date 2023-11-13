@@ -27,7 +27,6 @@ const ReviewCard: React.FC<Review> = (props: Review) => {
         <ReviewRow text={props.username} icon={<IoPerson />} />
         <ReviewRow text={props.title} icon={<IoRestaurant />} />
         <ReviewRow text={props.content} icon={<IoChatbubbleEllipsesSharp />} />
-        <ReviewRow text={props.created_at} icon={<IoTime />} />
         <div className="flex gap-2 items-start">
           <div>{<IoThumbsUpSharp />}</div>
           {Array.from({ length: props.rating }).map((_, index) => (
