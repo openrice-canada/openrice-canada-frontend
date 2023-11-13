@@ -1,14 +1,24 @@
 import { useForm, Controller } from "react-hook-form";
+<<<<<<< Updated upstream
 import { useEffect, useState } from "react";
 import SearchInput from "../../components/Input/SearchInput";
 import { getRestaurantList } from "../../api/restaurant/restaurantApiIndex";
 import { Restaurant } from "../../api/restaurant/RestaurantType";
+=======
+import { useEffect } from "react";
+>>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getRestaurantsByQuery } from "../../redux/restaurant/restaurantSlice";
+
 import RestaurantCard from "../../components/card/RestaurantCard";
+import SearchInput from "../../components/Input/SearchInput";
 
 export default function HomePage(): JSX.Element {
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm();
+<<<<<<< Updated upstream
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
 
   const fetchRestaurantList = async () => {
@@ -19,13 +29,28 @@ export default function HomePage(): JSX.Element {
   useEffect(() => {
     fetchRestaurantList();
   }, []);
+=======
+
+  const dispatch = useDispatch<AppDispatch>();
+  const restaurants = useSelector(
+    (state: IRootState) => state.restaurant.restaurants
+  );
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      dispatch(getRestaurantsByQuery({ limit: 6 }));
+    };
+
+    fetchRestaurants();
+  }, [dispatch]);
+>>>>>>> Stashed changes
 
   return (
     <div>
       <form
         className="relative h-96 flex justify-center items-center"
         onSubmit={handleSubmit((data) =>
-          navigate(`/restaurant?search=${data.name}`)
+          navigate(`/restaurants?search=${data.name}`)
         )}
       >
         <img

@@ -1,7 +1,11 @@
 import { useParams } from "react-router-dom";
+<<<<<<< Updated upstream
 import { useEffect, useState } from "react";
 import { Review } from "../../api/review/ReviewType";
 import { getReviewByReviewId } from "../../api/review/reviewApiIndex";
+=======
+import { useEffect } from "react";
+>>>>>>> Stashed changes
 import {
   IoCashOutline,
   IoPerson,
@@ -10,6 +14,9 @@ import {
   IoTime,
 } from "react-icons/io5";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getReviewByID } from "../../redux/reviews/reviewsSlice";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -26,24 +33,39 @@ const ReviewRow = ({ text, icon }: { text: string; icon: React.ReactNode }) => (
 
 const ReviewPage: React.FC = () => {
   const { id } = useParams();
+<<<<<<< Updated upstream
   const [review, setReview] = useState<Review>();
   // const [userList, setUserList] = useState<User[]>([]);
   // const fetchUserList = async () => {
   //   const data = await getUserList();
   //   setUserList(data);
   // };
+=======
+
+  const dispatch = useDispatch<AppDispatch>();
+  const review = useSelector((state: IRootState) => state.review.review);
+>>>>>>> Stashed changes
 
   useEffect(() => {
     const fetchReview = async () => {
       if (!id || !isUUID(id)) return;
+<<<<<<< Updated upstream
       const data = await getReviewByReviewId(id);
       if (data) {
         setReview(data);
       }
+=======
+      dispatch(getReviewByID(id));
+>>>>>>> Stashed changes
     };
+
     fetchReview();
+<<<<<<< Updated upstream
     // fetchUserList();
   }, [id]);
+=======
+  }, [id, dispatch]);
+>>>>>>> Stashed changes
 
   return (
     <div className="container justify-center mb-8 px-4 gap-8 mx-auto mt-10">

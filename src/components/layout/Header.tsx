@@ -49,10 +49,17 @@ const Header = () => {
         <h1 className="text-2xl font-bold">OpenRice</h1>
       </Link>
       {sessionStorage.getItem("jwt") ? (
+<<<<<<< Updated upstream
         <div className="flex items-center">
           {user?.username}
           {user?.role === "ADMIN" && (
             <Link to="/new-restaurant" className="text-lg font-bold">
+=======
+        <div className="flex items-center gap-3 text-sm">
+          {user && user.username}
+          {user?.role === "Admin" && (
+            <Link to="/restaurants/create" className="text-lg font-bold">
+>>>>>>> Stashed changes
               <IoCreateOutline />
             </Link>
           )}

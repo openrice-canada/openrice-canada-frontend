@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-// import { getUserList } from "../../api/user";
 import { User } from "../../api/user/UserType";
 import useOnClickOutside from "../../components/hooks/useOnClickOutside";
 
@@ -8,27 +7,21 @@ const MenuPage = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const imageRef = useRef<null | HTMLDivElement>(null);
 
-  const [userList, setUserList] = useState<User[]>([]);
-  // const fetchUserList = async () => {
-  //   const data = await getUserList();
-  //   setUserList(data);
-  // };
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    setUserList([]);
-    // fetchUserList();
+    setUsers([]);
   }, []);
 
-  // Function to open the pop-up and set the selected image
   const openPopUp = (image: string) => {
     setSelectedImage(image);
     setPopUpOpen(true);
   };
 
-  // Function to close the pop-up
   const closePopUp = () => {
     setPopUpOpen(false);
   };
+
   useOnClickOutside(imageRef, () => setPopUpOpen(false));
 
   return (
@@ -97,9 +90,9 @@ const MenuPage = () => {
         />
       </div>
       <div className="flex mt-3">
-        {userList &&
-          userList.length > 0 &&
-          userList.map((user) => (
+        {users &&
+          users.length > 0 &&
+          users.map((user) => (
             <div key={user.user_id}>
               <p>{user.username}</p>
               <div className="text-center">
@@ -108,7 +101,6 @@ const MenuPage = () => {
             </div>
           ))}
       </div>
-      {/* Pop-up container */}
       {popUpOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-70">
           <div className="bg-white p-4" ref={imageRef}>

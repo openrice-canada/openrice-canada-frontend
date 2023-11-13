@@ -9,7 +9,11 @@ export const getReviewList = async (): Promise<Review[]> => {
   return apiClient.get("");
 };
 
+<<<<<<< Updated upstream
 export const getReviewListByRestaurantId = async (
+=======
+export const getReviewsByRestaurantID = async (
+>>>>>>> Stashed changes
   restaurantId: string
 ): Promise<Review[]> => {
   return apiClient.get("", { params: { restaurantId } });
