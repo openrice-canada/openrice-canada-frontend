@@ -51,20 +51,22 @@ const RestaurantOverviewPage: React.FC = () => {
   }, [id]);
 
   useEffect(() => {
-    setPhotos(
-      reviews.map(
-        (review) =>
-          `${process.env.REACT_APP_IMAGE_PREFIX}/reviews/${id}/${review.review_id}.jpg`
-      )
-    );
-    setMenus(
-      reviews
-        .map(
+    if (id === "8879942f-fce4-41d2-8aab-3faeb8d8c909") {
+      setPhotos(
+        reviews.map(
           (review) =>
-            `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.review_id}.jpg`
+            `${process.env.REACT_APP_IMAGE_PREFIX}/reviews/${id}/${review.review_id}.jpg`
         )
-        .sort((a, b) => a.localeCompare(b))
-    );
+      );
+      setMenus(
+        reviews
+          .map(
+            (review) =>
+              `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.review_id}.jpg`
+          )
+          .sort((a, b) => a.localeCompare(b))
+      );
+    }
   }, [id, reviews]);
 
   const openPopUp = (image: string) => {
@@ -157,7 +159,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {photos.map((photo, index) => (
                   <div
-                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200 hover:scale-110 transition duration-500"
+                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200"
                     onClick={() => openPopUp(photo)}
                     key={`photo${index}`}
                   >
@@ -190,7 +192,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {menus.map((menu, index) => (
                   <div
-                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200 hover:scale-110 transition duration-500"
+                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200"
                     onClick={() => openPopUp(menu)}
                     key={`menu${index}`}
                   >
