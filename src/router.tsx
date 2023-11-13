@@ -44,19 +44,22 @@ const router = createBrowserRouter(
           element: <MapPage />,
         },
         {
-          path: "/restaurant/:id",
-          element: <RestaurantOverviewPage />,
-        },
-        {
-          path: "/restaurants",
+          path: "/restaurant",
           element: <Outlet />,
           children: [
-            { index: true, element: <RestaurantHomePage /> },
+            {
+              path: ":id",
+              element: <RestaurantOverviewPage />,
+            },
             {
               path: "create",
               element: <CreateRestaurantPage />,
             },
           ],
+        },
+        {
+          path: "/restaurants",
+          element: <RestaurantHomePage />,
         },
         {
           path: "/menu",

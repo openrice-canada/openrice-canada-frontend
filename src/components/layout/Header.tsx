@@ -62,7 +62,7 @@ const Header = () => {
         <div className="flex items-center gap-3 text-sm">
           {user && user.username}
           {user?.role === "Admin" && (
-            <Link to="/restaurants/create" className="text-lg font-bold">
+            <Link to="/restaurant/create" className="text-lg font-bold">
               <IoCreateOutline />
             </Link>
           )}
