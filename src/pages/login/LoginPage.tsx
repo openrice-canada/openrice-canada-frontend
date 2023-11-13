@@ -2,7 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/auth/authSlice";
+import { loginThunk } from "../../redux/auth/authSlice";
 import { AppDispatch, IRootState } from "../../store";
 
 import TextInput from "../../components/Input/TextInput";
@@ -18,7 +18,7 @@ function LoginPage() {
   const message = useSelector((state: IRootState) => state.auth.message);
 
   const userLogin = async (user: { username: string; password: string }) => {
-    dispatch(login(user));
+    dispatch(loginThunk(user));
   };
 
   useEffect(() => {

@@ -1,7 +1,7 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserLogin } from "../../api/auth/authType";
 import {
-  getCurrentUserCheck,
+  getCurrentUser,
   postUserAuth,
   postUserRegister,
 } from "../../api/auth/authApiIndex";
@@ -22,7 +22,7 @@ const initialState: IAuthState = {
   loginSuccess: null,
 };
 
-export const register = createAsyncThunk(
+export const registerThunk = createAsyncThunk(
   "auth/register",
   async (user: { email: string; username: string; password: string }) => {
     const response = await postUserRegister(user);
@@ -30,7 +30,7 @@ export const register = createAsyncThunk(
   }
 );
 
-export const login = createAsyncThunk(
+export const loginThunk = createAsyncThunk(
   "auth/login",
   async (user: { username: string; password: string }) => {
     const response = await postUserAuth(user);
@@ -38,47 +38,44 @@ export const login = createAsyncThunk(
   }
 );
 
-export const checkCurrentUser = createAsyncThunk(
-  "auth/checkCurrentUser",
+export const getCurrentUserThunk = createAsyncThunk(
+  "auth/getCurrentUser",
   async () => {
-    const response = await getCurrentUserCheck();
+    const response = await getCurrentUser();
     return response;
   }
 );
 
-const toDoItemReducer = createSlice({
+const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    getAllToDoItems: (
-      state: IAuthState,
-      action: PayloadAction<UserLogin[]>
-    ) => {
-      state.users = action.payload;
-    },
-
-    addToDoItem: (state: IAuthState, action: PayloadAction<UserLogin>) => {
-      state.users.unshift(action.payload);
-    },
-
-    updateToDoItem: (
-      state: IAuthState,
-      action: PayloadAction<{ id: string; name: string }>
-    ) => {
-      const { id, name } = action.payload;
-      state.users.filter((item) => item.user_id === id)[0].username = name;
-    },
-
-    deleteToDoItem: (state: IAuthState, action: PayloadAction<string>) => {
-      const id = action.payload;
-      state.users.splice(
-        state.users.findIndex((item) => item.user_id === id),
-        1
-      );
-    },
+    // getAllToDoItems: (
+    //   state: IAuthState,
+    //   action: PayloadAction<UserLogin[]>
+    // ) => {
+    //   state.users = action.payload;
+    // },
+    // addToDoItem: (state: IAuthState, action: PayloadAction<UserLogin>) => {
+    //   state.users.unshift(action.payload);
+    // },
+    // updateToDoItem: (
+    //   state: IAuthState,
+    //   action: PayloadAction<{ id: string; name: string }>
+    // ) => {
+    //   const { id, name } = action.payload;
+    //   state.users.filter((item) => item.user_id === id)[0].username = name;
+    // },
+    // deleteToDoItem: (state: IAuthState, action: PayloadAction<string>) => {
+    //   const id = action.payload;
+    //   state.users.splice(
+    //     state.users.findIndex((item) => item.user_id === id),
+    //     1
+    //   );
+    // },
   },
   extraReducers: (builder) => {
-    builder.addCase(register.fulfilled, (state, action) => {
+    builder.addCase(registerThunk.fulfilled, (state, action) => {
       if (action.payload?.token) {
         sessionStorage.setItem("jwt", action.payload?.token);
         state.registerSuccess = true;
@@ -89,7 +86,7 @@ const toDoItemReducer = createSlice({
       }
     });
 
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(loginThunk.fulfilled, (state, action) => {
       if (action.payload?.user) {
         state.currentUser = action.payload.user;
         state.loginSuccess = true;
@@ -101,7 +98,7 @@ const toDoItemReducer = createSlice({
       }
     });
 
-    builder.addCase(checkCurrentUser.fulfilled, (state, action) => {
+    builder.addCase(getCurrentUserThunk.fulfilled, (state, action) => {
       if (action.payload.user) {
         state.currentUser = action.payload.user;
       }
@@ -109,6 +106,6 @@ const toDoItemReducer = createSlice({
   },
 });
 
-export const { getAllToDoItems, addToDoItem, updateToDoItem, deleteToDoItem } =
-  toDoItemReducer.actions;
-export default toDoItemReducer.reducer;
+// export const { getAllToDoItems, addToDoItem, updateToDoItem, deleteToDoItem } =
+//   authSlice.actions;
+export default authSlice.reducer;

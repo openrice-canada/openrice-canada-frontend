@@ -1,60 +1,61 @@
 import { Controller, useForm } from "react-hook-form";
-import TextInput from "../../components/Input/TextInput";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import SelectInput from "../../components/Input/SelectInput";
-import NumberInput from "../../components/Input/NumberInput";
+import { useEffect } from "react";
 import { TextareaInput } from "../../components/Input/TextareaInput";
-import { Dish } from "../../api/dish/dishType";
-import { District } from "../../api/district/districtType";
-import { getDishes } from "../../api/dish/dishApiIndex";
-import { getDistricts } from "../../api/district/districtApiIndex";
-import { getPaymentMethods } from "../../api/payment/paymentApiIndex";
-import { PaymentMethod } from "../../api/payment/paymentMethodType";
 import {
   postRestaurant,
   postRestaurantDIsh,
   postRestaurantPaymentMethod,
 } from "../../api/restaurant/restaurantApiIndex";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../store";
-const NewRestaurantPage: React.FC = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getDishesThunk } from "../../redux/dish/dishSlice";
+import { getDistrictsThunk } from "../../redux/district/districtSlice";
+import { getPaymentMethodsThunk } from "../../redux/paymentMethod/paymentMethodSlice";
+
+import TextInput from "../../components/Input/TextInput";
+import SelectInput from "../../components/Input/SelectInput";
+import NumberInput from "../../components/Input/NumberInput";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+const CreateRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
-  const [dishes, setDishes] = useState<Dish[]>([]);
-  const [districts, setDistricts] = useState<District[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
+  const dishes = useSelector((state: IRootState) => state.dish.dishes);
+  const districts = useSelector(
+    (state: IRootState) => state.district.districts
+  );
+  const paymentMethods = useSelector(
+    (state: IRootState) => state.paymentMethod.paymentMethods
+  );
   const user = useSelector((state: IRootState) => state.auth.currentUser);
 
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    const fetchDishList = async () => {
+    const fetchDishes = async () => {
       if (user?.role !== "Admin") return;
-      const data = await getDishes();
-      if (data) {
-        setDishes(data);
-      }
+      dispatch(getDishesThunk());
     };
 
-    const fetchDistrictList = async () => {
+    const fetchDistricts = async () => {
       if (user?.role !== "Admin") return;
-      const data = await getDistricts();
-      setDistricts(data);
+      dispatch(getDistrictsThunk());
     };
 
-    const fetchPaymentMethodList = async () => {
+    const fetchPaymentMethods = async () => {
       if (user?.role !== "Admin") return;
-      const data = await getPaymentMethods();
-      setPaymentMethods(data);
+      dispatch(getPaymentMethodsThunk());
     };
 
-    fetchDishList();
-    fetchDistrictList();
-    fetchPaymentMethodList();
-  }, [user?.role]);
+    fetchDishes();
+    fetchDistricts();
+    fetchPaymentMethods();
+  }, [user?.role, dispatch]);
 
   const newRestaurant = async (
     restaurant: {
@@ -364,4 +365,4 @@ const NewRestaurantPage: React.FC = () => {
   );
 };
 
-export default NewRestaurantPage;
+export default CreateRestaurantPage;

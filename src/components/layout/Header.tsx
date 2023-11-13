@@ -8,7 +8,7 @@ import {
 } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
-import { checkCurrentUser } from "../../redux/auth/authSlice";
+import { getCurrentUserThunk } from "../../redux/auth/authSlice";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -24,7 +24,7 @@ const Header = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem("jwt")) {
-      dispatch(checkCurrentUser());
+      dispatch(getCurrentUserThunk());
     }
   }, [dispatch]);
 
@@ -62,7 +62,7 @@ const Header = () => {
         <div className="flex items-center gap-3 text-sm">
           {user && user.username}
           {user?.role === "Admin" && (
-            <Link to="/new-restaurant" className="text-lg font-bold">
+            <Link to="/restaurants/create" className="text-lg font-bold">
               <IoCreateOutline />
             </Link>
           )}

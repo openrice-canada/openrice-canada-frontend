@@ -3,7 +3,7 @@ import TextInput from "../../components/Input/TextInput";
 import { useNavigate } from "react-router-dom";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../redux/auth/authSlice";
+import { registerThunk } from "../../redux/auth/authSlice";
 import { useEffect } from "react";
 import { AppDispatch, IRootState } from "../../store";
 
@@ -22,7 +22,7 @@ const SignUpPage = () => {
     username: string;
     password: string;
   }) => {
-    dispatch(register(user));
+    dispatch(registerThunk(user));
   };
 
   useEffect(() => {

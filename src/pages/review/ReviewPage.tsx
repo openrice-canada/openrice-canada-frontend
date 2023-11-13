@@ -1,7 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Review } from "../../api/review/ReviewType";
-import { getReview } from "../../api/review/reviewApiIndex";
+import { useEffect } from "react";
 import {
   IoCashOutline,
   IoPerson,
@@ -10,6 +8,9 @@ import {
   IoTime,
 } from "react-icons/io5";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getReviewThunk } from "../../redux/reviews/reviewsSlice";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -26,18 +27,17 @@ const ReviewRow = ({ text, icon }: { text: string; icon: React.ReactNode }) => (
 
 const ReviewPage: React.FC = () => {
   const { id } = useParams();
-  const [review, setReview] = useState<Review>();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const review = useSelector((state: IRootState) => state.review.review);
 
   useEffect(() => {
     const fetchReview = async () => {
       if (!id || !isUUID(id)) return;
-      const data = await getReview(id);
-      if (data) {
-        setReview(data);
-      }
+      dispatch(getReviewThunk(id));
     };
     fetchReview();
-  }, [id]);
+  }, [id, dispatch]);
 
   return (
     <div className="container justify-center mb-8 px-4 gap-8 mx-auto mt-10">

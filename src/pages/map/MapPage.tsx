@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+
 import MapComponent from "../../components/map/MapComponent";
-import { getRestaurants } from "../../api/restaurant/restaurantApiIndex";
-import { Restaurant } from "../../api/restaurant/RestaurantType";
 
 const MapPage = () => {
-  const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
-
-  const fetchRestaurantList = async () => {
-    const data = await getRestaurants({});
-    setRestaurantList(data);
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const restaurants = useSelector(
+    (state: IRootState) => state.restaurant.restaurants
+  );
 
   useEffect(() => {
+    const fetchRestaurantList = async () => {
+      dispatch(getRestaurantsByQueryThunk({}));
+    };
+
     fetchRestaurantList();
-  }, []);
+  }, [dispatch]);
 
   return (
     <MapComponent
-      coordinates={restaurantList
+      coordinates={restaurants
         .filter((restaurant) => restaurant.latitude && restaurant.longitude)
         .map((restaurant) => ({
           name: restaurant.name,

@@ -9,7 +9,7 @@ export const getReviews = async (): Promise<Review[]> => {
   return apiClient.get("");
 };
 
-export const getReviewsByRestaurantId = async (
+export const getReviewsByRestaurantID = async (
   restaurantId: string
 ): Promise<Review[]> => {
   return apiClient.get("", { params: { restaurantId } });

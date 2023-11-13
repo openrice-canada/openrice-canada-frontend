@@ -18,6 +18,6 @@ export const postUserAuth = async (
   return apiClient.post("/login", user);
 };
 
-export const getCurrentUserCheck = async (): Promise<AuthenticateResponse> => {
+export const getCurrentUser = async (): Promise<AuthenticateResponse> => {
   return apiClient.get("/current-user");
 };

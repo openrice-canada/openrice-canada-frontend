@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getRestaurantDetail } from "../../api/restaurant/restaurantApiIndex";
-import { Restaurant } from "../../api/restaurant/RestaurantType";
 import { IoChatbubbleOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getRestaurantThunk } from "../../redux/restaurant/restaurantSlice";
+import { getReviewsThunk } from "../../redux/reviews/reviewsSlice";
+
+import useOnClickOutside from "../../components/hooks/useOnClickOutside";
 import RestaurantOverviewButton from "../../components/button/RestaurantOverviewButton";
 import ReviewCard from "../../components/card/ReviewCard";
-import { Review } from "../../api/review/ReviewType";
-import { getReviewsByRestaurantId } from "../../api/review/reviewApiIndex";
 import AddReviewModal from "../../components/modal/AddReviewModal";
 import RestaurantDetailSkeletonLoader from "../../components/loader/RestaurantDetailSkeletonLoader";
 import PhotoModal from "../../components/modal/PhotoModal";
-import useOnClickOutside from "../../components/hooks/useOnClickOutside";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -20,35 +21,37 @@ function isUUID(id: string) {
 
 const RestaurantOverviewPage: React.FC = () => {
   const { id } = useParams();
-  const [restaurantDetail, setRestaurantDetail] = useState<Restaurant>();
-  const [reviews, setReviews] = useState<Review[]>([]);
+
   const [page, setPage] = useState("Reviews");
   const [isShownAddReviewModal, setIsShownAddReviewModal] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]);
   const [menus, setMenus] = useState<string[]>([]);
   const [popUpOpen, setPopUpOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+
   const imageRef = useRef<null | HTMLDivElement>(null);
   const formRef = useRef<null | HTMLDivElement>(null);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+
+  const dispatch = useDispatch<AppDispatch>();
+  const restaurantDetail = useSelector(
+    (state: IRootState) => state.restaurant.restaurant
+  );
+  const reviews = useSelector((state: IRootState) => state.review.reviews);
 
   useEffect(() => {
     const fetchRestaurantDetail = async () => {
       if (!id || !isUUID(id)) return;
-      const data = await getRestaurantDetail(id);
-      if (data) {
-        setRestaurantDetail(data);
-      }
+      dispatch(getRestaurantThunk(id));
     };
 
     const fetchRestaurantReview = async () => {
       if (!id || !isUUID(id)) return;
-      const data = await getReviewsByRestaurantId(id);
-      setReviews(data);
+      dispatch(getReviewsThunk(id));
     };
 
     fetchRestaurantDetail();
     fetchRestaurantReview();
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (id === "8879942f-fce4-41d2-8aab-3faeb8d8c909") {
