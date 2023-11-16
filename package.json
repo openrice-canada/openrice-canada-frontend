@@ -1,7 +1,7 @@
 {
   "name": "openrice_canada_frontend",
-  "version": "0.0.1",
   "private": true,
+  "version": "0.1.0",
   "homepage": "https://openricecanadafrontend.vercel.app",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
