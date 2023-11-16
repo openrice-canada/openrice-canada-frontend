@@ -101,7 +101,7 @@ const SignUpPage = () => {
       />
       <button
         type="submit"
-        className="bg-[#000000] px-4 py-2 rounded-md text-[#ffffff] font-bold"
+        className="bg-black px-4 py-2 rounded-md text-white font-bold hover:scale-105 duration-500"
       >
         Sign up
       </button>

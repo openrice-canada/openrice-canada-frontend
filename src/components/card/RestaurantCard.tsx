@@ -18,7 +18,7 @@ const RestaurantCard: React.FC<Restaurant> = (props: Restaurant) => {
   return (
     <Link
       to={`/restaurant/${props.restaurant_id}`}
-      className="rounded-md shadow-lg hover:bg-slate-200"
+      className="rounded-md shadow-lg hover:bg-slate-200 hover:scale-110 duration-500"
     >
       <div className="w-full h-48 overflow-hidden">
         <img
