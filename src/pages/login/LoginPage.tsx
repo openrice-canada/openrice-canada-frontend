@@ -57,7 +57,7 @@ function LoginPage() {
           <TextInput
             label="Username"
             type="text"
-            placeholder="Enter your username or email"
+            placeholder="Enter your username"
             value={field.value}
             onChange={field.onChange}
           />
