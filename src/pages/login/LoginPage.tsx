@@ -26,7 +26,6 @@ function LoginPage() {
       enqueueSnackbar("Login successfully", { variant: "success" });
       setTimeout(() => {
         navigate("/");
-        navigate(0);
       }, 1000);
     } else if (loginSuccess === false) {
       enqueueSnackbar(`${message} You may try again`, {
@@ -58,7 +57,7 @@ function LoginPage() {
           <TextInput
             label="Username"
             type="text"
-            placeholder="Enter your username"
+            placeholder="Enter your username or email"
             value={field.value}
             onChange={field.onChange}
           />
