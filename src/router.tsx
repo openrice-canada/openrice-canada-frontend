@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import ReviewPage from "./pages/review/ReviewPage";
 import UserInputPage from "./pages/review/UserInputPage";
@@ -9,8 +9,8 @@ import HomePage from "./pages/home/HomePage";
 import SignUpPage from "./pages/signUp/SignUpPage";
 import RestaurantOverviewPage from "./pages/restaurant/RestaurantOverviewPage";
 import MenuPage from "./pages/menu/MenuPage";
-import RestaurantListPage from "./pages/restaurant/RestaurantListPage";
-import NewRestaurantPage from "./pages/restaurant/NewRestaurantPage";
+import RestaurantHomePage from "./pages/restaurant/RestaurantHomePage";
+import CreateRestaurantPage from "./pages/restaurant/CreateRestaurantPage";
 
 const router = createBrowserRouter(
   [
@@ -44,20 +44,26 @@ const router = createBrowserRouter(
           element: <MapPage />,
         },
         {
-          path: "/restaurant/:id",
-          element: <RestaurantOverviewPage />,
+          path: "/restaurant",
+          element: <Outlet />,
+          children: [
+            {
+              path: ":id",
+              element: <RestaurantOverviewPage />,
+            },
+            {
+              path: "create",
+              element: <CreateRestaurantPage />,
+            },
+          ],
         },
         {
-          path: "/restaurant",
-          element: <RestaurantListPage />,
+          path: "/restaurants",
+          element: <RestaurantHomePage />,
         },
         {
           path: "/menu",
           element: <MenuPage />,
-        },
-        {
-          path: "/new-restaurant",
-          element: <NewRestaurantPage />,
         },
       ],
     },

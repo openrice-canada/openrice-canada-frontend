@@ -1,59 +1,61 @@
 import { Controller, useForm } from "react-hook-form";
-import TextInput from "../../components/Input/TextInput";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../App";
-import { useContext, useEffect, useState } from "react";
-import SelectInput from "../../components/Input/SelectInput";
-import NumberInput from "../../components/Input/NumberInput";
+import { useEffect } from "react";
 import { TextareaInput } from "../../components/Input/TextareaInput";
-import { Dish } from "../../api/dish/dishType";
-import { District } from "../../api/district/districtType";
-import { getDishList } from "../../api/dish";
-import { getDistrictList } from "../../api/district";
-import { getPaymentMethodList } from "../../api/payment";
-import { PaymentMethod } from "../../api/payment/paymentMethodType";
 import {
   postRestaurant,
   postRestaurantDIsh,
   postRestaurantPaymentMethod,
-} from "../../api/restaurant";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { enqueueSnackbar } from "notistack";
+} from "../../api/restaurant/restaurantApiIndex";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../store";
+import { getDishesThunk } from "../../redux/dish/dishSlice";
+import { getDistrictsThunk } from "../../redux/district/districtSlice";
+import { getPaymentMethodsThunk } from "../../redux/paymentMethod/paymentMethodSlice";
 
-const NewRestaurantPage = () => {
-  const context = useContext(UserContext);
+import TextInput from "../../components/Input/TextInput";
+import SelectInput from "../../components/Input/SelectInput";
+import NumberInput from "../../components/Input/NumberInput";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+const CreateRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
-  const [dishes, setDishes] = useState<Dish[]>([]);
-  const [districts, setDistricts] = useState<District[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+
+  const dishes = useSelector((state: IRootState) => state.dish.dishes);
+  const districts = useSelector(
+    (state: IRootState) => state.district.districts
+  );
+  const paymentMethods = useSelector(
+    (state: IRootState) => state.paymentMethod.paymentMethods
+  );
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const fetchDishList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
-      const data = await getDishList();
-      if (data) {
-        setDishes(data);
-      }
+    const fetchDishes = async () => {
+      if (user?.role !== "Admin") return;
+      dispatch(getDishesThunk());
     };
 
-    const fetchDistrictList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
-      const data = await getDistrictList();
-      setDistricts(data);
+    const fetchDistricts = async () => {
+      if (user?.role !== "Admin") return;
+      dispatch(getDistrictsThunk());
     };
 
-    const fetchPaymentMethodList = async () => {
-      if (context?.userInfo?.role !== "ADMIN") return;
-      const data = await getPaymentMethodList();
-      setPaymentMethods(data);
+    const fetchPaymentMethods = async () => {
+      if (user?.role !== "Admin") return;
+      dispatch(getPaymentMethodsThunk());
     };
 
-    fetchDishList();
-    fetchDistrictList();
-    fetchPaymentMethodList();
-  }, [context?.userInfo?.role]);
+    fetchDishes();
+    fetchDistricts();
+    fetchPaymentMethods();
+  }, [user?.role, dispatch]);
 
   const newRestaurant = async (
     restaurant: {
@@ -81,7 +83,6 @@ const NewRestaurantPage = () => {
       saturday: { from: start_time, to: end_time },
       sunday: { from: start_time, to: end_time },
     });
-    // console.log(restaurant, dish, paymentMethod);
     const res = await postRestaurant(restaurant);
     if (res.restaurant_id) {
       await postRestaurantDIsh({
@@ -97,18 +98,14 @@ const NewRestaurantPage = () => {
         navigate(`/restaurant/${res.restaurant_id}`);
         navigate(0);
       }, 1000);
+
+      setTimeout(() => {
+        closeSnackbar();
+      }, 2000);
     }
-    // const token = await postUserRegister(restaurant);
-    // if (token.message) {
-    // 	console.error(token.message);
-    // } else {
-    // 	sessionStorage.setItem('jwt', token.token || '');
-    // 	navigate('/');
-    // 	navigate(0);
-    // }
   };
 
-  return context?.userInfo?.role === "ADMIN" ? (
+  return user?.role === "Admin" ? (
     <form
       className="grid grid-cols-2 gap-3 px-6"
       onSubmit={handleSubmit((restaurant) =>
@@ -269,13 +266,6 @@ const NewRestaurantPage = () => {
                 rules={{ required: true }}
                 render={({ field }) => {
                   return (
-                    // <TextareaInput
-                    // 	label='Opening Hours'
-                    // 	placeholder='Enter restaurant opening hours'
-                    // 	value={field.value}
-                    // 	onChange={field.onChange}
-                    // 	className='border border-gray-400 p-2 mt-1 rounded-md'
-                    // />
                     <>
                       <DatePicker
                         placeholderText="Opening Hour"
@@ -300,13 +290,6 @@ const NewRestaurantPage = () => {
                 rules={{ required: true }}
                 render={({ field }) => {
                   return (
-                    // <TextareaInput
-                    // 	label='Opening Hours'
-                    // 	placeholder='Enter restaurant opening hours'
-                    // 	value={field.value}
-                    // 	onChange={field.onChange}
-                    // 	className='border border-gray-400 p-2 mt-1 rounded-md'
-                    // />
                     <>
                       <DatePicker
                         placeholderText="Closing Hour"
@@ -382,4 +365,4 @@ const NewRestaurantPage = () => {
   );
 };
 
-export default NewRestaurantPage;
+export default CreateRestaurantPage;

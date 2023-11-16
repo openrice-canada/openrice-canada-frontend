@@ -2,15 +2,15 @@
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import TextInput from "../Input/TextInput";
-import { postReview } from "../../api/review";
-import { useContext } from "react";
-import { UserContext } from "../../App";
 import { TextareaInput } from "../Input/TextareaInput";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../Input/FIleInput";
 import { uploadImage } from "../../utils/imageService";
 import NumberInput from "../Input/NumberInput";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store";
+import { postReview } from "../../api/review/reviewApiIndex";
 
 type AddReviewModalProps = {
   isShown: boolean;
@@ -32,7 +32,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
   props: AddReviewModalProps
 ) => {
   const navigate = useNavigate();
-  const context = useContext(UserContext);
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       title: "",
@@ -45,14 +45,14 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
   });
 
   const addReview = async (review: ReviewForm) => {
-    if (context?.userInfo?.user_id) {
+    if (user?.user_id) {
       const res = await postReview({
         title: review.title,
         content: review.content,
         spending: review.spending,
         rating: review.rating,
         restaurant_id: props?.restaurant_id as string,
-        user_id: context?.userInfo?.user_id as string,
+        user_id: user?.user_id,
         visit_date: new Date(review.visit_date),
       });
       await uploadImage(
@@ -67,11 +67,15 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
         "menus",
         res.review_id
       );
-      enqueueSnackbar("Review added successfully!", { variant: "success" });
+      enqueueSnackbar("Review added successfully", { variant: "success" });
       setTimeout(() => {
         navigate(`/restaurant/${props?.restaurant_id}`);
         navigate(0);
       }, 1000);
+
+      setTimeout(() => {
+        closeSnackbar();
+      }, 2000);
     }
   };
 
@@ -80,7 +84,6 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
       <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
       <div className="relative w-1/4 min-w-[400px] my-6 mx-auto z-40">
-        {/*content*/}
         <div
           className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
           ref={props.formRef}
@@ -96,7 +99,6 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
               </span>
             </button>
           </div>
-          {/*body*/}
           <div className="relative p-6 flex flex-col items-center gap-6 overflow-auto">
             <form
               className="w-full gap-2 flex flex-col"
