@@ -8,6 +8,7 @@
     "notistack",
     "Nsenph",
     "Openrice",
+    "paymentmethod",
     "reduxjs",
     "supabase",
     "tailwindcss"

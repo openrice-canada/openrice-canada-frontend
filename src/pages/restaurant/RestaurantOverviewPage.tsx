@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
@@ -12,6 +12,7 @@ import ReviewCard from "../../components/card/ReviewCard";
 import AddReviewModal from "../../components/modal/AddReviewModal";
 import RestaurantDetailSkeletonLoader from "../../components/loader/RestaurantDetailSkeletonLoader";
 import PhotoModal from "../../components/modal/PhotoModal";
+import ErrorPage from "../error/ErrorPage";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -21,6 +22,7 @@ function isUUID(id: string) {
 
 const RestaurantOverviewPage: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [page, setPage] = useState("Reviews");
   const [isShownAddReviewModal, setIsShownAddReviewModal] = useState(false);
@@ -72,6 +74,12 @@ const RestaurantOverviewPage: React.FC = () => {
     }
   }, [id, reviews]);
 
+  useEffect(() => {
+    if (!id || !isUUID(id)) {
+      navigate("error");
+    }
+  }, [id, navigate]);
+
   const openPopUp = (image: string) => {
     setSelectedImage(image);
     setPopUpOpen(true);
@@ -85,7 +93,9 @@ const RestaurantOverviewPage: React.FC = () => {
   const buttons = ["Reviews", "Photos", "Menus"];
   if (!restaurantDetail) return null;
 
-  return (
+  return !id || !isUUID(id) ? (
+    <ErrorPage />
+  ) : (
     <>
       <AddReviewModal
         isShown={isShownAddReviewModal}

@@ -2,7 +2,7 @@ import { AxiosApiClientBuilder } from "../axiosIndex";
 import { User, AuthenticateResponse } from "./authType";
 
 const apiClient = new AxiosApiClientBuilder()
-  .withResourceName("/user/auth")
+  .withResourceName("/auth/user")
   .withCredentials(true)
   .build();
 

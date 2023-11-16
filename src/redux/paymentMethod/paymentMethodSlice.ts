@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PaymentMethod } from "../../api/payment/paymentMethodType";
-import { getPaymentMethods } from "../../api/payment/paymentApiIndex";
+import { PaymentMethod } from "../../api/paymentMethod/paymentMethodType";
+import { getPaymentMethods } from "../../api/paymentMethod/paymentMethodApiIndex";
 
 export interface IPaymentMethodState {
   paymentMethods: PaymentMethod[];
