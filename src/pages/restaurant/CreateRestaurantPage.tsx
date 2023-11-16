@@ -20,6 +20,7 @@ import NumberInput from "../../components/Input/NumberInput";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import ErrorPage from "../error/ErrorPage";
 
 const CreateRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
@@ -356,12 +357,7 @@ const CreateRestaurantPage: React.FC = () => {
       </div>
     </form>
   ) : (
-    <div className="h-screen flex flex-col gap-6 justify-center max-w-3xl mx-auto">
-      {" "}
-      <h1 className="text-3xl font-bold text-red-600 text-center">
-        You have no right to add new restaurant
-      </h1>{" "}
-    </div>
+    <ErrorPage />
   );
 };
 
