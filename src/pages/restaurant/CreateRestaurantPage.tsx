@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { TextareaInput } from "../../components/Input/TextareaInput";
+import { TextareaInput } from "../../components/input/TextareaInput";
 import {
   postRestaurant,
   postRestaurantDIsh,
@@ -14,9 +14,9 @@ import { getDishesThunk } from "../../redux/dish/dishSlice";
 import { getDistrictsThunk } from "../../redux/district/districtSlice";
 import { getPaymentMethodsThunk } from "../../redux/paymentMethod/paymentMethodSlice";
 
-import TextInput from "../../components/Input/TextInput";
-import SelectInput from "../../components/Input/SelectInput";
-import NumberInput from "../../components/Input/NumberInput";
+import TextInput from "../../components/input/TextInput";
+import SelectInput from "../../components/input/SelectInput";
+import NumberInput from "../../components/input/NumberInput";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";

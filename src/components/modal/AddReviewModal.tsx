@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
-import TextInput from "../Input/TextInput";
-import { TextareaInput } from "../Input/TextareaInput";
-import { useNavigate } from "react-router-dom";
-import FileInput from "../Input/FIleInput";
-import { uploadImage } from "../../utils/imageService";
-import NumberInput from "../Input/NumberInput";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
+
+import { TextareaInput } from "../input/TextareaInput";
+import { uploadImage } from "../../utils/imageService";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../store";
 import { postReview } from "../../api/review/reviewApiIndex";
+import TextInput from "../input/TextInput";
+import NumberInput from "../input/NumberInput";
+import FileInput from "../input/FileInput";
 
 type AddReviewModalProps = {
   isShown: boolean;
@@ -55,19 +56,34 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
         user_id: user?.user_id,
         visit_date: new Date(review.visit_date),
       });
-      await uploadImage(
-        review.photo,
-        props?.restaurant_id as string,
-        "reviews",
-        res.review_id
-      );
-      await uploadImage(
-        review.photo,
-        props?.restaurant_id as string,
-        "menus",
-        res.review_id
-      );
+
+      if (review.photo) {
+        await uploadImage(
+          review.photo,
+          props?.restaurant_id as string,
+          "photos",
+          res.review_id
+        );
+
+        await uploadImage(
+          review.photo,
+          props?.restaurant_id as string,
+          "menus",
+          res.review_id
+        );
+      }
+
       enqueueSnackbar("Review added successfully", { variant: "success" });
+      setTimeout(() => {
+        navigate(`/restaurant/${props?.restaurant_id}`);
+        navigate(0);
+      }, 1000);
+
+      setTimeout(() => {
+        closeSnackbar();
+      }, 2000);
+    } else {
+      enqueueSnackbar("You haven't login yet", { variant: "error" });
       setTimeout(() => {
         navigate(`/restaurant/${props?.restaurant_id}`);
         navigate(0);
@@ -80,6 +96,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
   };
 
   if (!props.isShown) return null;
+
   return (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
       <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
@@ -179,12 +196,10 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
                 name="photo"
                 render={({ field }) => (
                   <FileInput
-                    // value={field.value}
                     onChange={(e) => {
                       if (e.target.files) {
                         const selectedFile = e.target.files[0];
                         field.onChange(selectedFile);
-                        2;
                       }
                     }}
                     label="Visit Date"
