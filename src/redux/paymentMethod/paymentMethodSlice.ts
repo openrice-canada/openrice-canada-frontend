@@ -19,7 +19,7 @@ export const getPaymentMethodsThunk = createAsyncThunk(
 );
 
 const paymentMethodSlice = createSlice({
-  name: "paymentMethod",
+  name: "payment_method",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

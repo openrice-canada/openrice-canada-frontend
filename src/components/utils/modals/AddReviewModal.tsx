@@ -4,14 +4,14 @@ import { IoClose } from "react-icons/io5";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 
-import { TextareaInput } from "../input/TextareaInput";
-import { uploadImage } from "../../utils/imageService";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../store";
-import { postReview } from "../../api/review/reviewApiIndex";
-import TextInput from "../input/TextInput";
-import NumberInput from "../input/NumberInput";
-import FileInput from "../input/FileInput";
+import { TextareaInput } from "../inputs/TextareaInput";
+import { uploadImage } from "../../../utils/imageService";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, IRootState } from "../../../store";
+import TextInput from "../inputs/TextInput";
+import NumberInput from "../inputs/NumberInput";
+import FileInput from "../inputs/FileInput";
+import { createReviewThunk } from "../../../redux/reviews/reviewsSlice";
 
 type AddReviewModalProps = {
   isShown: boolean;
@@ -33,7 +33,6 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
   props: AddReviewModalProps
 ) => {
   const navigate = useNavigate();
-  const user = useSelector((state: IRootState) => state.auth.currentUser);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       title: "",
@@ -45,31 +44,39 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
     } as ReviewForm,
   });
 
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
+  const reviewID = useSelector(
+    (state: IRootState) => state.review.review?.review_id
+  );
+
   const addReview = async (review: ReviewForm) => {
     if (user?.user_id) {
-      const res = await postReview({
-        title: review.title,
-        content: review.content,
-        spending: review.spending,
-        rating: review.rating,
-        restaurant_id: props?.restaurant_id as string,
-        user_id: user?.user_id,
-        visit_date: new Date(review.visit_date),
-      });
+      dispatch(
+        createReviewThunk({
+          title: review.title,
+          content: review.content,
+          spending: review.spending,
+          rating: review.rating,
+          restaurant_id: props?.restaurant_id as string,
+          user_id: user?.user_id,
+          visit_date: new Date(review.visit_date),
+        })
+      );
 
       if (review.photo) {
         await uploadImage(
           review.photo,
           props?.restaurant_id as string,
           "photos",
-          res.review_id
+          reviewID
         );
 
         await uploadImage(
           review.photo,
           props?.restaurant_id as string,
           "menus",
-          res.review_id
+          reviewID
         );
       }
 
@@ -202,7 +209,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
                         field.onChange(selectedFile);
                       }
                     }}
-                    label="Visit Date"
+                    label="Upload Photo"
                     type="file"
                     className="form-control"
                     placeholder=""

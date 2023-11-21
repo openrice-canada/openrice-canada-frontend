@@ -17,9 +17,9 @@ export type Review = {
 export type CreateReviewRequest = {
   user_id: string;
   restaurant_id: string;
-  rating: number;
   title: string;
-  visit_date: Date;
   content: string;
+  rating: number;
   spending: number;
+  visit_date: Date;
 };

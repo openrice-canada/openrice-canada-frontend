@@ -7,11 +7,11 @@ import { getRestaurantThunk } from "../../redux/restaurant/restaurantSlice";
 import { getReviewsThunk } from "../../redux/reviews/reviewsSlice";
 
 import useOnClickOutside from "../../components/hooks/useOnClickOutside";
-import RestaurantOverviewButton from "../../components/button/RestaurantOverviewButton";
-import ReviewCard from "../../components/card/ReviewCard";
-import AddReviewModal from "../../components/modal/AddReviewModal";
+import RestaurantOverviewButton from "../../components/utils/buttons/RestaurantOverviewButton";
+import ReviewCard from "../../components/utils/cards/ReviewCard";
+import AddReviewModal from "../../components/utils/modals/AddReviewModal";
 import RestaurantDetailSkeletonLoader from "../../components/loader/RestaurantDetailSkeletonLoader";
-import PhotoModal from "../../components/modal/PhotoModal";
+import PhotoModal from "../../components/utils/modals/PhotoModal";
 import ErrorPage from "../error/ErrorPage";
 
 function isUUID(id: string) {
@@ -140,7 +140,7 @@ const RestaurantOverviewPage: React.FC = () => {
             ) : (
               <div>
                 <h1 className="text-2xl font-bold">{restaurantDetail.name}</h1>
-                <div>{restaurantDetail.rating}</div>
+                <div>{restaurantDetail.averageRating}</div>
                 <div className="text-lg font-semibold">
                   {restaurantDetail?.address}
                 </div>
@@ -164,7 +164,7 @@ const RestaurantOverviewPage: React.FC = () => {
         {page === "Reviews" && (
           <>
             <div className="flex gap-4 items-center my-4">
-              <h1 className="text-2xl font-bold">Review</h1>
+              <h1 className="text-2xl font-bold">Reviews</h1>
               <div className="flex gap-4">
                 <button
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-50"
@@ -186,7 +186,15 @@ const RestaurantOverviewPage: React.FC = () => {
         )}
         {page === "Photos" && (
           <>
-            <h1 className="text-2xl font-bold my-4">Photos</h1>
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold my-4">Photos</h1>
+              <button
+                type="submit"
+                className="border-gray-700 h-full w-20 flex justify-center items-center rounded-md text-lg px-12 py-2 border-2 hover:bg-gray-700 hover:text-white"
+              >
+                upload
+              </button>
+            </div>
             {photos.length === 0 && <div>No photos in this restaurant</div>}
             {photos.length > 0 && (
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
@@ -218,7 +226,15 @@ const RestaurantOverviewPage: React.FC = () => {
         )}
         {page === "Menus" && (
           <>
-            <h1 className="text-2xl font-bold my-4">Menus</h1>
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold my-4">Menus</h1>
+              <button
+                type="submit"
+                className="border-gray-700 h-full w-20 flex justify-center items-center rounded-md text-lg px-12 py-2 border-2 hover:bg-gray-700 hover:text-white"
+              >
+                upload
+              </button>
+            </div>
             {menus.length === 0 && (
               <div>No menu photos are provided for this restaurant</div>
             )}

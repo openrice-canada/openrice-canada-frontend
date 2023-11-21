@@ -1,10 +1,29 @@
+export interface Restaurant {
+  restaurant_id: string;
+  name: string;
+  address: string;
+  district_id: string;
+  latitude: string;
+  longitude: string;
+  postal_code: string;
+  phone: string;
+  intro: string;
+  opening_hours: string;
+  cover_image?: string;
+  averageRating: number;
+  reviewCount: number;
+  active: boolean;
+  created_at: Date;
+  modified_at: Date;
+}
+
 export type SearchRestaurantQuery = {
   name?: string;
   limit?: number;
   offset?: number;
 };
 
-export type Restaurant = {
+export type CreateRestaurantType = {
   address: string;
   latitude: string;
   longitude: string;
@@ -30,14 +49,4 @@ export type Restaurant = {
   restaurant_id?: string;
   rating?: number;
   coverImageUrl?: string;
-};
-
-export type RestaurantDish = {
-  restaurant_id: string;
-  dish_id: string;
-};
-
-export type RestaurantPaymentMethod = {
-  restaurant_id: string;
-  payment_method_id: string;
 };

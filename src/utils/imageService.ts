@@ -9,13 +9,12 @@ export async function uploadImage(
   file: File,
   restaurantId: string,
   path?: string,
-  reviewId?: string
+  id?: string
 ) {
-  const { data } = await supabase.storage
+  await supabase.storage
     .from("restaurant")
-    .upload(`/${path}/${restaurantId}/${reviewId}.jpg`, file, {
+    .upload(`/${restaurantId}/${path}/${id}.jpg`, file, {
       cacheControl: "3600",
       upsert: false,
     });
-  console.log(data);
 }

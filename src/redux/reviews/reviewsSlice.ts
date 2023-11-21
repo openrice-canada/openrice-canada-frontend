@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Review } from "../../api/review/ReviewType";
+import { CreateReviewRequest, Review } from "../../api/review/ReviewType";
 import {
   getReview,
   getReviewsByRestaurantID,
+  createReview,
 } from "../../api/review/reviewApiIndex";
 
 export interface IReviewsState {
@@ -31,6 +32,14 @@ export const getReviewThunk = createAsyncThunk(
   }
 );
 
+export const createReviewThunk = createAsyncThunk(
+  "review/create",
+  async (review: CreateReviewRequest) => {
+    const response = await createReview(review);
+    return response;
+  }
+);
+
 const reviewsReducer = createSlice({
   name: "reviews",
   initialState,
@@ -43,6 +52,12 @@ const reviewsReducer = createSlice({
     });
 
     builder.addCase(getReviewThunk.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.review = action.payload;
+      }
+    });
+
+    builder.addCase(createReviewThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.review = action.payload;
       }

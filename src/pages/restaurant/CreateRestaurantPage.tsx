@@ -1,31 +1,30 @@
-import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { TextareaInput } from "../../components/input/TextareaInput";
-import {
-  postRestaurant,
-  postRestaurantDIsh,
-  postRestaurantPaymentMethod,
-} from "../../api/restaurant/restaurantApiIndex";
-import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Controller, useForm } from "react-hook-form";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+import DatePicker from "react-datepicker";
+
+import { TextareaInput } from "../../components/utils/inputs/TextareaInput";
 import { AppDispatch, IRootState } from "../../store";
 import { getDishesThunk } from "../../redux/dish/dishSlice";
 import { getDistrictsThunk } from "../../redux/district/districtSlice";
 import { getPaymentMethodsThunk } from "../../redux/paymentMethod/paymentMethodSlice";
-
-import TextInput from "../../components/input/TextInput";
-import SelectInput from "../../components/input/SelectInput";
-import NumberInput from "../../components/input/NumberInput";
-import DatePicker from "react-datepicker";
+import { createRestaurantThunk } from "../../redux/restaurant/restaurantSlice";
+import { createRestaurantPaymentMethodThunk } from "../../redux/restaurantPaymentMethod/restaurantPaymentMethodSlice";
+import { createRestaurantDishThunk } from "../../redux/restaurantDish/restaurantDishSlice";
+import TextInput from "../../components/utils/inputs/TextInput";
+import SelectInput from "../../components/utils/inputs/SelectInput";
+import NumberInput from "../../components/utils/inputs/NumberInput";
+import ErrorPage from "../error/ErrorPage";
 
 import "react-datepicker/dist/react-datepicker.css";
-import ErrorPage from "../error/ErrorPage";
 
 const CreateRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
 
+  const dispatch = useDispatch<AppDispatch>();
   const dishes = useSelector((state: IRootState) => state.dish.dishes);
   const districts = useSelector(
     (state: IRootState) => state.district.districts
@@ -34,8 +33,9 @@ const CreateRestaurantPage: React.FC = () => {
     (state: IRootState) => state.paymentMethod.paymentMethods
   );
   const user = useSelector((state: IRootState) => state.auth.currentUser);
-
-  const dispatch = useDispatch<AppDispatch>();
+  const restaurantID = useSelector(
+    (state: IRootState) => state.restaurant.restaurant?.restaurant_id
+  );
 
   useEffect(() => {
     const fetchDishes = async () => {
@@ -58,7 +58,7 @@ const CreateRestaurantPage: React.FC = () => {
     fetchPaymentMethods();
   }, [user?.role, dispatch]);
 
-  const newRestaurant = async (
+  const createNewRestaurant = async (
     restaurant: {
       name: string;
       address: string;
@@ -84,19 +84,27 @@ const CreateRestaurantPage: React.FC = () => {
       saturday: { from: start_time, to: end_time },
       sunday: { from: start_time, to: end_time },
     });
-    const res = await postRestaurant(restaurant);
-    if (res.restaurant_id) {
-      await postRestaurantDIsh({
-        restaurant_id: res.restaurant_id,
-        dish_id,
-      });
-      await postRestaurantPaymentMethod({
-        restaurant_id: res.restaurant_id,
-        payment_method_id,
-      });
+
+    dispatch(createRestaurantThunk(restaurant));
+
+    if (restaurantID) {
+      dispatch(
+        createRestaurantDishThunk({
+          restaurant_id: restaurantID,
+          dish_id,
+        })
+      );
+
+      dispatch(
+        createRestaurantPaymentMethodThunk({
+          restaurant_id: restaurantID,
+          payment_method_id,
+        })
+      );
+
       enqueueSnackbar("Restaurant added successfully!", { variant: "success" });
       setTimeout(() => {
-        navigate(`/restaurant/${res.restaurant_id}`);
+        navigate(`/restaurant/${restaurantID}`);
         navigate(0);
       }, 1000);
 
@@ -110,7 +118,7 @@ const CreateRestaurantPage: React.FC = () => {
     <form
       className="grid grid-cols-2 gap-3 px-6"
       onSubmit={handleSubmit((restaurant) =>
-        newRestaurant(
+        createNewRestaurant(
           restaurant as {
             name: string;
             address: string;
@@ -210,15 +218,15 @@ const CreateRestaurantPage: React.FC = () => {
           )}
         />
         <Controller
-          name="postalCode"
+          name="createalCode"
           control={control}
           defaultValue={""}
           rules={{ required: true }}
           render={({ field }) => (
             <TextInput
-              label="Postal Code"
+              label="createal Code"
               type="text"
-              placeholder="Enter restaurant postal code"
+              placeholder="Enter restaurant createal code"
               value={field.value}
               onChange={field.onChange}
             />

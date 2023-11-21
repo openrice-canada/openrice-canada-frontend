@@ -1,8 +1,7 @@
 import { AxiosApiClientBuilder } from "../axiosIndex";
 import {
   Restaurant,
-  RestaurantDish,
-  RestaurantPaymentMethod,
+  CreateRestaurantType,
   SearchRestaurantQuery,
 } from "./RestaurantType";
 
@@ -22,20 +21,8 @@ export const getRestaurantDetail = async (
   return apiClient.get(restaurantId);
 };
 
-export const postRestaurant = async (
-  restaurant: Restaurant
+export const createRestaurant = async (
+  restaurant: CreateRestaurantType
 ): Promise<Restaurant> => {
   return apiClient.post("", restaurant);
-};
-
-export const postRestaurantDIsh = async (
-  dish: RestaurantDish
-): Promise<RestaurantDish> => {
-  return apiClient.post("/dish", dish);
-};
-
-export const postRestaurantPaymentMethod = async (
-  paymentMethod: RestaurantPaymentMethod
-): Promise<RestaurantPaymentMethod> => {
-  return apiClient.post("/payment", paymentMethod);
 };
