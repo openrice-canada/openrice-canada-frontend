@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextareaInput } from "../../components/Input/TextareaInput";
+import { TextareaInput } from "../../components/input/TextareaInput";
 
 function UserInput() {
   const { handleSubmit, control } = useForm();

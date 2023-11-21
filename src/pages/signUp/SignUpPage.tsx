@@ -1,5 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import TextInput from "../../components/Input/TextInput";
+import TextInput from "../../components/input/TextInput";
 import { useNavigate } from "react-router-dom";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";

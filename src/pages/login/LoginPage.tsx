@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginThunk } from "../../redux/auth/authSlice";
 import { AppDispatch, IRootState } from "../../store";
 
-import TextInput from "../../components/Input/TextInput";
+import TextInput from "../../components/input/TextInput";
 import { useEffect } from "react";
 
 function LoginPage() {

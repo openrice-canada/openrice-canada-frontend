@@ -99,7 +99,7 @@ const RestaurantOverviewPage: React.FC = () => {
             : photo
         )
       );
-    } else if (type === "menus") {
+    } else if (type === "menu") {
       setMenus(
         menus.map((menu) =>
           menu.id === id
@@ -192,7 +192,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {photos.map((photo, index) => (
                   <div
-                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200"
+                    className="shadow-md rounded-lg cursor-pointer h-fit bg-white hover:bg-slate-200"
                     onClick={() => openPopUp(photo.src)}
                     key={`photo${index}`}
                   >
@@ -226,7 +226,7 @@ const RestaurantOverviewPage: React.FC = () => {
               <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {menus.map((menu, index) => (
                   <div
-                    className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200"
+                    className="shadow-md rounded-lg cursor-pointer h-fit bg-white hover:bg-slate-200"
                     onClick={() => openPopUp(menu.src)}
                     key={`menu${index}`}
                   >

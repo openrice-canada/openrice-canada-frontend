@@ -6,7 +6,7 @@ import { AppDispatch, IRootState } from "../../store";
 import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
 
 import RestaurantCard from "../../components/card/RestaurantCard";
-import SearchInput from "../../components/Input/SearchInput";
+import SearchInput from "../../components/input/SearchInput";
 
 export default function HomePage(): JSX.Element {
   const navigate = useNavigate();
