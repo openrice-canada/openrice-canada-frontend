@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
 import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
 
-import RestaurantCard from "../../components/card/RestaurantCard";
-import SearchInput from "../../components/input/SearchInput";
+import RestaurantCard from "../../components/utils/cards/RestaurantCard";
+import SearchInput from "../../components/utils/inputs/SearchInput";
 
 const RestaurantHomePage = () => {
   const dispatch = useDispatch<AppDispatch>();

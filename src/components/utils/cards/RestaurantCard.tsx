@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Restaurant } from "../../api/restaurant/RestaurantType";
+import { Restaurant } from "../../../api/restaurant/RestaurantType";
 import { IoLocation, IoReorderThree, IoRestaurant } from "react-icons/io5";
 
 const RestaurantCard: React.FC<Restaurant> = (props: Restaurant) => {

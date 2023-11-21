@@ -1,27 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Restaurant } from "../../api/restaurant/RestaurantType";
 import {
+  CreateRestaurantType,
+  Restaurant,
+} from "../../api/restaurant/RestaurantType";
+import {
+  createRestaurant,
   getRestaurantDetail,
   getRestaurants,
 } from "../../api/restaurant/restaurantApiIndex";
 
 export interface IRestaurantState {
-  restaurant: Restaurant | null;
   restaurants: Restaurant[];
+  restaurant: Restaurant | null;
 }
 
 const initialState: IRestaurantState = {
-  restaurant: null,
   restaurants: [],
+  restaurant: null,
 };
-
-export const getRestaurantThunk = createAsyncThunk(
-  "restaurant/detail",
-  async (id: string) => {
-    const response = await getRestaurantDetail(id);
-    return response;
-  }
-);
 
 export const getRestaurantsByQueryThunk = createAsyncThunk(
   "restaurant/restaurants",
@@ -36,20 +32,36 @@ export const getRestaurantsByQueryThunk = createAsyncThunk(
   }
 );
 
+export const getRestaurantThunk = createAsyncThunk(
+  "restaurant/detail",
+  async (id: string) => {
+    const response = await getRestaurantDetail(id);
+    return response;
+  }
+);
+
+export const createRestaurantThunk = createAsyncThunk(
+  "restaurant/create",
+  async (restaurant: CreateRestaurantType) => {
+    const response = await createRestaurant(restaurant);
+    return response;
+  }
+);
+
 const restaurantSlice = createSlice({
   name: "restaurant",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getRestaurantThunk.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.restaurant = action.payload;
-      }
-    });
-
     builder.addCase(getRestaurantsByQueryThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.restaurants = action.payload;
+      }
+    });
+
+    builder.addCase(getRestaurantThunk.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.restaurant = action.payload;
       }
     });
   },

@@ -11,6 +11,12 @@ import districtReducer, {
 import paymentMethodReducer, {
   IPaymentMethodState,
 } from "./redux/paymentMethod/paymentMethodSlice";
+import restaurantDishReducer, {
+  IRestaurantDishState,
+} from "./redux/restaurantDish/restaurantDishSlice";
+import restaurantPaymentMethodReducer, {
+  IRestaurantPaymentMethodState,
+} from "./redux/restaurantPaymentMethod/restaurantPaymentMethodSlice";
 
 export interface IRootState {
   auth: IAuthState;
@@ -19,6 +25,8 @@ export interface IRootState {
   dish: IDishState;
   district: IDistrictState;
   paymentMethod: IPaymentMethodState;
+  restaurantDish: IRestaurantDishState;
+  restaurantPaymentMethod: IRestaurantPaymentMethodState;
 }
 
 const reducer = combineReducers<IRootState>({
@@ -28,6 +36,8 @@ const reducer = combineReducers<IRootState>({
   dish: dishReducer,
   district: districtReducer,
   paymentMethod: paymentMethodReducer,
+  restaurantDish: restaurantDishReducer,
+  restaurantPaymentMethod: restaurantPaymentMethodReducer,
 });
 
 export const store = configureStore({

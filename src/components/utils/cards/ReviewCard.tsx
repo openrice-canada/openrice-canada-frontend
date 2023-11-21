@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Review } from "../../api/review/ReviewType";
+import { Review } from "../../../api/review/ReviewType";
 import {
   IoRestaurant,
   IoChatbubbleEllipsesSharp,

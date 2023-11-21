@@ -15,7 +15,7 @@ export const getReviewsByRestaurantID = async (
   return apiClient.get("", { params: { restaurantId } });
 };
 
-export const postReview = async (
+export const createReview = async (
   input: CreateReviewRequest
 ): Promise<Review> => {
   return apiClient.post("", input);
