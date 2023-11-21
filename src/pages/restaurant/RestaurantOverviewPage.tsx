@@ -26,8 +26,8 @@ const RestaurantOverviewPage: React.FC = () => {
 
   const [page, setPage] = useState("Reviews");
   const [isShownAddReviewModal, setIsShownAddReviewModal] = useState(false);
-  const [photos, setPhotos] = useState<string[]>([]);
-  const [menus, setMenus] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<{ id: string; src: string }[]>([]);
+  const [menus, setMenus] = useState<{ id: string; src: string }[]>([]);
   const [popUpOpen, setPopUpOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
 
@@ -58,18 +58,18 @@ const RestaurantOverviewPage: React.FC = () => {
   useEffect(() => {
     if (id === "8879942f-fce4-41d2-8aab-3faeb8d8c909") {
       setPhotos(
-        reviews.map(
-          (review) =>
-            `${process.env.REACT_APP_IMAGE_PREFIX}/reviews/${id}/${review.review_id}.jpg`
-        )
+        reviews.map((review) => ({
+          id: review.review_id,
+          src: `${process.env.REACT_APP_IMAGE_PREFIX}/photos/${id}/${review.review_id}.jpg`,
+        }))
       );
       setMenus(
         reviews
-          .map(
-            (review) =>
-              `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.review_id}.jpg`
-          )
-          .sort((a, b) => a.localeCompare(b))
+          .map((review) => ({
+            id: review.review_id,
+            src: `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.review_id}.jpg`,
+          }))
+          .sort((a, b) => a.id.localeCompare(b.id))
       );
     }
   }, [id, reviews]);
@@ -89,6 +89,26 @@ const RestaurantOverviewPage: React.FC = () => {
   };
   useOnClickOutside(imageRef, () => setPopUpOpen(false));
   useOnClickOutside(formRef, () => setIsShownAddReviewModal(false));
+
+  const loadDefaultImage = (type: string, id: string) => {
+    if (type === "photo") {
+      setPhotos(
+        photos.map((photo) =>
+          photo.id === id
+            ? { id, src: `${process.env.PUBLIC_URL}/error.svg` }
+            : photo
+        )
+      );
+    } else if (type === "menus") {
+      setMenus(
+        menus.map((menu) =>
+          menu.id === id
+            ? { id, src: `${process.env.PUBLIC_URL}/error.svg` }
+            : menu
+        )
+      );
+    }
+  };
 
   const buttons = ["Reviews", "Photos", "Menus"];
   if (!restaurantDetail) return null;
@@ -173,14 +193,15 @@ const RestaurantOverviewPage: React.FC = () => {
                 {photos.map((photo, index) => (
                   <div
                     className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200"
-                    onClick={() => openPopUp(photo)}
+                    onClick={() => openPopUp(photo.src)}
                     key={`photo${index}`}
                   >
                     <img
-                      src={photo}
+                      src={photo.src}
                       width="350"
                       height="200"
                       className="object-cover w-full h-auto rounded-lg"
+                      onError={() => loadDefaultImage("photo", photo.id)}
                     />
                   </div>
                 ))}
@@ -206,14 +227,15 @@ const RestaurantOverviewPage: React.FC = () => {
                 {menus.map((menu, index) => (
                   <div
                     className="shadow-md rounded-lg cursor-pointer bg-white hover:bg-slate-200"
-                    onClick={() => openPopUp(menu)}
+                    onClick={() => openPopUp(menu.src)}
                     key={`menu${index}`}
                   >
                     <img
-                      src={menu}
+                      src={menu.src}
                       width="350"
                       height="200"
                       className="object-cover w-full h-auto rounded-lg"
+                      onError={() => loadDefaultImage("menu", menu.id)}
                     />
                   </div>
                 ))}
