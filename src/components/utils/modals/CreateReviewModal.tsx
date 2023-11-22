@@ -74,7 +74,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (
           );
         }
 
-        enqueueSnackbar("Review and Review photo is added successfully", {
+        enqueueSnackbar("Review and Review photo are added successfully", {
           variant: "success",
         });
         props.setShow(false);
