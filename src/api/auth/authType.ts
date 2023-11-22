@@ -1,39 +1,14 @@
-export type User = {
-  email?: string;
+import { CurrentLoginUserInfo } from "../../redux/auth/authSlice";
+
+export type AuthType = {
   username?: string;
+  email?: string;
   password: string;
   role?: string;
-};
-
-export type UserEntity = {
-  user_id: string;
-  email: string;
-  username: string;
-  password: string;
-  created_at: string;
-  modifiedAt: string;
-  active: boolean;
-  role: string;
-  enabled: boolean;
-  authorities: [
-    {
-      authority: string;
-    }
-  ];
-  accountNonExpired?: boolean;
-  accountNonLocked?: boolean;
-  credentialsNonExpired?: boolean;
 };
 
 export type AuthenticateResponse = {
   token?: string;
   message?: string;
-  user?: UserLogin;
+  user?: CurrentLoginUserInfo;
 };
-
-export interface UserLogin {
-  user_id: string;
-  username: string;
-  email: string;
-  role: string;
-}

@@ -8,5 +8,5 @@ const apiClient = new AxiosApiClientBuilder()
 export const createRestaurantPaymentMethod = async (
   restaurantPaymentMethod: RestaurantPaymentMethod
 ): Promise<RestaurantPaymentMethod> => {
-  return apiClient.post("/restaurant-payment", restaurantPaymentMethod);
+  return apiClient.post("/restaurant-payment-method", restaurantPaymentMethod);
 };

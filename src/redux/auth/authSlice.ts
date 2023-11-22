@@ -1,21 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { UserLogin } from "../../api/auth/authType";
-import {
-  getCurrentUser,
-  postUserAuth,
-  postUserRegister,
-} from "../../api/auth/authApiIndex";
+import { getCurrentUser, login, register } from "../../api/auth/authApiIndex";
+
+export interface CurrentLoginUserInfo {
+  user_id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 export interface IAuthState {
-  users: UserLogin[];
-  currentUser: UserLogin | null;
+  currentUser: CurrentLoginUserInfo | null;
   message: string;
   registerSuccess: boolean | null;
   loginSuccess: boolean | null;
 }
 
 const initialState: IAuthState = {
-  users: [],
   currentUser: null,
   message: "",
   registerSuccess: null,
@@ -25,7 +25,7 @@ const initialState: IAuthState = {
 export const registerThunk = createAsyncThunk(
   "auth/register",
   async (user: { email: string; username: string; password: string }) => {
-    const response = await postUserRegister(user);
+    const response = await register(user);
     return response;
   }
 );
@@ -33,7 +33,7 @@ export const registerThunk = createAsyncThunk(
 export const loginThunk = createAsyncThunk(
   "auth/login",
   async (user: { username: string; password: string }) => {
-    const response = await postUserAuth(user);
+    const response = await login(user);
     return response;
   }
 );
@@ -49,31 +49,7 @@ export const getCurrentUserThunk = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    // getAllToDoItems: (
-    //   state: IAuthState,
-    //   action: PayloadAction<UserLogin[]>
-    // ) => {
-    //   state.users = action.payload;
-    // },
-    // addToDoItem: (state: IAuthState, action: PayloadAction<UserLogin>) => {
-    //   state.users.unshift(action.payload);
-    // },
-    // updateToDoItem: (
-    //   state: IAuthState,
-    //   action: PayloadAction<{ id: string; name: string }>
-    // ) => {
-    //   const { id, name } = action.payload;
-    //   state.users.filter((item) => item.user_id === id)[0].username = name;
-    // },
-    // deleteToDoItem: (state: IAuthState, action: PayloadAction<string>) => {
-    //   const id = action.payload;
-    //   state.users.splice(
-    //     state.users.findIndex((item) => item.user_id === id),
-    //     1
-    //   );
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(registerThunk.fulfilled, (state, action) => {
       if (action.payload?.token) {
@@ -106,6 +82,4 @@ const authSlice = createSlice({
   },
 });
 
-// export const { getAllToDoItems, addToDoItem, updateToDoItem, deleteToDoItem } =
-//   authSlice.actions;
 export default authSlice.reducer;

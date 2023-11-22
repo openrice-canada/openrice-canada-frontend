@@ -30,6 +30,9 @@ const ReviewPage: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const review = useSelector((state: IRootState) => state.review.review);
+  const restaurant = useSelector(
+    (state: IRootState) => state.restaurant.restaurant
+  );
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -43,7 +46,7 @@ const ReviewPage: React.FC = () => {
     <div className="container justify-center mb-8 px-4 gap-8 mx-auto mt-10">
       <div className="relative">
         <img
-          src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${review?.restaurant_id}.jpg`}
+          src={restaurant?.cover_image_url}
           alt="hero"
           className="w-full h-80 object-cover rounded-lg mb-4 grayscale-[50%]"
         />

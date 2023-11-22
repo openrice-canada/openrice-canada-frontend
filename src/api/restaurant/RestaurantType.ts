@@ -9,7 +9,7 @@ export interface Restaurant {
   phone: string;
   intro: string;
   opening_hours: string;
-  cover_image?: string;
+  cover_image_url?: string;
   averageRating: number;
   reviewCount: number;
   active: boolean;
@@ -24,14 +24,14 @@ export type SearchRestaurantQuery = {
 };
 
 export type CreateRestaurantType = {
+  name: string;
   address: string;
+  district_id: string;
   latitude: string;
   longitude: string;
-  created_at?: string;
-  district_id: string;
+  postal_code: string;
+  phone: string;
   intro: string;
-  modified_at?: string;
-  name: string;
   opening_hours:
     | {
         monday: { from: string; to: string };
@@ -44,9 +44,8 @@ export type CreateRestaurantType = {
         holiday?: { from: string; to: string };
       }
     | string;
-  phone: string;
-  postal_code: string;
-  restaurant_id?: string;
+  cover_image_url?: string;
   rating?: number;
-  coverImageUrl?: string;
+  created_at?: string;
+  modified_at?: string;
 };
