@@ -18,7 +18,7 @@ export const getRestaurants = async (
 export const getRestaurantDetail = async (
   restaurantId: string
 ): Promise<Restaurant> => {
-  return apiClient.get(restaurantId);
+  return apiClient.get(`id/${restaurantId}`);
 };
 
 export const createRestaurant = async (

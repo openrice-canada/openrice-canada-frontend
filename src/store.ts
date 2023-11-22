@@ -3,7 +3,7 @@ import authReducer, { IAuthState } from "./redux/auth/authSlice";
 import restaurantReducer, {
   IRestaurantState,
 } from "./redux/restaurant/restaurantSlice";
-import reviewsReducer, { IReviewsState } from "./redux/reviews/reviewsSlice";
+import reviewReducer, { IReviewState } from "./redux/review/reviewSlice";
 import dishReducer, { IDishState } from "./redux/dish/dishSlice";
 import districtReducer, {
   IDistrictState,
@@ -17,27 +17,30 @@ import restaurantDishReducer, {
 import restaurantPaymentMethodReducer, {
   IRestaurantPaymentMethodState,
 } from "./redux/restaurantPaymentMethod/restaurantPaymentMethodSlice";
+import photoReducer, { IPhotoState } from "./redux/photo/photoSlice";
 
 export interface IRootState {
   auth: IAuthState;
   restaurant: IRestaurantState;
-  review: IReviewsState;
+  review: IReviewState;
   dish: IDishState;
   district: IDistrictState;
   paymentMethod: IPaymentMethodState;
   restaurantDish: IRestaurantDishState;
   restaurantPaymentMethod: IRestaurantPaymentMethodState;
+  photo: IPhotoState;
 }
 
 const reducer = combineReducers<IRootState>({
   auth: authReducer,
   restaurant: restaurantReducer,
-  review: reviewsReducer,
+  review: reviewReducer,
   dish: dishReducer,
   district: districtReducer,
   paymentMethod: paymentMethodReducer,
   restaurantDish: restaurantDishReducer,
   restaurantPaymentMethod: restaurantPaymentMethodReducer,
+  photo: photoReducer,
 });
 
 export const store = configureStore({

@@ -20,7 +20,7 @@ const ReviewRow = ({ text, icon }: { text: string; icon: React.ReactNode }) => (
 const ReviewCard: React.FC<Review> = (props: Review) => {
   return (
     <Link
-      to={`/review/${props.review_id}`}
+      to={`/review/id/${props.review_id}`}
       className="rounded-md shadow-lg hover:bg-slate-200"
     >
       <div className="flex justify-between">
@@ -33,11 +33,13 @@ const ReviewCard: React.FC<Review> = (props: Review) => {
           />
           <div className="flex gap-2 items-start">
             <div>{<IoThumbsUpSharp />}</div>
-            {Array.from({ length: props.rating }).map((_, index) => (
-              <span className="text-yellow-400" key={index}>
-                {<IoStar />}
-              </span>
-            ))}
+            <div className="flex gap-1">
+              {Array.from({ length: props.rating }).map((_, index) => (
+                <span className="text-yellow-400" key={index}>
+                  {<IoStar />}
+                </span>
+              ))}
+            </div>
           </div>
           <ReviewRow
             text={

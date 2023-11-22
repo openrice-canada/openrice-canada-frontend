@@ -104,7 +104,7 @@ const CreateRestaurantPage: React.FC = () => {
 
       enqueueSnackbar("Restaurant added successfully!", { variant: "success" });
       setTimeout(() => {
-        navigate(`/restaurant/${restaurantID}`);
+        navigate(`/restaurant/id/${restaurantID}`);
         navigate(0);
       }, 1000);
 

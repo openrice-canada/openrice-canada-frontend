@@ -1,6 +1,6 @@
 import { CurrentLoginUserInfo } from "../../redux/auth/authSlice";
 
-export type AuthType = {
+export type Auth = {
   username?: string;
   email?: string;
   password: string;

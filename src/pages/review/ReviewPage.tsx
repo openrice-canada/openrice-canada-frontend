@@ -10,7 +10,7 @@ import {
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
-import { getReviewThunk } from "../../redux/reviews/reviewsSlice";
+import { getReviewThunk } from "../../redux/review/reviewSlice";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -33,6 +33,9 @@ const ReviewPage: React.FC = () => {
   const restaurant = useSelector(
     (state: IRootState) => state.restaurant.restaurant
   );
+  const reviewPhotos = useSelector(
+    (state: IRootState) => state.photo.reviewPhotos
+  );
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -54,8 +57,8 @@ const ReviewPage: React.FC = () => {
           {review?.restaurantName}
         </p>
       </div>
-      <div className="container justify-center mb-8 grid grid-cols-1 gap-8 mx-auto sm:grid-cols-1 md:grid-cols-3 mt-10">
-        <div className="col-span-2 rounded-md shadow-md">
+      <div className="justify-center mb-8 grid grid-cols-1 gap-8 mx-auto md:grid-cols-3 mt-10">
+        <div className="col-span-2 rounded-md shadow-md h-80">
           {review && (
             <h1 className="font-bold text-4xl text-center pt-70">
               {review.title}
@@ -72,11 +75,23 @@ const ReviewPage: React.FC = () => {
                   }
                   icon={<IoTime />}
                 />
+                <div className="h-40">
+                  <div className="mb-1">Photos</div>
+                  <img
+                    src={
+                      reviewPhotos.filter(
+                        (reviewPhoto) => reviewPhoto.review_id === id
+                      )[0].photo_url
+                    }
+                    alt="review photo"
+                    className="object-cover h-[100%] w-auto rounded-md"
+                  />
+                </div>
               </div>
             )}
           </div>
         </div>
-        <div className="p-4 col-span-2 h-fit rounded-md shadow-md md:col-span-1">
+        <div className="p-4 col-span-2 rounded-md shadow-md md:col-span-1">
           {review && (
             <>
               <h5 className="border-b border-orange-500 my-2 text-lg">User</h5>

@@ -15,7 +15,7 @@ export type Review = {
   modified_at: string;
 };
 
-export type CreateReviewRequest = {
+export type CreateReviewDto = {
   user_id: string;
   restaurant_id: string;
   title: string;
