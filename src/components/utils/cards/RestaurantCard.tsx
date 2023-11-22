@@ -22,7 +22,7 @@ const RestaurantCard: React.FC<Restaurant> = (props: Restaurant) => {
     >
       <div className="w-full h-48 overflow-hidden">
         <img
-          src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${props.restaurant_id}.jpg`}
+          src={props.cover_image_url}
           alt={props.name}
           className="w-[100%] h-[100%] object-cover rounded-tl-md rounded-tr-md hover:scale-110 duration-300"
         />

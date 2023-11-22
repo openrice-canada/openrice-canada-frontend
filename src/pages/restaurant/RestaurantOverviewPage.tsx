@@ -10,9 +10,10 @@ import useOnClickOutside from "../../components/hooks/useOnClickOutside";
 import RestaurantOverviewButton from "../../components/utils/buttons/RestaurantOverviewButton";
 import ReviewCard from "../../components/utils/cards/ReviewCard";
 import AddReviewModal from "../../components/utils/modals/AddReviewModal";
-import RestaurantDetailSkeletonLoader from "../../components/loader/RestaurantDetailSkeletonLoader";
+import RestaurantDetailSkeletonLoader from "../../components/skeletonLoader/RestaurantDetailSkeletonLoader";
 import PhotoModal from "../../components/utils/modals/PhotoModal";
 import ErrorPage from "../error/ErrorPage";
+import UploadButton from "../../components/utils/buttons/UploadButton";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -54,25 +55,6 @@ const RestaurantOverviewPage: React.FC = () => {
     fetchRestaurantDetail();
     fetchRestaurantReview();
   }, [id, dispatch]);
-
-  useEffect(() => {
-    if (id === "8879942f-fce4-41d2-8aab-3faeb8d8c909") {
-      setPhotos(
-        reviews.map((review) => ({
-          id: review.review_id,
-          src: `${process.env.REACT_APP_IMAGE_PREFIX}/photos/${id}/${review.review_id}.jpg`,
-        }))
-      );
-      setMenus(
-        reviews
-          .map((review) => ({
-            id: review.review_id,
-            src: `${process.env.REACT_APP_IMAGE_PREFIX}/menus/${id}/${review.review_id}.jpg`,
-          }))
-          .sort((a, b) => a.id.localeCompare(b.id))
-      );
-    }
-  }, [id, reviews]);
 
   useEffect(() => {
     if (!id || !isUUID(id)) {
@@ -129,9 +111,9 @@ const RestaurantOverviewPage: React.FC = () => {
             <div className="relative w-[400px] h-auto shrink-0 rounded-md overflow-hidden">
               {restaurantDetail && (
                 <img
-                  src={`${process.env.REACT_APP_IMAGE_PREFIX}/coverImageUrl/${restaurantDetail.restaurant_id}.jpg`}
+                  src={restaurantDetail.cover_image_url}
                   alt=""
-                  width="object-cover"
+                  className="object-cover"
                 />
               )}
             </div>
@@ -140,7 +122,12 @@ const RestaurantOverviewPage: React.FC = () => {
             ) : (
               <div>
                 <h1 className="text-2xl font-bold">{restaurantDetail.name}</h1>
-                <div>{restaurantDetail.averageRating}</div>
+                {restaurantDetail.averageRating && (
+                  <div className="flex gap-2">
+                    <div>rating</div>
+                    <div>{restaurantDetail.averageRating}</div>
+                  </div>
+                )}
                 <div className="text-lg font-semibold">
                   {restaurantDetail?.address}
                 </div>
@@ -188,12 +175,6 @@ const RestaurantOverviewPage: React.FC = () => {
           <>
             <div className="flex justify-between">
               <h1 className="text-2xl font-bold my-4">Photos</h1>
-              <button
-                type="submit"
-                className="border-gray-700 h-full w-20 flex justify-center items-center rounded-md text-lg px-12 py-2 border-2 hover:bg-gray-700 hover:text-white"
-              >
-                upload
-              </button>
             </div>
             {photos.length === 0 && <div>No photos in this restaurant</div>}
             {photos.length > 0 && (
@@ -228,12 +209,7 @@ const RestaurantOverviewPage: React.FC = () => {
           <>
             <div className="flex justify-between">
               <h1 className="text-2xl font-bold my-4">Menus</h1>
-              <button
-                type="submit"
-                className="border-gray-700 h-full w-20 flex justify-center items-center rounded-md text-lg px-12 py-2 border-2 hover:bg-gray-700 hover:text-white"
-              >
-                upload
-              </button>
+              <UploadButton />
             </div>
             {menus.length === 0 && (
               <div>No menu photos are provided for this restaurant</div>

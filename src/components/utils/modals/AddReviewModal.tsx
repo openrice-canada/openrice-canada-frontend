@@ -68,14 +68,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
         await uploadImage(
           review.photo,
           props?.restaurant_id as string,
-          "photos",
-          reviewID
-        );
-
-        await uploadImage(
-          review.photo,
-          props?.restaurant_id as string,
-          "menus",
+          "reviews",
           reviewID
         );
       }
