@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
 
+import { IRootState } from "../../../store";
 import { TextareaInput } from "../inputs/TextareaInput";
-import { uploadImage } from "../../../utils/imageService";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, IRootState } from "../../../store";
 import TextInput from "../inputs/TextInput";
 import NumberInput from "../inputs/NumberInput";
 import FileInput from "../inputs/FileInput";
-import { createReviewThunk } from "../../../redux/reviews/reviewsSlice";
+import { uploadImage } from "../../../utils/imageService";
+import { useCallback } from "react";
+import { createReview } from "../../../api/review/reviewApiIndex";
 
-type AddReviewModalProps = {
-  isShown: boolean;
-  setIsShown: React.Dispatch<React.SetStateAction<boolean>>;
+interface CreateReviewModalProps {
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   formRef: React.MutableRefObject<HTMLDivElement | null>;
   restaurant_id?: string;
-};
+}
 
 export type ReviewForm = {
   rating: number;
@@ -29,8 +30,8 @@ export type ReviewForm = {
   photo?: any;
 };
 
-const AddReviewModal: React.FC<AddReviewModalProps> = (
-  props: AddReviewModalProps
+const CreateReviewModal: React.FC<CreateReviewModalProps> = (
+  props: CreateReviewModalProps
 ) => {
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm({
@@ -44,60 +45,64 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
     } as ReviewForm,
   });
 
-  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: IRootState) => state.auth.currentUser);
-  const reviewID = useSelector(
-    (state: IRootState) => state.review.review?.review_id
+
+  const createNewReview = useCallback(
+    async (review: ReviewForm) => {
+      if (user?.user_id) {
+        const res = await createReview(
+          {
+            title: review.title,
+            content: review.content,
+            spending: review.spending,
+            rating: review.rating,
+            restaurant_id: props?.restaurant_id as string,
+            user_id: user?.user_id,
+            visit_date: new Date(review.visit_date),
+          },
+          process.env.REACT_APP_IMAGE_PREFIX as string,
+          props.restaurant_id as string,
+          "Review"
+        );
+
+        if (review.photo) {
+          await uploadImage(
+            review.photo,
+            props.restaurant_id as string,
+            "photos",
+            res?.review_id
+          );
+        }
+
+        enqueueSnackbar("Review and Review photo is added successfully", {
+          variant: "success",
+        });
+        props.setShow(false);
+        setTimeout(() => {
+          navigate(`/restaurant/id/${props?.restaurant_id}`);
+          navigate(0);
+        }, 1000);
+
+        setTimeout(() => {
+          closeSnackbar();
+        }, 2000);
+      } else {
+        enqueueSnackbar("You haven't login yet", { variant: "error" });
+        props.setShow(false);
+        setTimeout(() => {
+          navigate(`/restaurant/id/${props?.restaurant_id}`);
+          navigate(0);
+        }, 1000);
+
+        setTimeout(() => {
+          closeSnackbar();
+        }, 2000);
+      }
+    },
+    [navigate, user?.user_id, props]
   );
 
-  const addReview = async (review: ReviewForm) => {
-    if (user?.user_id) {
-      dispatch(
-        createReviewThunk({
-          title: review.title,
-          content: review.content,
-          spending: review.spending,
-          rating: review.rating,
-          restaurant_id: props?.restaurant_id as string,
-          user_id: user?.user_id,
-          visit_date: new Date(review.visit_date),
-        })
-      );
-
-      if (review.photo) {
-        await uploadImage(
-          review.photo,
-          props?.restaurant_id as string,
-          "reviews",
-          reviewID
-        );
-      }
-
-      enqueueSnackbar("Review added successfully", { variant: "success" });
-      setTimeout(() => {
-        navigate(`/restaurant/${props?.restaurant_id}`);
-        navigate(0);
-      }, 1000);
-
-      setTimeout(() => {
-        closeSnackbar();
-      }, 2000);
-    } else {
-      enqueueSnackbar("You haven't login yet", { variant: "error" });
-      setTimeout(() => {
-        navigate(`/restaurant/${props?.restaurant_id}`);
-        navigate(0);
-      }, 1000);
-
-      setTimeout(() => {
-        closeSnackbar();
-      }, 2000);
-    }
-  };
-
-  if (!props.isShown) return null;
-
-  return (
+  return props.show ? (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
       <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
       <div className="relative w-1/4 min-w-[400px] my-6 mx-auto z-40">
@@ -106,10 +111,10 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
           ref={props.formRef}
         >
           <div className="flex items-center justify-between p-2 px-4 border-b border-solid border-slate-200 rounded-t">
-            <h3 className="text-lg font-semibold">Add Review</h3>
+            <h3 className="text-lg font-semibold">Create New Review</h3>
             <button
               className="p-2 ml-auto text-black float-right text-3xl leading-none font-semibold outline-none rounded-full hover:bg-gray-200 focus:outline-none"
-              onClick={() => props.setIsShown(false)}
+              onClick={() => props.setShow(false)}
             >
               <span className="bg-transparent text-black text-2xl block outline-none focus:outline-none">
                 <IoClose size={20} />
@@ -119,7 +124,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
           <div className="relative p-6 flex flex-col items-center gap-6 overflow-auto">
             <form
               className="w-full gap-2 flex flex-col"
-              onSubmit={handleSubmit((review) => addReview(review))}
+              onSubmit={handleSubmit((review) => createNewReview(review))}
             >
               <Controller
                 control={control}
@@ -220,7 +225,9 @@ const AddReviewModal: React.FC<AddReviewModalProps> = (
         </div>
       </div>
     </div>
+  ) : (
+    <></>
   );
 };
 
-export default AddReviewModal;
+export default CreateReviewModal;

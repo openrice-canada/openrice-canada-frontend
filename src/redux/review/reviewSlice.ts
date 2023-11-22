@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CreateReviewRequest, Review } from "../../api/review/ReviewType";
+import { CreateReviewDto, Review } from "../../api/review/ReviewType";
 import {
   getReview,
   getReviewsByRestaurantID,
   createReview,
 } from "../../api/review/reviewApiIndex";
 
-export interface IReviewsState {
+export interface IReviewState {
   reviews: Review[];
   review: Review | null;
 }
 
-const initialState: IReviewsState = {
+const initialState: IReviewState = {
   reviews: [],
   review: null,
 };
@@ -34,14 +34,29 @@ export const getReviewThunk = createAsyncThunk(
 
 export const createReviewThunk = createAsyncThunk(
   "review/create",
-  async (review: CreateReviewRequest) => {
-    const response = await createReview(review);
+  async ({
+    review,
+    imagePrefix,
+    restaurantID,
+    photoCategory,
+  }: {
+    review: CreateReviewDto;
+    imagePrefix: string;
+    restaurantID: string;
+    photoCategory: string;
+  }) => {
+    const response = await createReview(
+      review,
+      imagePrefix,
+      restaurantID,
+      photoCategory
+    );
     return response;
   }
 );
 
-const reviewsReducer = createSlice({
-  name: "reviews",
+const reviewReducer = createSlice({
+  name: "review",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -65,4 +80,4 @@ const reviewsReducer = createSlice({
   },
 });
 
-export default reviewsReducer.reducer;
+export default reviewReducer.reducer;

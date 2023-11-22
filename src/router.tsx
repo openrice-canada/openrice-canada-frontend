@@ -32,7 +32,7 @@ const router = createBrowserRouter(
           element: <LoginPage />,
         },
         {
-          path: "/review/:id",
+          path: "/review/id/:id",
           element: <ReviewPage />,
         },
         {
@@ -48,7 +48,7 @@ const router = createBrowserRouter(
           element: <Outlet />,
           children: [
             {
-              path: ":id",
+              path: "id/:id",
               element: <RestaurantOverviewPage />,
             },
             {
