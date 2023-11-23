@@ -15,11 +15,12 @@ import {
 import useOnClickOutside from "../../components/hooks/useOnClickOutside";
 import RestaurantOverviewButton from "../../components/utils/buttons/RestaurantOverviewButton";
 import ReviewCard from "../../components/utils/cards/ReviewCard";
-import CreateReviewModal from "../../components/utils/modals/CreateReviewModal";
 import RestaurantDetailSkeletonLoader from "../../components/skeletonLoader/RestaurantDetailSkeletonLoader";
-import PhotoModal from "../../components/utils/modals/PhotoModal";
 import ErrorPage from "../error/ErrorPage";
 import UploadButton from "../../components/utils/buttons/UploadButton";
+import UploadImageModal from "../../components/utils/modals/UploadImageModal";
+import CreateReviewModal from "../../components/utils/modals/CreateReviewModal";
+import PhotoModal from "../../components/utils/modals/PhotoModal";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -31,13 +32,15 @@ const RestaurantOverviewPage: React.FC = () => {
   const { id } = useParams();
 
   const [page, setPage] = useState("Reviews");
-  const [shownCreateReviewModal, setShowCreateReviewModal] = useState(false);
+  const [showCreateReviewModal, setShowCreateReviewModal] = useState(false);
+  const [showUploadImageModal, setShowUploadImageModal] = useState(false);
   const [popUpOpen, setPopUpOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
   const imageRef = useRef<null | HTMLDivElement>(null);
   const formRef = useRef<null | HTMLDivElement>(null);
+  const modalRef = useRef<null | HTMLDivElement>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const restaurantDetail = useSelector(
@@ -82,11 +85,14 @@ const RestaurantOverviewPage: React.FC = () => {
     setSelectedImage(image);
     setPopUpOpen(true);
   };
+
   const closePopUp = () => {
     setPopUpOpen(false);
   };
+
   useOnClickOutside(imageRef, () => setPopUpOpen(false));
   useOnClickOutside(formRef, () => setShowCreateReviewModal(false));
+  useOnClickOutside(modalRef, () => setShowUploadImageModal(false));
 
   const loadDefaultImage = (type: string, id: string) => {
     if (type === "review") {
@@ -127,10 +133,15 @@ const RestaurantOverviewPage: React.FC = () => {
     restaurantDetail && (
       <>
         <CreateReviewModal
-          show={shownCreateReviewModal}
+          show={showCreateReviewModal}
           setShow={setShowCreateReviewModal}
           formRef={formRef}
           restaurant_id={id}
+        />
+        <UploadImageModal
+          show={showUploadImageModal}
+          setShow={setShowUploadImageModal}
+          modalRef={modalRef}
         />
         <div className="max-w-5xl mx-auto px-3 py-3">
           <div className="flex font-semibold justify-between">
@@ -213,19 +224,19 @@ const RestaurantOverviewPage: React.FC = () => {
               )}
               {reviewPhotos.length > 0 && (
                 <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-                  {reviewPhotos.map((review, index) => (
+                  {reviewPhotos.map((reviewPhoto, index) => (
                     <div
                       className="shadow-md rounded-lg cursor-pointer h-fit bg-white hover:bg-slate-200"
-                      onClick={() => openPopUp(review.photo_url)}
-                      key={`review ${index}`}
+                      onClick={() => openPopUp(reviewPhoto.photo_url)}
+                      key={`review photo ${index}`}
                     >
                       <img
-                        src={review.photo_url}
+                        src={reviewPhoto.photo_url}
                         width="350"
                         height="200"
                         className="object-cover w-full h-auto rounded-lg"
                         onError={() =>
-                          loadDefaultImage("review", review.photo_id)
+                          loadDefaultImage("review", reviewPhoto.photo_id)
                         }
                       />
                     </div>
@@ -245,25 +256,27 @@ const RestaurantOverviewPage: React.FC = () => {
             <>
               <div className="flex justify-between">
                 <h1 className="text-2xl font-bold my-4">Menus</h1>
-                <UploadButton />
+                <UploadButton showUploadImageModal={setShowUploadImageModal} />
               </div>
               {menuPhotos.length === 0 && (
                 <div>No menu photos are provided for this restaurant</div>
               )}
               {menuPhotos.length > 0 && (
                 <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-                  {menuPhotos.map((menu, index) => (
+                  {menuPhotos.map((menuPhoto, index) => (
                     <div
                       className="shadow-md rounded-lg cursor-pointer h-fit bg-white hover:bg-slate-200"
-                      onClick={() => openPopUp(menu.photo_url)}
-                      key={`menu ${index}`}
+                      onClick={() => openPopUp(menuPhoto.photo_url)}
+                      key={`menu photo ${index}`}
                     >
                       <img
-                        src={menu.photo_url}
+                        src={menuPhoto.photo_url}
                         width="350"
                         height="200"
                         className="object-cover w-full h-auto rounded-lg"
-                        onError={() => loadDefaultImage("menu", menu.photo_id)}
+                        onError={() =>
+                          loadDefaultImage("menu", menuPhoto.photo_id)
+                        }
                       />
                     </div>
                   ))}
