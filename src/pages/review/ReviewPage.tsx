@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, IRootState } from "../../store";
 import { getReviewThunk } from "../../redux/review/reviewSlice";
+import { getRestaurantThunk } from "../../redux/restaurant/restaurantSlice";
 
 function isUUID(id: string) {
   const uuidPattern =
@@ -33,17 +34,26 @@ const ReviewPage: React.FC = () => {
   const restaurant = useSelector(
     (state: IRootState) => state.restaurant.restaurant
   );
-  const reviewPhotos = useSelector(
-    (state: IRootState) => state.photo.reviewPhotos
-  );
 
   useEffect(() => {
-    const fetchReview = async () => {
+    const fetchReview = () => {
       if (!id || !isUUID(id)) return;
       dispatch(getReviewThunk(id));
     };
+
     fetchReview();
   }, [id, dispatch]);
+
+  useEffect(() => {
+    const fetchRestaurant = () => {
+      if (!id || !isUUID(id)) return;
+      if (review?.restaurant_id) {
+        dispatch(getRestaurantThunk(review.restaurant_id));
+      }
+    };
+
+    fetchRestaurant();
+  }, [dispatch, review, id]);
 
   return (
     <div className="container justify-center mb-8 px-4 gap-8 mx-auto mt-10">
@@ -75,18 +85,16 @@ const ReviewPage: React.FC = () => {
                   }
                   icon={<IoTime />}
                 />
-                <div className="h-40">
-                  <div className="mb-1">Photos</div>
-                  <img
-                    src={
-                      reviewPhotos.filter(
-                        (reviewPhoto) => reviewPhoto.review_id === id
-                      )[0].photo_url
-                    }
-                    alt="review photo"
-                    className="object-cover h-[100%] w-auto rounded-md"
-                  />
-                </div>
+                {review.photo && (
+                  <div className="h-40">
+                    <div className="mb-1">Photos</div>
+                    <img
+                      src={review.photo}
+                      alt="review photo"
+                      className="object-cover h-[100%] w-auto rounded-md"
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

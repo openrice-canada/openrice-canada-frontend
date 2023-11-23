@@ -10,7 +10,7 @@ import { TextareaInput } from "../inputs/TextareaInput";
 import TextInput from "../inputs/TextInput";
 import NumberInput from "../inputs/NumberInput";
 import FileInput from "../inputs/FileInput";
-import { uploadImage } from "../../../utils/imageService";
+import { uploadImage } from "../../../utils/uploadImageService";
 import { useCallback } from "react";
 import { createReview } from "../../../api/review/reviewApiIndex";
 
