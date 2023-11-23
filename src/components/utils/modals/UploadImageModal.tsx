@@ -1,4 +1,14 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuid } from "uuid";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { IoClose } from "react-icons/io5";
+
+import { AppDispatch, IRootState } from "../../../store";
+import { createMenuPhotoThunk } from "../../../redux/photo/photoSlice";
+import { uploadImage } from "../../../utils/uploadImageService";
+import FileInput from "../inputs/FileInput";
 
 interface UploadImageModalProps {
   show: boolean;
@@ -11,7 +21,70 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
   show,
   setShow,
   modalRef,
+  restaurant_id,
 }) => {
+  const navigate = useNavigate();
+  const [image, setImage] = useState<File | null>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
+
+  const fileTypeToExtension: Record<string, string> = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "application/pdf": "pdf",
+  };
+
+  const uploadMenuPhoto = async () => {
+    let imageName;
+    if (user?.user_id) {
+      if (image && image?.type) {
+        const randomID = uuid();
+        imageName = `${randomID}.${fileTypeToExtension[image?.type]}`;
+
+        dispatch(
+          createMenuPhotoThunk({
+            imagePrefix: process.env.REACT_APP_IMAGE_PREFIX as string,
+            restaurantID: restaurant_id as string,
+            imageName,
+            photoCategory: "Menu",
+          })
+        );
+        await uploadImage(
+          image as File,
+          restaurant_id as string,
+          "menus",
+          "",
+          imageName
+        );
+
+        enqueueSnackbar("Menu photo is added successfully", {
+          variant: "success",
+        });
+        setShow(false);
+        setTimeout(() => {
+          navigate(`/restaurant/id/${restaurant_id}`);
+          navigate(0);
+        }, 1000);
+
+        setTimeout(() => {
+          closeSnackbar();
+        }, 2000);
+      }
+    } else {
+      enqueueSnackbar("You haven't login yet", { variant: "error" });
+      setShow(false);
+      setTimeout(() => {
+        navigate(`/restaurant/id/${restaurant_id}`);
+        navigate(0);
+      }, 1000);
+
+      setTimeout(() => {
+        closeSnackbar();
+      }, 2000);
+    }
+  };
+
   return show ? (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
       <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
@@ -30,6 +103,27 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
                 <IoClose size={20} />
               </span>
             </button>
+          </div>
+          <div className="p-4 flex flex-col justify-center">
+            <FileInput
+              onChange={(e) => {
+                if (e.target.files) {
+                  const selectedFile = e.target.files[0];
+                  setImage(selectedFile);
+                }
+              }}
+              type="file"
+              className="form-control"
+              placeholder=""
+            />
+            <div className="w-full flex justify-center">
+              <button
+                className="border-slate-600 border-1 hover:bg-slate-600 hover:text-white font-bold py-1 px-4 mt-4 rounded w-[40%]"
+                onClick={uploadMenuPhoto}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>

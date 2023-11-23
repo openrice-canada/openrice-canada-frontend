@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import "./form-control.min.css";
 import { RouterProvider } from "react-router";
 import router from "./router";
 import { Provider } from "react-redux";

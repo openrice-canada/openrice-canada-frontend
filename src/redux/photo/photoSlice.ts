@@ -1,10 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Photo } from "../../api/photo/PhotoType";
-import { getMenuPhotos, getReviewPhotos } from "../../api/photo/photoApiIndex";
+import { MenuPhoto, ReviewPhoto } from "../../api/photo/PhotoType";
+import {
+  createMenuPhoto,
+  getMenuPhotos,
+  getReviewPhotos,
+} from "../../api/photo/photoApiIndex";
 
 export interface IPhotoState {
-  reviewPhotos: Photo[];
-  menuPhotos: Photo[];
+  reviewPhotos: ReviewPhoto[];
+  menuPhotos: MenuPhoto[];
 }
 
 const initialState: IPhotoState = {
@@ -28,19 +32,45 @@ export const getMenuPhotosThunk = createAsyncThunk(
   }
 );
 
+export const createMenuPhotoThunk = createAsyncThunk(
+  "photo/create",
+  async ({
+    imagePrefix,
+    restaurantID,
+    imageName,
+    photoCategory,
+  }: {
+    imagePrefix: string;
+    restaurantID: string;
+    imageName: string;
+    photoCategory: string;
+  }) => {
+    const response = await createMenuPhoto(
+      imagePrefix,
+      restaurantID,
+      imageName,
+      photoCategory
+    );
+    return response;
+  }
+);
+
 const photoReducer = createSlice({
   name: "photo",
   initialState,
   reducers: {
     updateReviewPhotos: (
       state: IPhotoState,
-      action: PayloadAction<Photo[]>
+      action: PayloadAction<ReviewPhoto[]>
     ) => {
       state.reviewPhotos = action.payload;
     },
 
-    updateMenuPhotos: (state: IPhotoState, action: PayloadAction<Photo[]>) => {
-      state.reviewPhotos = action.payload;
+    updateMenuPhotos: (
+      state: IPhotoState,
+      action: PayloadAction<MenuPhoto[]>
+    ) => {
+      state.menuPhotos = action.payload;
     },
   },
   extraReducers: (builder) => {

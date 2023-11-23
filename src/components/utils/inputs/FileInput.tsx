@@ -1,5 +1,5 @@
 type FileInputProps = {
-  label: string;
+  label?: string;
   placeholder: string;
   value?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,9 +16,9 @@ const FileInput = ({
 }: FileInputProps) => {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-semibold">{label}</label>
+      {label && <label className="text-sm font-semibold">{label}</label>}
       <input
-        className={`border border-gray-400 rounded-md p-2 ${className}`}
+        className={className}
         type={type}
         placeholder={placeholder}
         onChange={onChange}

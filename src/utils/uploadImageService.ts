@@ -9,12 +9,22 @@ export async function uploadImage(
   file: File,
   restaurantId: string,
   path?: string,
-  id?: string
+  id?: string,
+  imageName?: string
 ) {
-  await supabase.storage
-    .from("restaurant")
-    .upload(`/${restaurantId}/${path}/${id}.jpg`, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
+  if (id) {
+    await supabase.storage
+      .from("restaurant")
+      .upload(`/${restaurantId}/${path}/${id}.jpg`, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+  } else if (imageName) {
+    await supabase.storage
+      .from("restaurant")
+      .upload(`/${restaurantId}/${path}/${imageName}`, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+  }
 }
