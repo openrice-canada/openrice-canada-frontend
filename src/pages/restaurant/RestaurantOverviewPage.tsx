@@ -35,7 +35,10 @@ const RestaurantOverviewPage: React.FC = () => {
   const [showCreateReviewModal, setShowCreateReviewModal] = useState(false);
   const [showUploadImageModal, setShowUploadImageModal] = useState(false);
   const [popUpOpen, setPopUpOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<{
+    id: string;
+    photo_url: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
   const imageRef = useRef<null | HTMLDivElement>(null);
@@ -81,8 +84,8 @@ const RestaurantOverviewPage: React.FC = () => {
     setLoading(false);
   }, [id, dispatch]);
 
-  const openPopUp = (image: string) => {
-    setSelectedImage(image);
+  const openPopUp = (image: string, imageID: string) => {
+    setSelectedImage({ id: imageID, photo_url: image });
     setPopUpOpen(true);
   };
 
@@ -99,7 +102,7 @@ const RestaurantOverviewPage: React.FC = () => {
       dispatch(
         updateReviewPhotos(
           reviewPhotos.map((reviewPhoto) =>
-            reviewPhoto.photo_id === id
+            reviewPhoto.review_photo_id === id
               ? {
                   ...reviewPhoto,
                   photo_url: `${process.env.PUBLIC_URL}/error.svg`,
@@ -112,7 +115,7 @@ const RestaurantOverviewPage: React.FC = () => {
       dispatch(
         updateMenuPhotos(
           menuPhotos.map((menuPhoto) =>
-            menuPhoto.photo_id === id
+            menuPhoto.menu_photo_id === id
               ? {
                   ...menuPhoto,
                   photo_url: `${process.env.PUBLIC_URL}/error.svg`,
@@ -142,6 +145,7 @@ const RestaurantOverviewPage: React.FC = () => {
           show={showUploadImageModal}
           setShow={setShowUploadImageModal}
           modalRef={modalRef}
+          restaurant_id={id}
         />
         <div className="max-w-5xl mx-auto px-3 py-3">
           <div className="flex font-semibold justify-between">
@@ -227,7 +231,12 @@ const RestaurantOverviewPage: React.FC = () => {
                   {reviewPhotos.map((reviewPhoto, index) => (
                     <div
                       className="shadow-md rounded-lg cursor-pointer h-fit bg-white hover:bg-slate-200"
-                      onClick={() => openPopUp(reviewPhoto.photo_url)}
+                      onClick={() =>
+                        openPopUp(
+                          reviewPhoto.photo_url,
+                          reviewPhoto.review_photo_id
+                        )
+                      }
                       key={`review photo ${index}`}
                     >
                       <img
@@ -236,16 +245,20 @@ const RestaurantOverviewPage: React.FC = () => {
                         height="200"
                         className="object-cover w-full h-auto rounded-lg"
                         onError={() =>
-                          loadDefaultImage("review", reviewPhoto.photo_id)
+                          loadDefaultImage(
+                            "review",
+                            reviewPhoto.review_photo_id
+                          )
                         }
                       />
                     </div>
                   ))}
-                  {popUpOpen && (
+                  {popUpOpen && selectedImage && selectedImage.photo_url && (
                     <PhotoModal
-                      selectedImage={selectedImage}
+                      selectedImage={selectedImage.photo_url}
                       imageRef={imageRef}
                       closePopUp={closePopUp}
+                      imageID={selectedImage.id}
                     />
                   )}
                 </div>
@@ -266,7 +279,9 @@ const RestaurantOverviewPage: React.FC = () => {
                   {menuPhotos.map((menuPhoto, index) => (
                     <div
                       className="shadow-md rounded-lg cursor-pointer h-fit bg-white hover:bg-slate-200"
-                      onClick={() => openPopUp(menuPhoto.photo_url)}
+                      onClick={() =>
+                        openPopUp(menuPhoto.photo_url, menuPhoto.menu_photo_id)
+                      }
                       key={`menu photo ${index}`}
                     >
                       <img
@@ -275,16 +290,17 @@ const RestaurantOverviewPage: React.FC = () => {
                         height="200"
                         className="object-cover w-full h-auto rounded-lg"
                         onError={() =>
-                          loadDefaultImage("menu", menuPhoto.photo_id)
+                          loadDefaultImage("menu", menuPhoto.menu_photo_id)
                         }
                       />
                     </div>
                   ))}
-                  {popUpOpen && (
+                  {popUpOpen && selectedImage && selectedImage.photo_url && (
                     <PhotoModal
-                      selectedImage={selectedImage}
+                      selectedImage={selectedImage.photo_url}
                       imageRef={imageRef}
                       closePopUp={closePopUp}
+                      imageID={selectedImage.id}
                     />
                   )}
                 </div>

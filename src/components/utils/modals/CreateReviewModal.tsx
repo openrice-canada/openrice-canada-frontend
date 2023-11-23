@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
@@ -6,13 +7,13 @@ import { IoClose } from "react-icons/io5";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 
 import { IRootState } from "../../../store";
+import { createReview } from "../../../api/review/reviewApiIndex";
 import { TextareaInput } from "../inputs/TextareaInput";
+import { uploadImage } from "../../../utils/uploadImageService";
 import TextInput from "../inputs/TextInput";
 import NumberInput from "../inputs/NumberInput";
 import FileInput from "../inputs/FileInput";
-import { uploadImage } from "../../../utils/uploadImageService";
-import { useCallback } from "react";
-import { createReview } from "../../../api/review/reviewApiIndex";
+import DateInput from "../inputs/DateInput";
 
 interface CreateReviewModalProps {
   show: boolean;
@@ -187,7 +188,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (
                 control={control}
                 name="visit_date"
                 render={({ field }) => (
-                  <TextInput
+                  <DateInput
                     value={field.value}
                     onChange={field.onChange}
                     label="Visit Date"

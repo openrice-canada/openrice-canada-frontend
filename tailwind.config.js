@@ -16,6 +16,9 @@ export default {
           900: "#001933",
         },
       },
+      borderWidth: {
+        1: "1px",
+      },
     },
   },
   plugins: [],

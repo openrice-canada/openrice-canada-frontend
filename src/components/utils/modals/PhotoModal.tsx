@@ -4,11 +4,13 @@ const PhotoModal: React.FC<{
   selectedImage: string;
   closePopUp: () => void;
   imageRef: React.MutableRefObject<HTMLDivElement | null>;
-}> = ({ selectedImage, closePopUp, imageRef }) => {
+  imageID: string;
+}> = ({ selectedImage, closePopUp, imageRef, imageID }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-70">
       <div className="bg-white rounded-xl" ref={imageRef}>
-        <div className="flex items-center justify-end p-2 px-4 border-b border-solid border-slate-200 rounded-t">
+        <div className="flex items-center justify-between p-2 px-4 border-b border-solid border-slate-200 rounded-t">
+          <h3 className="text-sm">{imageID}</h3>
           <button
             className="p-2 ml-auto text-black float-right text-3xl leading-none font-semibold outline-none rounded-full hover:bg-gray-200 focus:outline-none"
             onClick={closePopUp}
