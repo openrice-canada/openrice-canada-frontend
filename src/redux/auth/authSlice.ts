@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCurrentUser, login, register } from "../../api/auth/authApiIndex";
 
 export interface CurrentLoginUserInfo {
@@ -49,7 +49,11 @@ export const getCurrentUserThunk = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    updateMessage: (state: IAuthState, action: PayloadAction<string>) => {
+      state.message = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(registerThunk.fulfilled, (state, action) => {
       if (action.payload?.token) {
@@ -82,4 +86,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { updateMessage } = authSlice.actions;
 export default authSlice.reducer;

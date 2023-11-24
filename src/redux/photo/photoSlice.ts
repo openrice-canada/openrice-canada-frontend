@@ -52,7 +52,7 @@ export const createMenuPhotoThunk = createAsyncThunk(
   }
 );
 
-const photoReducer = createSlice({
+const photoSlice = createSlice({
   name: "photo",
   initialState,
   reducers: {
@@ -85,5 +85,5 @@ const photoReducer = createSlice({
   },
 });
 
-export const { updateReviewPhotos, updateMenuPhotos } = photoReducer.actions;
-export default photoReducer.reducer;
+export const { updateReviewPhotos, updateMenuPhotos } = photoSlice.actions;
+export default photoSlice.reducer;

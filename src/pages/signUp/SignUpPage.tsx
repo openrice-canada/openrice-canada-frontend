@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 
 import { AppDispatch, IRootState } from "../../store";
-import { registerThunk } from "../../redux/auth/authSlice";
+import { registerThunk, updateMessage } from "../../redux/auth/authSlice";
 import TextInput from "../../components/utils/inputs/TextInput";
 
 const SignUpPage = () => {
@@ -33,7 +33,7 @@ const SignUpPage = () => {
         navigate("/");
         navigate(0);
       }, 1000);
-    } else if (registerSuccess === false) {
+    } else if (registerSuccess === false && message) {
       enqueueSnackbar(message, {
         variant: "error",
       });
@@ -43,6 +43,14 @@ const SignUpPage = () => {
       closeSnackbar();
     }, 2000);
   }, [registerSuccess, navigate, message]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (message) {
+        dispatch(updateMessage(""));
+      }
+    }, 2000);
+  }, [dispatch, message]);
 
   return (
     <form

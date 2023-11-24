@@ -36,7 +36,7 @@ const ReviewCard: React.FC<Review> = (props: Review) => {
             <div className="flex gap-1">
               {Array.from({ length: props.rating }).map((_, index) => (
                 <span className="text-yellow-400" key={index}>
-                  {<IoStar />}
+                  <IoStar />
                 </span>
               ))}
             </div>
