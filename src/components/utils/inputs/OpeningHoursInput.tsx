@@ -1,14 +1,19 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-type DateInputProps = {
+interface OpeningHoursInputProps {
   label: string;
   placeholder: string;
   value: Date;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
+}
 
-const DateInput = ({ label, placeholder, value, onChange }: DateInputProps) => {
+const OpeningHoursInput: React.FC<OpeningHoursInputProps> = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+}) => {
   return (
     <div className="flex flex-col">
       <label>{label}</label>
@@ -26,4 +31,4 @@ const DateInput = ({ label, placeholder, value, onChange }: DateInputProps) => {
   );
 };
 
-export default DateInput;
+export default OpeningHoursInput;

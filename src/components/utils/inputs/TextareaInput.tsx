@@ -7,13 +7,13 @@ interface TextareaInputProps {
   className: string;
 }
 
-export const TextareaInput = ({
+const TextareaInput: React.FC<TextareaInputProps> = ({
   label,
   placeholder,
   value,
   onChange,
   className,
-}: TextareaInputProps) => {
+}) => {
   return (
     <div className="flex flex-col gap-1">
       {label && <label className="text-sm font-semibold">{label}</label>}
@@ -26,3 +26,5 @@ export const TextareaInput = ({
     </div>
   );
 };
+
+export default TextareaInput;

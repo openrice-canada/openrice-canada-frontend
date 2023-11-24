@@ -1,11 +1,12 @@
-import { useForm, Controller } from "react-hook-form";
-import TextInput from "../../components/utils/inputs/TextInput";
-import { useNavigate } from "react-router-dom";
-import { closeSnackbar, enqueueSnackbar } from "notistack";
-import { useDispatch, useSelector } from "react-redux";
-import { registerThunk } from "../../redux/auth/authSlice";
 import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+
 import { AppDispatch, IRootState } from "../../store";
+import { registerThunk } from "../../redux/auth/authSlice";
+import TextInput from "../../components/utils/inputs/TextInput";
 
 const SignUpPage = () => {
   const navigate = useNavigate();

@@ -10,12 +10,13 @@ export async function uploadImage(
   restaurantId: string,
   path?: string,
   id?: string,
-  imageName?: string
+  imageName?: string,
+  fileExtension?: string
 ) {
-  if (id) {
+  if (id && fileExtension) {
     await supabase.storage
       .from("restaurant")
-      .upload(`/${restaurantId}/${path}/${id}.jpg`, file, {
+      .upload(`/${restaurantId}/${path}/${id}.${fileExtension}`, file, {
         cacheControl: "3600",
         upsert: false,
       });
