@@ -94,6 +94,12 @@ const CreateRestaurantPage: React.FC = () => {
     fetchPaymentMethods();
   }, [user?.role, dispatch]);
 
+  useEffect(() => {
+    if (!user?.user_id) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const createNewRestaurant = async (
     restaurant: RestaurantForm,
     start_time: Date,

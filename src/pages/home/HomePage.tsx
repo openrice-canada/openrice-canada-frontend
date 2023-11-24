@@ -1,13 +1,16 @@
 import { useForm, Controller } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { AppDispatch, IRootState } from "../../store";
 import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
+import RestaurantCardSkeletonLoader from "../../components/skeletonLoader/RestaurantCardSkeletonLoader";
 import RestaurantCard from "../../components/utils/cards/RestaurantCard";
 import SearchInput from "../../components/utils/inputs/SearchInput";
 
 export default function HomePage(): JSX.Element {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm();
 
@@ -23,6 +26,12 @@ export default function HomePage(): JSX.Element {
 
     fetchRestaurants();
   }, [dispatch]);
+
+  useEffect(() => {
+    if (restaurants.length > 0) {
+      setLoading(false);
+    }
+  }, [restaurants]);
 
   return (
     <div>
@@ -67,9 +76,19 @@ export default function HomePage(): JSX.Element {
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {restaurants.map((restaurant) => (
-            <RestaurantCard {...restaurant} key={restaurant.restaurant_id} />
-          ))}
+          {loading &&
+            Array.from({
+              length: 6,
+            }).map((_, index) => (
+              <RestaurantCardSkeletonLoader
+                key={`loader ${index}`}
+                width="363"
+              />
+            ))}
+          {!loading &&
+            restaurants.map((restaurant) => (
+              <RestaurantCard {...restaurant} key={restaurant.restaurant_id} />
+            ))}
         </div>
       </div>
     </div>

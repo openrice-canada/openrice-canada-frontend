@@ -170,7 +170,7 @@ const RestaurantOverviewPage: React.FC = () => {
                         length: Math.round(restaurantDetail.averageRating),
                       }).map((_, index) => (
                         <span className="text-yellow-400" key={index}>
-                          {<IoStar size={12} />}
+                          <IoStar size={12} />
                         </span>
                       ))}
                     </div>

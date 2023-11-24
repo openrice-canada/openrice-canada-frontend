@@ -2,7 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
-import { loginThunk } from "../../redux/auth/authSlice";
+import { loginThunk, updateMessage } from "../../redux/auth/authSlice";
 import { AppDispatch, IRootState } from "../../store";
 
 import TextInput from "../../components/utils/inputs/TextInput";
@@ -27,16 +27,23 @@ function LoginPage() {
       setTimeout(() => {
         navigate("/");
       }, 1000);
-    } else if (loginSuccess === false) {
+    } else if (loginSuccess === false && message) {
       enqueueSnackbar(`${message} You may try again`, {
         variant: "error",
       });
     }
-
     setTimeout(() => {
       closeSnackbar();
     }, 2000);
-  }, [loginSuccess, navigate, message]);
+  }, [loginSuccess, navigate, message, dispatch]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (message) {
+        dispatch(updateMessage(""));
+      }
+    }, 2000);
+  }, [dispatch, message]);
 
   return (
     <form

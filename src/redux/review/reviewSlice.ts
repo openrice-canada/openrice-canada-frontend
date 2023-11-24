@@ -48,7 +48,7 @@ export const createReviewThunk = createAsyncThunk(
   }
 );
 
-const reviewReducer = createSlice({
+const reviewSlice = createSlice({
   name: "review",
   initialState,
   reducers: {},
@@ -73,4 +73,4 @@ const reviewReducer = createSlice({
   },
 });
 
-export default reviewReducer.reducer;
+export default reviewSlice.reducer;

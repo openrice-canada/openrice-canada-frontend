@@ -1,6 +1,6 @@
 import ContentLoader from "react-content-loader";
 
-const RestaurantDetailSkeletonLoader = () => (
+const RestaurantDetailSkeletonLoader: React.FC = () => (
   <ContentLoader
     speed={1}
     width={340}

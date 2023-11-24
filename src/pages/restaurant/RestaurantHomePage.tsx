@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,8 +7,11 @@ import { AppDispatch, IRootState } from "../../store";
 import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
 import RestaurantCard from "../../components/utils/cards/RestaurantCard";
 import SearchInput from "../../components/utils/inputs/SearchInput";
+import RestaurantCardSkeletonLoader from "../../components/skeletonLoader/RestaurantCardSkeletonLoader";
 
 const RestaurantHomePage = () => {
+  const [loading, setLoading] = useState(true);
+
   const dispatch = useDispatch<AppDispatch>();
   const restaurants = useSelector(
     (state: IRootState) => state.restaurant.restaurants
@@ -35,6 +38,16 @@ const RestaurantHomePage = () => {
     fetchRestaurants();
   }, [searchParams, dispatch]);
 
+  useEffect(() => {
+    if (restaurants.length > 0 && !searchParams.get("search")) {
+      setLoading(false);
+    }
+
+    if (searchParams.get("search")) {
+      setLoading(false);
+    }
+  }, [restaurants, searchParams]);
+
   const handleSubmitSearch = (data: { name: string }) => {
     navigate(`/restaurants/?search=${data.name}`);
     navigate(0);
@@ -60,9 +73,19 @@ const RestaurantHomePage = () => {
           )}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
-          {restaurants.map((restaurant, index) => (
-            <RestaurantCard {...restaurant} key={`restaurant${index}`} />
-          ))}
+          {loading &&
+            Array.from({
+              length: 10,
+            }).map((_, index) => (
+              <RestaurantCardSkeletonLoader
+                key={`loader ${index}`}
+                width="330"
+              />
+            ))}
+          {!loading &&
+            restaurants.map((restaurant, index) => (
+              <RestaurantCard {...restaurant} key={`restaurant${index}`} />
+            ))}
         </div>
       </form>
     </>
