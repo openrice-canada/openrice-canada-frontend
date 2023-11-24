@@ -12,7 +12,10 @@ import { getDishesThunk } from "../../redux/dish/dishSlice";
 import { getDistrictsThunk } from "../../redux/district/districtSlice";
 import { getPaymentMethodsThunk } from "../../redux/paymentMethod/paymentMethodSlice";
 import { createRestaurantPaymentMethodThunk } from "../../redux/restaurantPaymentMethod/restaurantPaymentMethodSlice";
+import { createRestaurantOwnerThunk } from "../../redux/restaurantOwner/restaurantOwnerSlice";
 import { createRestaurantDishThunk } from "../../redux/restaurantDish/restaurantDishSlice";
+import { fileTypeToExtension } from "../../utils/fileTypeToExtension";
+import { uploadImage } from "../../utils/uploadImageService";
 import TextareaInput from "../../components/utils/inputs/TextareaInput";
 import TextInput from "../../components/utils/inputs/TextInput";
 import SelectInput from "../../components/utils/inputs/SelectInput";
@@ -21,9 +24,6 @@ import FileInput from "../../components/utils/inputs/FileInput";
 import ErrorPage from "../error/ErrorPage";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { createRestaurantOwnerThunk } from "../../redux/restaurantOwner/restaurantOwnerSlice";
-import { uploadImage } from "../../utils/uploadImageService";
-import { fileTypeToExtension } from "../../utils/fileTypeToExtension";
 
 export interface RestaurantForm {
   name: string;
