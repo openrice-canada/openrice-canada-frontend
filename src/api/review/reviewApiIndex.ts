@@ -17,14 +17,13 @@ export const getReviewsByRestaurantID = async (
 
 export const createReview = async (
   createReviewDto: CreateReviewDto,
-  imagePrefix: string,
   restaurantID: string,
   photoCategory: string,
   fileExtension?: string
 ): Promise<Review> => {
   return apiClient.post(
     "",
-    { createReviewDto, imagePrefix, restaurantID, fileExtension },
+    { createReviewDto, restaurantID, fileExtension },
     { params: { photoCategory } }
   );
 };

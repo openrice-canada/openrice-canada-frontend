@@ -7,25 +7,34 @@ const supabase = createClient(
 
 export async function uploadImage(
   file: File,
-  restaurantId: string,
+  restaurantID: string,
   path?: string,
   id?: string,
   imageName?: string,
   fileExtension?: string
 ) {
-  if (id && fileExtension) {
+  if (!path) {
     await supabase.storage
       .from("restaurant")
-      .upload(`/${restaurantId}/${path}/${id}.${fileExtension}`, file, {
+      .upload(`/${restaurantID}/cover_image_url.${fileExtension}`, file, {
         cacheControl: "3600",
         upsert: false,
       });
-  } else if (imageName) {
-    await supabase.storage
-      .from("restaurant")
-      .upload(`/${restaurantId}/${path}/${imageName}`, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+  } else {
+    if (id && fileExtension) {
+      await supabase.storage
+        .from("restaurant")
+        .upload(`/${restaurantID}/${path}/${id}.${fileExtension}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+    } else if (imageName) {
+      await supabase.storage
+        .from("restaurant")
+        .upload(`/${restaurantID}/${path}/${imageName}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+    }
   }
 }

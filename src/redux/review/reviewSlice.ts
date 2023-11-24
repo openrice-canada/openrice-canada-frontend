@@ -36,21 +36,14 @@ export const createReviewThunk = createAsyncThunk(
   "review/create",
   async ({
     review,
-    imagePrefix,
     restaurantID,
     photoCategory,
   }: {
     review: CreateReviewDto;
-    imagePrefix: string;
     restaurantID: string;
     photoCategory: string;
   }) => {
-    const response = await createReview(
-      review,
-      imagePrefix,
-      restaurantID,
-      photoCategory
-    );
+    const response = await createReview(review, restaurantID, photoCategory);
     return response;
   }
 );

@@ -19,6 +19,12 @@ export default {
       borderWidth: {
         1: "1px",
       },
+      width: {
+        120: "30rem",
+      },
+      minWidth: {
+        36: "9rem",
+      },
     },
   },
   plugins: [],

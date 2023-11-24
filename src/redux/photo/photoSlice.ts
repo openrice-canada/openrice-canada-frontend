@@ -35,18 +35,15 @@ export const getMenuPhotosThunk = createAsyncThunk(
 export const createMenuPhotoThunk = createAsyncThunk(
   "photo/create",
   async ({
-    imagePrefix,
     restaurantID,
     imageName,
     photoCategory,
   }: {
-    imagePrefix: string;
     restaurantID: string;
     imageName: string;
     photoCategory: string;
   }) => {
     const response = await createMenuPhoto(
-      imagePrefix,
       restaurantID,
       imageName,
       photoCategory

@@ -24,14 +24,14 @@ interface CreateReviewModalProps {
   restaurant_id?: string;
 }
 
-export type ReviewForm = {
+export interface ReviewForm {
   rating: number;
   title: string;
   visit_date: string;
   content: string;
   spending: number;
   photo?: any;
-};
+}
 
 const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
   const navigate = useNavigate();
@@ -63,7 +63,6 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
               user_id: user?.user_id,
               visit_date: new Date(review.visit_date),
             },
-            process.env.REACT_APP_IMAGE_PREFIX as string,
             props.restaurant_id as string,
             "Review",
             fileTypeToExtension[review.photo?.type]
@@ -93,7 +92,6 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
                 user_id: user?.user_id,
                 visit_date: new Date(review.visit_date),
               },
-              imagePrefix: process.env.REACT_APP_IMAGE_PREFIX as string,
               restaurantID: props.restaurant_id as string,
               photoCategory: "Review",
             })
