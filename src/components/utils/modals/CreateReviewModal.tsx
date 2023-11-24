@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 
-import { IRootState } from "../../../store";
+import { AppDispatch, IRootState } from "../../../store";
+import { createReviewThunk } from "../../../redux/review/reviewSlice";
 import { createReview } from "../../../api/review/reviewApiIndex";
-import { TextareaInput } from "../inputs/TextareaInput";
 import { uploadImage } from "../../../utils/uploadImageService";
+import { fileTypeToExtension } from "../../../utils/fileTypeToExtension";
 import TextInput from "../inputs/TextInput";
+import TextareaInput from "../inputs/TextareaInput";
 import NumberInput from "../inputs/NumberInput";
 import FileInput from "../inputs/FileInput";
 import DateInput from "../inputs/DateInput";
@@ -31,9 +33,7 @@ export type ReviewForm = {
   photo?: any;
 };
 
-const CreateReviewModal: React.FC<CreateReviewModalProps> = (
-  props: CreateReviewModalProps
-) => {
+const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -46,38 +46,64 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (
     } as ReviewForm,
   });
 
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: IRootState) => state.auth.currentUser);
 
   const createNewReview = useCallback(
     async (review: ReviewForm) => {
       if (user?.user_id) {
-        const res = await createReview(
-          {
-            title: review.title,
-            content: review.content,
-            spending: review.spending,
-            rating: review.rating,
-            restaurant_id: props?.restaurant_id as string,
-            user_id: user?.user_id,
-            visit_date: new Date(review.visit_date),
-          },
-          process.env.REACT_APP_IMAGE_PREFIX as string,
-          props.restaurant_id as string,
-          "Review"
-        );
-
         if (review.photo) {
+          const res = await createReview(
+            {
+              title: review.title,
+              content: review.content,
+              spending: review.spending,
+              rating: review.rating,
+              restaurant_id: props?.restaurant_id as string,
+              user_id: user?.user_id,
+              visit_date: new Date(review.visit_date),
+            },
+            process.env.REACT_APP_IMAGE_PREFIX as string,
+            props.restaurant_id as string,
+            "Review",
+            fileTypeToExtension[review.photo?.type]
+          );
+
           await uploadImage(
             review.photo,
             props.restaurant_id as string,
             "photos",
-            res?.review_id
+            res?.review_id,
+            "",
+            fileTypeToExtension[review.photo.type]
           );
+
+          enqueueSnackbar("Review and Review photo are added successfully", {
+            variant: "success",
+          });
+        } else {
+          dispatch(
+            createReviewThunk({
+              review: {
+                title: review.title,
+                content: review.content,
+                spending: review.spending,
+                rating: review.rating,
+                restaurant_id: props?.restaurant_id as string,
+                user_id: user?.user_id,
+                visit_date: new Date(review.visit_date),
+              },
+              imagePrefix: process.env.REACT_APP_IMAGE_PREFIX as string,
+              restaurantID: props.restaurant_id as string,
+              photoCategory: "Review",
+            })
+          );
+
+          enqueueSnackbar("Review is added successfully", {
+            variant: "success",
+          });
         }
 
-        enqueueSnackbar("Review and Review photo are added successfully", {
-          variant: "success",
-        });
         props.setShow(false);
         setTimeout(() => {
           navigate(`/restaurant/id/${props?.restaurant_id}`);
@@ -100,7 +126,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (
         }, 2000);
       }
     },
-    [navigate, user?.user_id, props]
+    [navigate, user?.user_id, props, dispatch]
   );
 
   return props.show ? (

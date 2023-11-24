@@ -19,11 +19,12 @@ export const createReview = async (
   createReviewDto: CreateReviewDto,
   imagePrefix: string,
   restaurantID: string,
-  photoCategory: string
+  photoCategory: string,
+  fileExtension?: string
 ): Promise<Review> => {
   return apiClient.post(
     "",
-    { createReviewDto, imagePrefix, restaurantID },
+    { createReviewDto, imagePrefix, restaurantID, fileExtension },
     { params: { photoCategory } }
   );
 };

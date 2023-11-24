@@ -1,4 +1,4 @@
-type NumberInputProps = {
+interface NumberInputProps {
   label: string;
   placeholder: string;
   value: number;
@@ -6,9 +6,9 @@ type NumberInputProps = {
   step: string;
   min?: number;
   max?: number;
-};
+}
 
-const TextInput = ({
+const NumberInput: React.FC<NumberInputProps> = ({
   label,
   placeholder,
   value,
@@ -16,7 +16,7 @@ const TextInput = ({
   step,
   min,
   max,
-}: NumberInputProps) => {
+}) => {
   return (
     <div className="flex flex-col">
       <label>{label}</label>
@@ -34,4 +34,4 @@ const TextInput = ({
   );
 };
 
-export default TextInput;
+export default NumberInput;

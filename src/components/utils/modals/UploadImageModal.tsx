@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuid } from "uuid";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { v4 as uuid } from "uuid";
 import { IoClose } from "react-icons/io5";
 
 import { AppDispatch, IRootState } from "../../../store";
 import { createMenuPhotoThunk } from "../../../redux/photo/photoSlice";
+import { fileTypeToExtension } from "../../../utils/fileTypeToExtension";
 import { uploadImage } from "../../../utils/uploadImageService";
 import FileInput from "../inputs/FileInput";
 
@@ -25,14 +26,28 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
 }) => {
   const navigate = useNavigate();
   const [image, setImage] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<
+    string | ArrayBuffer | null
+  >(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: IRootState) => state.auth.currentUser);
 
-  const fileTypeToExtension: Record<string, string> = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "application/pdf": "pdf",
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let file;
+    if (e.target.files) {
+      file = e.target.files[0];
+    }
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedImage(null);
+    }
   };
 
   const uploadMenuPhoto = async () => {
@@ -105,10 +120,20 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
             </button>
           </div>
           <div className="p-4 flex flex-col justify-center">
+            {selectedImage && (
+              <div className="mb-4 shadow-md rounded-md">
+                <img
+                  src={selectedImage as string}
+                  alt="Preview"
+                  className="w-full h-auto rounded-md"
+                />
+              </div>
+            )}
             <FileInput
               onChange={(e) => {
                 if (e.target.files) {
                   const selectedFile = e.target.files[0];
+                  handleImageChange(e);
                   setImage(selectedFile);
                 }
               }}

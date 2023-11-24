@@ -6,13 +6,13 @@ type TextInputProps = {
   type: React.HTMLInputTypeAttribute;
 };
 
-const TextInput = ({
+const TextInput: React.FC<TextInputProps> = ({
   label,
   placeholder,
   value,
   onChange,
   type,
-}: TextInputProps) => {
+}) => {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-sm font-semibold">{label}</label>
