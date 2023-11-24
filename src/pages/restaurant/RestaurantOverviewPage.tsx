@@ -13,14 +13,14 @@ import {
   updateReviewPhotos,
 } from "../../redux/photo/photoSlice";
 import useOnClickOutside from "../../components/hooks/useOnClickOutside";
-import RestaurantOverviewButton from "../../components/utils/buttons/RestaurantOverviewButton";
-import ReviewCard from "../../components/utils/cards/ReviewCard";
 import RestaurantDetailSkeletonLoader from "../../components/skeletonLoader/RestaurantDetailSkeletonLoader";
-import ErrorPage from "../error/ErrorPage";
+import ReviewCard from "../../components/utils/cards/ReviewCard";
+import RestaurantOverviewButton from "../../components/utils/buttons/RestaurantOverviewButton";
 import UploadButton from "../../components/utils/buttons/UploadButton";
 import UploadImageModal from "../../components/utils/modals/UploadImageModal";
 import CreateReviewModal from "../../components/utils/modals/CreateReviewModal";
 import PhotoModal from "../../components/utils/modals/PhotoModal";
+import ErrorPage from "../error/ErrorPage";
 
 function isUUID(id: string) {
   const uuidPattern =
