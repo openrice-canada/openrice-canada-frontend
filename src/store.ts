@@ -18,6 +18,9 @@ import restaurantPaymentMethodReducer, {
   IRestaurantPaymentMethodState,
 } from "./redux/restaurantPaymentMethod/restaurantPaymentMethodSlice";
 import photoReducer, { IPhotoState } from "./redux/photo/photoSlice";
+import restaurantOwnerReducer, {
+  IRestaurantOwnerState,
+} from "./redux/restaurantOwner/restaurantOwnerSlice";
 
 export interface IRootState {
   auth: IAuthState;
@@ -27,6 +30,7 @@ export interface IRootState {
   district: IDistrictState;
   paymentMethod: IPaymentMethodState;
   restaurantDish: IRestaurantDishState;
+  restaurantOwner: IRestaurantOwnerState;
   restaurantPaymentMethod: IRestaurantPaymentMethodState;
   photo: IPhotoState;
 }
@@ -39,6 +43,7 @@ const reducer = combineReducers<IRootState>({
   district: districtReducer,
   paymentMethod: paymentMethodReducer,
   restaurantDish: restaurantDishReducer,
+  restaurantOwner: restaurantOwnerReducer,
   restaurantPaymentMethod: restaurantPaymentMethodReducer,
   photo: photoReducer,
 });

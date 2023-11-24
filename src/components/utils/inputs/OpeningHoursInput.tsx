@@ -15,8 +15,8 @@ const OpeningHoursInput: React.FC<OpeningHoursInputProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex flex-col">
-      <label>{label}</label>
+    <div className="flex flex-col gap-1">
+      <label className="text-sm font-semibold">{label}</label>
       <DatePicker
         placeholderText={placeholder}
         onChange={(date, e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}

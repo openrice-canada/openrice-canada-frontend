@@ -22,7 +22,8 @@ export const getRestaurantDetail = async (
 };
 
 export const createRestaurant = async (
-  restaurant: CreateRestaurantType
+  restaurant: CreateRestaurantType,
+  fileExtension?: string
 ): Promise<Restaurant> => {
-  return apiClient.post("", restaurant);
+  return apiClient.post("", { restaurant, fileExtension });
 };

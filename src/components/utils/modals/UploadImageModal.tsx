@@ -59,7 +59,6 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
 
         dispatch(
           createMenuPhotoThunk({
-            imagePrefix: process.env.REACT_APP_IMAGE_PREFIX as string,
             restaurantID: restaurant_id as string,
             imageName,
             photoCategory: "Menu",

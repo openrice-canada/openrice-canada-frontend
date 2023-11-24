@@ -21,8 +21,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
   optionList,
 }) => {
   return (
-    <div className="flex flex-col">
-      <label>{label}</label>
+    <div className="flex flex-col gap-1">
+      <label className="text-sm font-semibold">{label}</label>
       <Select
         isClearable
         placeholder={placeholder}

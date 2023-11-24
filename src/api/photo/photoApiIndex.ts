@@ -18,14 +18,13 @@ export const getMenuPhotos = async (
 };
 
 export const createMenuPhoto = async (
-  imagePrefix: string,
   restaurantID: string,
   imageName: string,
   photoCategory: string
 ): Promise<MenuPhoto> => {
   return apiClient.post(
     "",
-    { imagePrefix, restaurantID, imageName },
+    { restaurantID, imageName },
     { params: { photoCategory } }
   );
 };
