@@ -4,9 +4,10 @@ import {
   Restaurant,
 } from "../../api/restaurant/RestaurantType";
 import {
-  createRestaurant,
-  getRestaurantDetail,
   getRestaurants,
+  getRestaurantsByDish,
+  getRestaurantDetail,
+  createRestaurant,
 } from "../../api/restaurant/restaurantApiIndex";
 
 export interface IRestaurantState {
@@ -28,6 +29,14 @@ export const getRestaurantsByQueryThunk = createAsyncThunk(
     }
 
     const response = await getRestaurants({});
+    return response;
+  }
+);
+
+export const getRestaurantsByDishThunk = createAsyncThunk(
+  "restaurant/dish",
+  async (dish: string | null) => {
+    const response = await getRestaurantsByDish(dish);
     return response;
   }
 );
@@ -54,6 +63,12 @@ const restaurantSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getRestaurantsByQueryThunk.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.restaurants = action.payload;
+      }
+    });
+
+    builder.addCase(getRestaurantsByDishThunk.fulfilled, (state, action) => {
       if (action.payload) {
         state.restaurants = action.payload;
       }
