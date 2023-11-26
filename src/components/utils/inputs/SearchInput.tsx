@@ -50,7 +50,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         <IoSearch color="#FFFFFF" />
       </button>
       {isSearching && dishes.length > 0 && (
-        <div className="absolute top-13 w-80 h-80 flex flex-wrap overflow-y-auto bg-white border rounded-lg p-2">
+        <div className="absolute top-13 w-80 h-80 flex flex-wrap overflow-y-auto bg-white border rounded-lg p-2 z-4">
           {dishes.map((dish) => {
             return (
               <Link
