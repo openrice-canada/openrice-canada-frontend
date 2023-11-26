@@ -15,6 +15,12 @@ export const getRestaurants = async (
   return apiClient.get("", { params: input });
 };
 
+export const getRestaurantsByDish = async (
+  dish: string | null
+): Promise<Restaurant[]> => {
+  return apiClient.get("dish", { params: { dish } });
+};
+
 export const getRestaurantDetail = async (
   restaurantId: string
 ): Promise<Restaurant> => {

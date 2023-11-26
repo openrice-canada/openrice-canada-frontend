@@ -25,6 +25,9 @@ export default {
       minWidth: {
         36: "9rem",
       },
+      inset: {
+        13: "3.2rem",
+      },
     },
   },
   plugins: [],

@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { IoClose } from "react-icons/io5";
 
 import { AppDispatch, IRootState } from "../../store";
-import { getRestaurantsByQueryThunk } from "../../redux/restaurant/restaurantSlice";
+import {
+  getRestaurantsByDishThunk,
+  getRestaurantsByQueryThunk,
+} from "../../redux/restaurant/restaurantSlice";
+import RestaurantCardSkeletonLoader from "../../components/skeletonLoader/RestaurantCardSkeletonLoader";
 import RestaurantCard from "../../components/utils/cards/RestaurantCard";
 import SearchInput from "../../components/utils/inputs/SearchInput";
-import RestaurantCardSkeletonLoader from "../../components/skeletonLoader/RestaurantCardSkeletonLoader";
 
 const RestaurantHomePage = () => {
   const [loading, setLoading] = useState(true);
@@ -28,22 +32,33 @@ const RestaurantHomePage = () => {
 
   useEffect(() => {
     const fetchRestaurants = () => {
-      dispatch(
-        getRestaurantsByQueryThunk({
-          name: searchParams.get("search") || "",
-        })
-      );
+      if (!searchParams.get("dish")) {
+        dispatch(
+          getRestaurantsByQueryThunk({
+            name: searchParams.get("search") || "",
+          })
+        );
+      } else {
+        dispatch(getRestaurantsByDishThunk(searchParams.get("dish")));
+      }
     };
 
     fetchRestaurants();
   }, [searchParams, dispatch]);
 
   useEffect(() => {
-    if (restaurants.length > 0 && !searchParams.get("search")) {
+    if (
+      restaurants.length > 0 &&
+      (!searchParams.get("search") || !searchParams.get("dish"))
+    ) {
       setLoading(false);
     }
 
     if (searchParams.get("search")) {
+      setLoading(false);
+    }
+
+    if (searchParams.get("dish")) {
       setLoading(false);
     }
   }, [restaurants, searchParams]);
@@ -72,6 +87,19 @@ const RestaurantHomePage = () => {
             />
           )}
         />
+        {searchParams.get("dish") && (
+          <div className="border-1 p-2 w-fit flex gap-2 rounded-md items-center mt-2">
+            <div>{searchParams.get("dish")}</div>
+            <span
+              className="bg-transparent text-black text-2xl block outline-none focus:outline-none"
+              onClick={() => {
+                navigate("/restaurants");
+              }}
+            >
+              <IoClose size={20} />
+            </span>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
           {loading &&
             Array.from({
