@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { User } from "../../api/user/UserType";
-
-import useOnClickOutside from "../../components/hooks/useOnClickOutside";
+import { User } from "../api/user/UserType";
+import useOnClickOutside from "../components/hooks/useOnClickOutside";
 
 const MenuPage = () => {
   const [popUpOpen, setPopUpOpen] = useState(false);

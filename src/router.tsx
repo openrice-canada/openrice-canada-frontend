@@ -2,13 +2,13 @@ import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import ReviewPage from "./pages/review/ReviewPage";
 import UserInputPage from "./pages/review/UserInputPage";
-import MapPage from "./pages/map/MapPage";
-import LoginPage from "./pages/login/LoginPage";
+import MapPage from "./pages/MapPage";
+import LoginPage from "./pages/LoginPage";
 import ErrorPage from "./pages/error/ErrorPage";
-import HomePage from "./pages/home/HomePage";
-import SignUpPage from "./pages/signUp/SignUpPage";
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/SignUpPage";
 import RestaurantOverviewPage from "./pages/restaurant/RestaurantOverviewPage";
-import MenuPage from "./pages/menu/MenuPage";
+import MenuPage from "./pages/MenuPage";
 import RestaurantHomePage from "./pages/restaurant/RestaurantHomePage";
 import CreateRestaurantPage from "./pages/restaurant/CreateRestaurantPage";
 
