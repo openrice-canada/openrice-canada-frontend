@@ -1,16 +1,14 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import ReviewPage from "./pages/review/ReviewPage";
-import UserInputPage from "./pages/review/UserInputPage";
-import MapPage from "./pages/MapPage";
+import ReviewPage from "./pages/ReviewPage";
 import LoginPage from "./pages/LoginPage";
 import ErrorPage from "./pages/error/ErrorPage";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
 import RestaurantOverviewPage from "./pages/restaurant/RestaurantOverviewPage";
-import MenuPage from "./pages/MenuPage";
 import RestaurantHomePage from "./pages/restaurant/RestaurantHomePage";
 import CreateRestaurantPage from "./pages/restaurant/CreateRestaurantPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const router = createBrowserRouter(
   [
@@ -36,14 +34,6 @@ const router = createBrowserRouter(
           element: <ReviewPage />,
         },
         {
-          path: "/user-input",
-          element: <UserInputPage />,
-        },
-        {
-          path: "/map",
-          element: <MapPage />,
-        },
-        {
           path: "/restaurant",
           element: <Outlet />,
           children: [
@@ -62,8 +52,8 @@ const router = createBrowserRouter(
           element: <RestaurantHomePage />,
         },
         {
-          path: "/menu",
-          element: <MenuPage />,
+          path: "/profile",
+          element: <ProfilePage />,
         },
       ],
     },

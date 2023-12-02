@@ -9,9 +9,10 @@ import {
 } from "react-icons/io5";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, IRootState } from "../../store";
-import { getReviewThunk } from "../../redux/review/reviewSlice";
-import { getRestaurantThunk } from "../../redux/restaurant/restaurantSlice";
+
+import { AppDispatch, IRootState } from "../store";
+import { getReviewThunk } from "../redux/review/reviewSlice";
+import { getRestaurantThunk } from "../redux/restaurant/restaurantSlice";
 
 function isUUID(id: string) {
   const uuidPattern =
