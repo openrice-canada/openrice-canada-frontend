@@ -7,6 +7,7 @@ import { closeSnackbar, enqueueSnackbar } from "notistack";
 import DatePicker from "react-datepicker";
 
 import { createRestaurant } from "../../api/restaurant/restaurantApiIndex";
+import { getCurrentUser } from "../../api/auth/authApiIndex";
 import { AppDispatch, IRootState } from "../../store";
 import { getDishesThunk } from "../../redux/dish/dishSlice";
 import { getDistrictsThunk } from "../../redux/district/districtSlice";
@@ -15,7 +16,7 @@ import { createRestaurantPaymentMethodThunk } from "../../redux/restaurantPaymen
 import { createRestaurantOwnerThunk } from "../../redux/restaurantOwner/restaurantOwnerSlice";
 import { createRestaurantDishThunk } from "../../redux/restaurantDish/restaurantDishSlice";
 import { fileTypeToExtension } from "../../utils/fileTypeToExtension";
-import { uploadImage } from "../../utils/uploadImageService";
+import { uploadRestaurantCoverImage } from "../../utils/uploadImageService";
 import TextareaInput from "../../components/utils/inputs/TextareaInput";
 import TextInput from "../../components/utils/inputs/TextInput";
 import SelectInput from "../../components/utils/inputs/SelectInput";
@@ -95,9 +96,18 @@ const CreateRestaurantPage: React.FC = () => {
   }, [user?.role, dispatch]);
 
   useEffect(() => {
-    if (!user?.user_id) {
-      navigate("/");
-    }
+    const fetchCurrentUser = async () => {
+      if (sessionStorage.getItem("jwt")) {
+        const res = await getCurrentUser();
+        if (!res.user) {
+          navigate("/");
+        }
+      } else {
+        navigate("/");
+      }
+    };
+
+    fetchCurrentUser();
   }, [user, navigate]);
 
   const createNewRestaurant = async (
@@ -134,12 +144,9 @@ const CreateRestaurantPage: React.FC = () => {
         );
 
         if (res.restaurant_id) {
-          await uploadImage(
+          await uploadRestaurantCoverImage(
             restaurant.photo,
             res.restaurant_id as string,
-            "",
-            "",
-            "",
             fileTypeToExtension[restaurant.photo.type]
           );
 

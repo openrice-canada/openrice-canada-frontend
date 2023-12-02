@@ -51,16 +51,14 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
   };
 
   const uploadMenuPhoto = async () => {
-    let imageName;
     if (user?.user_id) {
       if (image && image?.type) {
         const randomID = uuid();
-        imageName = `${randomID}.${fileTypeToExtension[image?.type]}`;
 
         dispatch(
           createMenuPhotoThunk({
             restaurantID: restaurant_id as string,
-            imageName,
+            imageName: `${randomID}.${fileTypeToExtension[image?.type]}`,
             photoCategory: "Menu",
           })
         );
@@ -69,7 +67,8 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
           restaurant_id as string,
           "menus",
           "",
-          imageName
+          randomID,
+          fileTypeToExtension[image?.type]
         );
 
         enqueueSnackbar("Menu photo is added successfully", {

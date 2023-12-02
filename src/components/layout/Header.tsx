@@ -16,7 +16,6 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const userLogout = () => {
     sessionStorage.removeItem("jwt");
-    sessionStorage.removeItem("userInfo");
     enqueueSnackbar("Logging out", {
       variant: "success",
     });

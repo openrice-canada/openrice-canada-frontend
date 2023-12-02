@@ -7,6 +7,7 @@ import { closeSnackbar, enqueueSnackbar } from "notistack";
 import DatePicker from "react-datepicker";
 
 import { createRestaurant } from "../api/restaurant/restaurantApiIndex";
+import { getCurrentUser } from "../api/auth/authApiIndex";
 import { AppDispatch, IRootState } from "../store";
 import { getDishesThunk } from "../redux/dish/dishSlice";
 import { getDistrictsThunk } from "../redux/district/districtSlice";
@@ -43,7 +44,7 @@ export interface RestaurantForm {
   cover_image_url?: string;
 }
 
-const CreateRestaurantPage: React.FC = () => {
+const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm({
     defaultValues: {
@@ -95,9 +96,18 @@ const CreateRestaurantPage: React.FC = () => {
   }, [user?.role, dispatch]);
 
   useEffect(() => {
-    if (!user?.user_id) {
-      navigate("/");
-    }
+    const fetchCurrentUser = async () => {
+      if (sessionStorage.getItem("jwt")) {
+        const res = await getCurrentUser();
+        if (!res.user) {
+          navigate("/");
+        }
+      } else {
+        navigate("/");
+      }
+    };
+
+    fetchCurrentUser();
   }, [user, navigate]);
 
   const createNewRestaurant = async (
@@ -444,4 +454,4 @@ const CreateRestaurantPage: React.FC = () => {
   );
 };
 
-export default CreateRestaurantPage;
+export default ProfilePage;
