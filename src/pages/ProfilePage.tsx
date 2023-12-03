@@ -17,12 +17,12 @@ import { createRestaurantOwnerThunk } from "../redux/restaurantOwner/restaurantO
 import { createRestaurantDishThunk } from "../redux/restaurantDish/restaurantDishSlice";
 import { fileTypeToExtension } from "../utils/fileTypeToExtension";
 import { uploadImage } from "../utils/uploadImageService";
+import { PrimeVue } from "../assets/index";
 import TextareaInput from "../components/utils/inputs/TextareaInput";
 import TextInput from "../components/utils/inputs/TextInput";
 import SelectInput from "../components/utils/inputs/SelectInput";
 import NumberInput from "../components/utils/inputs/NumberInput";
 import FileInput from "../components/utils/inputs/FileInput";
-import ErrorPage from "./error/ErrorPage";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -200,7 +200,7 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  return user?.role === "Admin" ? (
+  return (
     <form
       className="flex flex-col gap-3 px-6 w-120 mx-auto"
       onSubmit={handleSubmit((restaurant) => {
@@ -215,9 +215,12 @@ const ProfilePage: React.FC = () => {
         }
       })}
     >
-      <p className="col-span-2 text-center text-3xl font-bold">
-        Create new restaurant
-      </p>
+      <div className="w-full flex justify-center">
+        <div className="w-40 h-40 rounded-full bg-blue-400 flex items-center justify-center border-1 border-gray-700">
+          <img className="" src={PrimeVue} />
+        </div>
+      </div>
+
       <Controller
         name="name"
         control={control}
@@ -449,8 +452,6 @@ const ProfilePage: React.FC = () => {
         </button>
       </div>
     </form>
-  ) : (
-    <ErrorPage />
   );
 };
 
