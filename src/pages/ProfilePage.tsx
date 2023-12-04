@@ -70,7 +70,7 @@ const ProfilePage: React.FC = () => {
       });
       setTimeout(() => {
         navigate(0);
-      }, 1000);
+      }, 3000);
     } else if (updateProfileSuccess === false && message) {
       enqueueSnackbar(message, {
         variant: "error",
