@@ -14,19 +14,9 @@ import { enqueueSnackbar } from "notistack";
 const Header = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
-  const userLogout = () => {
-    sessionStorage.removeItem("jwt");
-    enqueueSnackbar("Logging out", {
-      variant: "success",
-    });
-    setTimeout(() => {
-      navigate(0);
-    }, 1000);
-  };
-
-  const user = useSelector((state: IRootState) => state.auth.currentUser);
 
   const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: IRootState) => state.auth.currentUser);
 
   useEffect(() => {
     if (sessionStorage.getItem("jwt")) {
@@ -49,6 +39,16 @@ const Header = () => {
     };
   }, []);
 
+  const userLogout = () => {
+    sessionStorage.removeItem("jwt");
+    enqueueSnackbar("Logging out", {
+      variant: "success",
+    });
+    setTimeout(() => {
+      navigate(0);
+    }, 1000);
+  };
+
   return (
     <div
       className={`fixed top-0 left-0 w-full flex justify-between px-4 h-16 bg-gray-100 z-10 ${
@@ -66,7 +66,12 @@ const Header = () => {
       </Link>
       {sessionStorage.getItem("jwt") ? (
         <div className="flex items-center justify-between">
-          <div className="text-sm p-2">{user && user.username}</div>
+          <Link
+            to="/profile"
+            className="hover:bg-slate-200 hover:text-gray-800 hover:font-semibold p-0.5 rounded-sm"
+          >
+            <div className="text-sm p-2">{user && user.username}</div>
+          </Link>
           {user?.role === "Admin" && (
             <Link
               to="/restaurant/create"

@@ -5,6 +5,8 @@ interface FileInputProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type: React.HTMLInputTypeAttribute;
   className: string;
+  labelClassName?: string;
+  fileInputRef?: React.LegacyRef<HTMLInputElement>;
 }
 
 const FileInput: React.FC<FileInputProps> = ({
@@ -13,16 +15,38 @@ const FileInput: React.FC<FileInputProps> = ({
   onChange,
   type,
   className,
+  labelClassName,
+  fileInputRef,
 }) => {
   return (
     <div className="flex flex-col gap-1">
-      {label && <label className="text-sm font-semibold">{label}</label>}
-      <input
-        className={`border border-gray-400 rounded-md p-2 ${className}`}
-        type={type}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
+      {label && (
+        <label
+          className={`${
+            labelClassName
+              ? `text-sm font-semibold ${labelClassName}`
+              : "text-sm font-semibold"
+          }`}
+        >
+          {label}
+        </label>
+      )}
+      {fileInputRef ? (
+        <input
+          className={`border border-gray-400 rounded-md p-2 ${className}`}
+          type={type}
+          placeholder={placeholder}
+          onChange={onChange}
+          ref={fileInputRef}
+        />
+      ) : (
+        <input
+          className={`border border-gray-400 rounded-md p-2 ${className}`}
+          type={type}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
+      )}
     </div>
   );
 };

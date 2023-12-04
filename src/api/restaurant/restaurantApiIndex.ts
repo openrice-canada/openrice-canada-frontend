@@ -1,7 +1,7 @@
 import { AxiosApiClientBuilder } from "../axiosIndex";
 import {
   Restaurant,
-  CreateRestaurantType,
+  CreateRestaurantDto,
   SearchRestaurantQuery,
 } from "./RestaurantType";
 
@@ -28,8 +28,8 @@ export const getRestaurantDetail = async (
 };
 
 export const createRestaurant = async (
-  restaurant: CreateRestaurantType,
+  createRestaurantDto: CreateRestaurantDto,
   fileExtension?: string
 ): Promise<Restaurant> => {
-  return apiClient.post("", { restaurant, fileExtension });
+  return apiClient.post("", { createRestaurantDto, fileExtension });
 };

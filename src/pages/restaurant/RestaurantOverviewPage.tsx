@@ -17,7 +17,7 @@ import RestaurantDetailSkeletonLoader from "../../components/skeletonLoader/Rest
 import ReviewCard from "../../components/utils/cards/ReviewCard";
 import RestaurantOverviewButton from "../../components/utils/buttons/RestaurantOverviewButton";
 import UploadButton from "../../components/utils/buttons/UploadButton";
-import UploadImageModal from "../../components/utils/modals/UploadImageModal";
+import UploadMenuImageModal from "../../components/utils/modals/UploadMenuImageModal";
 import CreateReviewModal from "../../components/utils/modals/CreateReviewModal";
 import PhotoModal from "../../components/utils/modals/PhotoModal";
 import ErrorPage from "../error/ErrorPage";
@@ -33,7 +33,8 @@ const RestaurantOverviewPage: React.FC = () => {
 
   const [page, setPage] = useState("Reviews");
   const [showCreateReviewModal, setShowCreateReviewModal] = useState(false);
-  const [showUploadImageModal, setShowUploadImageModal] = useState(false);
+  const [showUploadMenuImageModal, setShowUploadMenuImageModal] =
+    useState(false);
   const [popUpOpen, setPopUpOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<{
     id: string;
@@ -95,7 +96,7 @@ const RestaurantOverviewPage: React.FC = () => {
 
   useOnClickOutside(imageRef, () => setPopUpOpen(false));
   useOnClickOutside(formRef, () => setShowCreateReviewModal(false));
-  useOnClickOutside(modalRef, () => setShowUploadImageModal(false));
+  useOnClickOutside(modalRef, () => setShowUploadMenuImageModal(false));
 
   const loadDefaultImage = (type: string, id: string) => {
     if (type === "review") {
@@ -141,9 +142,9 @@ const RestaurantOverviewPage: React.FC = () => {
           formRef={formRef}
           restaurant_id={id}
         />
-        <UploadImageModal
-          show={showUploadImageModal}
-          setShow={setShowUploadImageModal}
+        <UploadMenuImageModal
+          show={showUploadMenuImageModal}
+          setShow={setShowUploadMenuImageModal}
           modalRef={modalRef}
           restaurant_id={id}
         />
@@ -269,7 +270,9 @@ const RestaurantOverviewPage: React.FC = () => {
             <>
               <div className="flex justify-between">
                 <h1 className="text-2xl font-bold my-4">Menus</h1>
-                <UploadButton showUploadImageModal={setShowUploadImageModal} />
+                <UploadButton
+                  showUploadMenuImageModal={setShowUploadMenuImageModal}
+                />
               </div>
               {menuPhotos.length === 0 && (
                 <div>No menu photos are provided for this restaurant</div>

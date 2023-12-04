@@ -35,7 +35,7 @@ export interface ReviewForm {
 
 const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
   const navigate = useNavigate();
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<ReviewForm>({
     defaultValues: {
       title: "",
       content: "",
@@ -43,7 +43,7 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
       rating: 0,
       visit_date: "",
       photo: "",
-    } as ReviewForm,
+    },
   });
 
   const dispatch = useDispatch<AppDispatch>();
@@ -73,7 +73,6 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
             props.restaurant_id as string,
             "photos",
             res?.review_id,
-            "",
             fileTypeToExtension[review.photo.type]
           );
 
@@ -107,10 +106,6 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
           navigate(`/restaurant/id/${props?.restaurant_id}`);
           navigate(0);
         }, 1000);
-
-        setTimeout(() => {
-          closeSnackbar();
-        }, 2000);
       } else {
         enqueueSnackbar("You haven't login yet", { variant: "error" });
         props.setShow(false);
@@ -118,11 +113,11 @@ const CreateReviewModal: React.FC<CreateReviewModalProps> = (props) => {
           navigate(`/restaurant/id/${props?.restaurant_id}`);
           navigate(0);
         }, 1000);
-
-        setTimeout(() => {
-          closeSnackbar();
-        }, 2000);
       }
+
+      setTimeout(() => {
+        closeSnackbar();
+      }, 2000);
     },
     [navigate, user?.user_id, props, dispatch]
   );
