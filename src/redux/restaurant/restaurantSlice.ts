@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-  CreateRestaurantType,
+  CreateRestaurantDto,
   Restaurant,
 } from "../../api/restaurant/RestaurantType";
 import {
@@ -51,7 +51,7 @@ export const getRestaurantThunk = createAsyncThunk(
 
 export const createRestaurantThunk = createAsyncThunk(
   "restaurant/create",
-  async (restaurant: CreateRestaurantType) => {
+  async (restaurant: CreateRestaurantDto) => {
     const response = await createRestaurant(restaurant);
     return response;
   }
