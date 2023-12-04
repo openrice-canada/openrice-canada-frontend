@@ -1,18 +1,15 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCurrentUser, login, register } from "../../api/auth/authApiIndex";
-
-export interface CurrentLoginUserInfo {
-  user_id: string;
-  username: string;
-  email: string;
-  role: string;
-}
+import { CurrentLoginUserInfo } from "../../api/auth/authType";
+import { updateUserProfile } from "../../api/user/userApiIndex";
+import { UpdateUserDto } from "../../api/user/UserType";
 
 export interface IAuthState {
   currentUser: CurrentLoginUserInfo | null;
   message: string;
   registerSuccess: boolean | null;
   loginSuccess: boolean | null;
+  updateProfileSuccess: boolean | null;
 }
 
 const initialState: IAuthState = {
@@ -20,6 +17,7 @@ const initialState: IAuthState = {
   message: "",
   registerSuccess: null,
   loginSuccess: null,
+  updateProfileSuccess: null,
 };
 
 export const registerThunk = createAsyncThunk(
@@ -46,12 +44,40 @@ export const getCurrentUserThunk = createAsyncThunk(
   }
 );
 
+export const updateUserProfileThunk = createAsyncThunk(
+  "auth/updateUserProfile",
+  async ({
+    userID,
+    profile,
+    fileExtension,
+  }: {
+    userID: string;
+    profile: UpdateUserDto;
+    fileExtension: string;
+  }) => {
+    const response = await updateUserProfile(userID, profile, fileExtension);
+    return response;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    updateRegisterStatus: (
+      state: IAuthState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.registerSuccess = action.payload;
+    },
     updateMessage: (state: IAuthState, action: PayloadAction<string>) => {
       state.message = action.payload;
+    },
+    updateCurrentUserProfilePicture: (
+      state: IAuthState,
+      action: PayloadAction<CurrentLoginUserInfo>
+    ) => {
+      state.currentUser = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -83,8 +109,23 @@ const authSlice = createSlice({
         state.currentUser = action.payload.user;
       }
     });
+
+    builder.addCase(updateUserProfileThunk.fulfilled, (state, action) => {
+      if (action.payload.message) {
+        state.message = action.payload.message;
+        state.updateProfileSuccess = false;
+      } else if (action.payload.userInfo && action.payload.token) {
+        state.currentUser = action.payload.userInfo;
+        sessionStorage.setItem("jwt", action.payload.token);
+        state.updateProfileSuccess = true;
+      }
+    });
   },
 });
 
-export const { updateMessage } = authSlice.actions;
+export const {
+  updateRegisterStatus,
+  updateMessage,
+  updateCurrentUserProfilePicture,
+} = authSlice.actions;
 export default authSlice.reducer;

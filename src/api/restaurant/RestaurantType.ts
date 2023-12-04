@@ -17,13 +17,13 @@ export interface Restaurant {
   modified_at: Date;
 }
 
-export type SearchRestaurantQuery = {
+export interface SearchRestaurantQuery {
   name?: string;
   limit?: number;
   offset?: number;
-};
+}
 
-export type CreateRestaurantType = {
+export interface CreateRestaurantDto {
   name: string;
   address: string;
   district_id: string;
@@ -48,4 +48,4 @@ export type CreateRestaurantType = {
   rating?: number;
   created_at?: string;
   modified_at?: string;
-};
+}

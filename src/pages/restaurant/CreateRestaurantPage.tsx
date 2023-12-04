@@ -19,7 +19,7 @@ import { fileTypeToExtension } from "../../utils/fileTypeToExtension";
 import { uploadRestaurantCoverImage } from "../../utils/uploadImageService";
 import TextareaInput from "../../components/utils/inputs/TextareaInput";
 import TextInput from "../../components/utils/inputs/TextInput";
-import SelectInput from "../../components/utils/inputs/SelectInput";
+import SelectInput from "../../components/utils/inputs/selectInput/SelectInput";
 import NumberInput from "../../components/utils/inputs/NumberInput";
 import FileInput from "../../components/utils/inputs/FileInput";
 import ErrorPage from "../error/ErrorPage";
@@ -39,14 +39,14 @@ export interface RestaurantForm {
   endTime: Date | null;
   dish_id: string;
   payment_method_id: string;
-  photo?: any;
   opening_hours?: string;
   cover_image_url?: string;
+  photo?: any;
 }
 
 const CreateRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control } = useForm<RestaurantForm>({
     defaultValues: {
       name: "",
       address: "",
@@ -178,11 +178,9 @@ const CreateRestaurantPage: React.FC = () => {
             navigate(`/restaurant/id/${res.restaurant_id}`);
             navigate(0);
           }, 1000);
-
-          setTimeout(() => {
-            closeSnackbar();
-          }, 2000);
         }
+      } else {
+        enqueueSnackbar("Restaurant photo is required", { variant: "error" });
       }
     } else {
       enqueueSnackbar("You haven't login yet", { variant: "error" });
@@ -190,11 +188,11 @@ const CreateRestaurantPage: React.FC = () => {
         navigate(`/`);
         navigate(0);
       }, 1000);
-
-      setTimeout(() => {
-        closeSnackbar();
-      }, 2000);
     }
+
+    setTimeout(() => {
+      closeSnackbar();
+    }, 2000);
   };
 
   return user?.role === "Admin" ? (
@@ -437,7 +435,7 @@ const CreateRestaurantPage: React.FC = () => {
           />
         )}
       />
-      <div className="flex flex-col items-center mb-2">
+      <div className="flex flex-col items-center mb-2 text-sm">
         <button
           type="submit"
           className="bg-black px-4 py-2 rounded-md text-white font-bold hover:bg-opacity-70"

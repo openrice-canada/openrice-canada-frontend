@@ -1,6 +1,6 @@
-import Layout from "./components/layout/Layout";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
+import Layout from "./components/layout/Layout";
 
 function App() {
   return (

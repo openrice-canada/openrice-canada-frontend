@@ -1,102 +1,54 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
-import DatePicker from "react-datepicker";
 
-import { createRestaurant } from "../api/restaurant/restaurantApiIndex";
 import { getCurrentUser } from "../api/auth/authApiIndex";
+import { CurrentLoginUserInfo } from "../api/auth/authType";
 import { AppDispatch, IRootState } from "../store";
-import { getDishesThunk } from "../redux/dish/dishSlice";
-import { getDistrictsThunk } from "../redux/district/districtSlice";
-import { getPaymentMethodsThunk } from "../redux/paymentMethod/paymentMethodSlice";
-import { createRestaurantPaymentMethodThunk } from "../redux/restaurantPaymentMethod/restaurantPaymentMethodSlice";
-import { createRestaurantOwnerThunk } from "../redux/restaurantOwner/restaurantOwnerSlice";
-import { createRestaurantDishThunk } from "../redux/restaurantDish/restaurantDishSlice";
-import { fileTypeToExtension } from "../utils/fileTypeToExtension";
-import { uploadImage } from "../utils/uploadImageService";
 import { PrimeVue } from "../assets/index";
-import TextareaInput from "../components/utils/inputs/TextareaInput";
 import TextInput from "../components/utils/inputs/TextInput";
-import SelectInput from "../components/utils/inputs/SelectInput";
-import NumberInput from "../components/utils/inputs/NumberInput";
 import FileInput from "../components/utils/inputs/FileInput";
+import SelectInput from "../components/utils/inputs/selectInput/SelectInput";
+import {
+  updateCurrentUserProfilePicture,
+  updateUserProfileThunk,
+} from "../redux/auth/authSlice";
+import { fileTypeToExtension } from "../utils/fileTypeToExtension";
+import { uploadUserProfilePicture } from "../utils/uploadImageService";
 
-import "react-datepicker/dist/react-datepicker.css";
-
-export interface RestaurantForm {
-  name: string;
-  address: string;
-  district_id: string;
-  latitude: number;
-  longitude: number;
-  postal_code: string;
-  phone: string;
-  intro: string;
-  startTime: Date | null;
-  endTime: Date | null;
-  dish_id: string;
-  payment_method_id: string;
+export interface UpdateProfileForm {
+  username: string;
+  email: string;
+  role: string;
+  password: string;
+  confirmPassword?: string;
   photo?: any;
-  opening_hours?: string;
-  cover_image_url?: string;
+  profile_picture_url?: string;
 }
+
+const userRoles = ["User", "Admin"];
 
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm({
-    defaultValues: {
-      name: "",
-      address: "",
-      district_id: "",
-      latitude: 0,
-      longitude: 0,
-      postal_code: "",
-      phone: "",
-      intro: "",
-      startTime: null,
-      endTime: null,
-      dish_id: "",
-      payment_method_id: "",
-      photo: "",
-    },
-  });
+  const photoRef = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState<boolean | null>(null);
+  const [selectedImage, setSelectedImage] = useState<
+    string | ArrayBuffer | null
+  >(null);
 
   const dispatch = useDispatch<AppDispatch>();
-  const dishes = useSelector((state: IRootState) => state.dish.dishes);
-  const districts = useSelector(
-    (state: IRootState) => state.district.districts
-  );
-  const paymentMethods = useSelector(
-    (state: IRootState) => state.paymentMethod.paymentMethods
-  );
   const user = useSelector((state: IRootState) => state.auth.currentUser);
-
-  useEffect(() => {
-    const fetchDishes = async () => {
-      if (user?.role !== "Admin") return;
-      dispatch(getDishesThunk());
-    };
-
-    const fetchDistricts = async () => {
-      if (user?.role !== "Admin") return;
-      dispatch(getDistrictsThunk());
-    };
-
-    const fetchPaymentMethods = async () => {
-      if (user?.role !== "Admin") return;
-      dispatch(getPaymentMethodsThunk());
-    };
-
-    fetchDishes();
-    fetchDistricts();
-    fetchPaymentMethods();
-  }, [user?.role, dispatch]);
+  const updateProfileSuccess = useSelector(
+    (state: IRootState) => state.auth.updateProfileSuccess
+  );
+  const message = useSelector((state: IRootState) => state.auth.message);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
+      setLoading(true);
       if (sessionStorage.getItem("jwt")) {
         const res = await getCurrentUser();
         if (!res.user) {
@@ -105,87 +57,125 @@ const ProfilePage: React.FC = () => {
       } else {
         navigate("/");
       }
+      setLoading(false);
     };
 
     fetchCurrentUser();
   }, [user, navigate]);
 
-  const createNewRestaurant = async (
-    restaurant: RestaurantForm,
-    start_time: Date,
-    end_time: Date,
-    dish_id: string,
-    payment_method_id: string
-  ) => {
-    restaurant.opening_hours = JSON.stringify({
-      monday: { from: start_time, to: end_time },
-      tuesday: { from: start_time, to: end_time },
-      wednesday: { from: start_time, to: end_time },
-      thursday: { from: start_time, to: end_time },
-      friday: { from: start_time, to: end_time },
-      saturday: { from: start_time, to: end_time },
-      sunday: { from: start_time, to: end_time },
-    });
+  useEffect(() => {
+    if (updateProfileSuccess) {
+      enqueueSnackbar("Profile is updated successfully", {
+        variant: "success",
+      });
+      setTimeout(() => {
+        navigate(0);
+      }, 1000);
+    } else if (updateProfileSuccess === false && message) {
+      enqueueSnackbar(message, {
+        variant: "error",
+      });
+    }
+
+    setTimeout(() => {
+      closeSnackbar();
+    }, 2000);
+  }, [updateProfileSuccess, navigate, message]);
+
+  const { handleSubmit, control } = useForm<UpdateProfileForm>();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let file;
+    if (e.target.files) {
+      file = e.target.files[0];
+    }
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedImage(null);
+    }
+  };
+
+  const loadDefaultImage = () => {
+    dispatch(
+      updateCurrentUserProfilePicture({
+        ...(user as CurrentLoginUserInfo),
+        profile_picture_url: `${process.env.PUBLIC_URL}/error.svg`,
+      })
+    );
+  };
+
+  const updateProfile = async (profile: UpdateProfileForm) => {
+    setLoading(true);
     if (user?.user_id) {
-      if (restaurant.photo) {
-        const res = await createRestaurant(
-          {
-            name: restaurant.name,
-            address: restaurant.address,
-            district_id: restaurant.district_id,
-            latitude: restaurant.latitude.toString(),
-            longitude: restaurant.longitude.toString(),
-            postal_code: restaurant.postal_code,
-            phone: restaurant.phone,
-            intro: restaurant.intro,
-            opening_hours: restaurant.opening_hours,
-          },
-          fileTypeToExtension[restaurant.photo.type]
-        );
-
-        if (res.restaurant_id) {
-          await uploadImage(
-            restaurant.photo,
-            res.restaurant_id as string,
-            "",
-            "",
-            "",
-            fileTypeToExtension[restaurant.photo.type]
-          );
-
+      if (profile.username.length > 2) {
+        if (profile.password === "" && profile.confirmPassword === "") {
           dispatch(
-            createRestaurantDishThunk({
-              restaurant_id: res.restaurant_id,
-              dish_id,
+            updateUserProfileThunk({
+              userID: user.user_id,
+              profile: {
+                username: profile.username,
+                email: profile.email,
+                role: profile.role,
+              },
+              fileExtension: profile.photo
+                ? fileTypeToExtension[profile.photo.type]
+                : "",
             })
           );
-
+        } else if (
+          profile.password !== "" &&
+          profile.password.length > 2 &&
+          profile.password === profile.confirmPassword
+        ) {
           dispatch(
-            createRestaurantOwnerThunk({
-              user_id: user?.user_id,
-              restaurant_id: res.restaurant_id,
+            updateUserProfileThunk({
+              userID: user.user_id,
+              profile: {
+                username: profile.username,
+                email: profile.email,
+                role: profile.role,
+                password: profile.password,
+              },
+              fileExtension: profile.photo
+                ? fileTypeToExtension[profile.photo.type]
+                : "",
             })
           );
-
-          dispatch(
-            createRestaurantPaymentMethodThunk({
-              restaurant_id: res.restaurant_id,
-              payment_method_id,
-            })
+        } else if (
+          profile.password === "" ||
+          profile.password.length <= 2 ||
+          profile.confirmPassword === "" ||
+          (profile.confirmPassword && profile.confirmPassword.length <= 2)
+        ) {
+          enqueueSnackbar(
+            "The minimum length of password or that of password confirm is 3",
+            {
+              variant: "error",
+            }
           );
-
-          enqueueSnackbar("Restaurant is added successfully", {
-            variant: "success",
+        } else {
+          enqueueSnackbar("The password and password confirm are different", {
+            variant: "error",
           });
-          setTimeout(() => {
-            navigate(`/restaurant/id/${res.restaurant_id}`);
-            navigate(0);
-          }, 1000);
-
-          setTimeout(() => {
-            closeSnackbar();
-          }, 2000);
         }
+
+        if (profile.photo) {
+          await uploadUserProfilePicture(
+            profile.photo,
+            user.user_id,
+            fileTypeToExtension[profile.photo.type]
+          );
+        }
+      } else {
+        enqueueSnackbar("The minimum length of username is 3", {
+          variant: "error",
+        });
       }
     } else {
       enqueueSnackbar("You haven't login yet", { variant: "error" });
@@ -193,239 +183,55 @@ const ProfilePage: React.FC = () => {
         navigate(`/`);
         navigate(0);
       }, 1000);
-
-      setTimeout(() => {
-        closeSnackbar();
-      }, 2000);
     }
+
+    setTimeout(() => {
+      closeSnackbar();
+    }, 2000);
+    setLoading(false);
   };
 
-  return (
+  return user && !loading ? (
     <form
-      className="flex flex-col gap-3 px-6 w-120 mx-auto"
-      onSubmit={handleSubmit((restaurant) => {
-        if (restaurant.startTime && restaurant.endTime) {
-          createNewRestaurant(
-            restaurant,
-            restaurant.startTime,
-            restaurant.endTime,
-            restaurant.dish_id,
-            restaurant.payment_method_id
-          );
-        }
+      className="flex flex-col gap-3 px-6 w-100 mx-auto"
+      onSubmit={handleSubmit((profile) => {
+        updateProfile(profile);
       })}
     >
-      <div className="w-full flex justify-center">
-        <div className="w-40 h-40 rounded-full bg-blue-400 flex items-center justify-center border-1 border-gray-700">
-          <img className="" src={PrimeVue} />
-        </div>
-      </div>
-
-      <Controller
-        name="name"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <TextInput
-            label="Name"
-            type="text"
-            placeholder="Enter restaurant name"
-            value={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
-      <Controller
-        name="address"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <TextInput
-            label="Address"
-            type="text"
-            placeholder="Enter restaurant address"
-            value={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
-      <Controller
-        name="district_id"
-        control={control}
-        render={({ field }) => (
-          <SelectInput
-            label="District"
-            placeholder="Select district"
-            value={field.value}
-            onChange={field.onChange}
-            optionList={districts.map((district) => {
-              return { label: district.name, value: district.district_id };
-            })}
-          />
-        )}
-      />
-      <Controller
-        name="latitude"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <NumberInput
-            label="Latitude"
-            step="0.1"
-            placeholder="Enter restaurant latitude"
-            value={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
-      <Controller
-        name="longitude"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <NumberInput
-            label="Longitude"
-            step="0.1"
-            placeholder="Enter restaurant longitude"
-            value={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
-      <Controller
-        name="postal_code"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <TextInput
-            label="Postal Code"
-            type="text"
-            placeholder="Enter restaurant postal code"
-            value={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
-      <Controller
-        name="phone"
-        control={control}
-        defaultValue={""}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <TextInput
-            label="Phone"
-            type="text"
-            placeholder="Enter restaurant phone"
-            value={field.value}
-            onChange={field.onChange}
-          />
-        )}
-      />
-      <Controller
-        name="intro"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <TextareaInput
-            label="Introduction"
-            placeholder="Enter restaurant introduction"
-            value={field.value}
-            onChange={field.onChange}
-            className="border border-gray-400 p-2 rounded-md"
-          />
-        )}
-      />
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-semibold">Opening Hours</label>
-        <div className="flex gap-2 items-center max-w-full">
-          <div className="text-sm font-semibold">from</div>
-          <div>
-            <Controller
-              name="startTime"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => {
-                return (
-                  <div className="grow w-44">
-                    <DatePicker
-                      placeholderText="Opening Hour"
-                      onChange={field.onChange}
-                      selected={field.value}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="h:mm aa"
-                      className="border-2 rounded-md p-1 w-full"
-                    />
-                  </div>
-                );
-              }}
+      <div className="w-full flex items-center flex-col gap-2">
+        {selectedImage ? (
+          <div className="w-40 h-40 border-2 border-gray-700 rounded-full overflow-hidden">
+            <img
+              src={selectedImage as string}
+              className="object-cover min-h-full min-w-full"
             />
           </div>
-          <div className="text-sm font-semibold">to</div>
-          <div>
-            <Controller
-              name="endTime"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => {
-                return (
-                  <div className="grow w-44">
-                    <DatePicker
-                      placeholderText="Closing Hour"
-                      onChange={field.onChange}
-                      selected={field.value}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="h:mm aa"
-                      className="border-2 rounded-md p-1 w-full"
-                    />
-                  </div>
-                );
-              }}
+        ) : user.profile_picture_url ? (
+          <div className="w-40 h-40 border-2 border-gray-700 rounded-full overflow-hidden">
+            <img
+              src={user.profile_picture_url}
+              className="object-cover"
+              onError={loadDefaultImage}
             />
           </div>
+        ) : (
+          <div className="w-40 h-40 rounded-full bg-blue-400 flex items-center justify-center border-1 border-gray-700">
+            <img src={PrimeVue} />
+          </div>
+        )}
+        <div
+          className="font-bold text-sm text-yellow-500 hover:text-orange-600 cursor-pointer"
+          onClick={() => {
+            if (photoRef.current) {
+              photoRef.current?.click();
+            }
+          }}
+        >
+          change your profile picture
         </div>
       </div>
       <Controller
-        name="dish_id"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <SelectInput
-            label="Dish"
-            placeholder="Select dish"
-            value={field.value}
-            onChange={field.onChange}
-            optionList={dishes.map((dish) => {
-              return { label: dish.name, value: dish.dish_id };
-            })}
-          />
-        )}
-      />
-      <Controller
-        name="payment_method_id"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <SelectInput
-            label="Payment Method"
-            placeholder="Select payment method"
-            value={field.value}
-            onChange={field.onChange}
-            optionList={paymentMethods.map((paymentMethod) => {
-              return {
-                label: paymentMethod.name,
-                value: paymentMethod.payment_method_id,
-              };
-            })}
-          />
-        )}
-      />
-      <Controller
+        defaultValue=""
         control={control}
         name="photo"
         render={({ field }) => (
@@ -434,24 +240,102 @@ const ProfilePage: React.FC = () => {
               if (e.target.files) {
                 const selectedFile = e.target.files[0];
                 field.onChange(selectedFile);
+                handleImageChange(e);
               }
             }}
             label="Restaurant Cover Photo"
             type="file"
-            className="form-control"
+            labelClassName="hidden"
+            className="hidden"
             placeholder=""
+            fileInputRef={photoRef}
           />
         )}
       />
-      <div className="flex flex-col items-center mb-2">
+      <Controller
+        defaultValue={user.username}
+        name="username"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <TextInput
+            label="Name"
+            type="text"
+            placeholder="Update username"
+            value={field.value as string}
+            onChange={field.onChange}
+          />
+        )}
+      />
+      <Controller
+        defaultValue={user.email}
+        name="email"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <TextInput
+            label="Name"
+            type="email"
+            placeholder="Update email"
+            value={field.value as string}
+            onChange={field.onChange}
+          />
+        )}
+      />
+      <Controller
+        defaultValue={user.role}
+        name="role"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <SelectInput
+            label="User Role"
+            placeholder="Select role"
+            value={field.value as string}
+            onChange={field.onChange}
+            optionList={userRoles.map((role) => {
+              return { label: role, value: role };
+            })}
+          />
+        )}
+      />
+      <Controller
+        defaultValue=""
+        name="password"
+        control={control}
+        render={({ field }) => (
+          <TextInput
+            label="Password"
+            type="password"
+            value={field.value as string}
+            onChange={field.onChange}
+          />
+        )}
+      />
+      <Controller
+        defaultValue=""
+        name="confirmPassword"
+        control={control}
+        render={({ field }) => (
+          <TextInput
+            label="Password Confirm"
+            type="password"
+            value={field.value as string}
+            onChange={field.onChange}
+          />
+        )}
+      />
+      <div className="flex flex-col items-center mb-2 text-sm">
         <button
           type="submit"
           className="bg-black px-4 py-2 rounded-md text-white font-bold hover:bg-opacity-70"
         >
-          Add
+          Update
         </button>
       </div>
     </form>
+  ) : (
+    <></>
   );
 };
 

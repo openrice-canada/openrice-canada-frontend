@@ -10,20 +10,12 @@ export async function uploadImage(
   restaurantID: string,
   path: string,
   id?: string,
-  imageName?: string,
   fileExtension?: string
 ) {
   if (id) {
     await supabase.storage
       .from("restaurant")
       .upload(`/${restaurantID}/${path}/${id}.${fileExtension}`, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-  } else if (imageName) {
-    await supabase.storage
-      .from("restaurant")
-      .upload(`/${restaurantID}/${path}/${imageName}.${fileExtension}`, file, {
         cacheControl: "3600",
         upsert: false,
       });
@@ -38,6 +30,19 @@ export async function uploadRestaurantCoverImage(
   await supabase.storage
     .from("restaurant")
     .upload(`/${restaurantID}/cover_image_url.${fileExtension}`, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+}
+
+export async function uploadUserProfilePicture(
+  file: File,
+  userID: string,
+  fileExtension?: string
+) {
+  await supabase.storage
+    .from("user")
+    .upload(`/${userID}/profile_picture_url.${fileExtension}`, file, {
       cacheControl: "3600",
       upsert: false,
     });

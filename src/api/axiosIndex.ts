@@ -22,8 +22,8 @@ export class AxiosApiClientBuilder {
     return this;
   }
 
-  public withCredentials(b: boolean): this {
-    this.client.defaults.withCredentials = b;
+  public withCredentials(bool: boolean): this {
+    this.client.defaults.withCredentials = bool;
     return this;
   }
 

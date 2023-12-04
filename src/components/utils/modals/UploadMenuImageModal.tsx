@@ -11,14 +11,14 @@ import { fileTypeToExtension } from "../../../utils/fileTypeToExtension";
 import { uploadImage } from "../../../utils/uploadImageService";
 import FileInput from "../inputs/FileInput";
 
-interface UploadImageModalProps {
+interface UploadMenuImageModalProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   modalRef: React.MutableRefObject<HTMLDivElement | null>;
   restaurant_id?: string;
 }
 
-const UploadImageModal: React.FC<UploadImageModalProps> = ({
+const UploadMenuImageModal: React.FC<UploadMenuImageModalProps> = ({
   show,
   setShow,
   modalRef,
@@ -66,7 +66,6 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
           image as File,
           restaurant_id as string,
           "menus",
-          "",
           randomID,
           fileTypeToExtension[image?.type]
         );
@@ -79,10 +78,6 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
           navigate(`/restaurant/id/${restaurant_id}`);
           navigate(0);
         }, 1000);
-
-        setTimeout(() => {
-          closeSnackbar();
-        }, 2000);
       }
     } else {
       enqueueSnackbar("You haven't login yet", { variant: "error" });
@@ -91,11 +86,11 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
         navigate(`/restaurant/id/${restaurant_id}`);
         navigate(0);
       }, 1000);
-
-      setTimeout(() => {
-        closeSnackbar();
-      }, 2000);
     }
+
+    setTimeout(() => {
+      closeSnackbar();
+    }, 2000);
   };
 
   return show ? (
@@ -156,4 +151,4 @@ const UploadImageModal: React.FC<UploadImageModalProps> = ({
   );
 };
 
-export default UploadImageModal;
+export default UploadMenuImageModal;

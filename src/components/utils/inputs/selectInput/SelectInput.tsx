@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Select from "react-select";
+import { selectInputColourStyles } from "./selectInput.color.style";
 
-interface Category {
+export interface Category {
   value: string;
   label: string;
 }
@@ -9,7 +11,7 @@ interface SelectInputProps {
   label: string;
   placeholder: string;
   value: string;
-  onChange: (...event: unknown[]) => void;
+  onChange: (e: any) => void;
   optionList: Category[];
 }
 
@@ -31,6 +33,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         onChange={(e) => {
           onChange(e?.value);
         }}
+        styles={selectInputColourStyles}
       />
     </div>
   );

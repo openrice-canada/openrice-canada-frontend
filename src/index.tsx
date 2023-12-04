@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 import "./form-control.min.css";
 import { RouterProvider } from "react-router";
@@ -15,5 +16,6 @@ root.render(
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
+    <Analytics />
   </React.StrictMode>
 );

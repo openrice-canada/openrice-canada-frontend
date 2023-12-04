@@ -8,16 +8,24 @@ import { AppDispatch, IRootState } from "../store";
 import { loginThunk, updateMessage } from "../redux/auth/authSlice";
 import TextInput from "../components/utils/inputs/TextInput";
 
+interface LoginForm {
+  username: string;
+  password: string;
+}
+
 function LoginPage() {
   const navigate = useNavigate();
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm<LoginForm>({
+    defaultValues: { username: "", password: "" },
+  });
+
   const dispatch = useDispatch<AppDispatch>();
   const loginSuccess = useSelector(
     (state: IRootState) => state.auth.loginSuccess
   );
   const message = useSelector((state: IRootState) => state.auth.message);
 
-  const userLogin = async (user: { username: string; password: string }) => {
+  const userLogin = async (user: LoginForm) => {
     dispatch(loginThunk(user));
   };
 
@@ -48,9 +56,7 @@ function LoginPage() {
   return (
     <form
       className="h-screen flex flex-col gap-6 justify-center max-w-sm mx-auto px-4"
-      onSubmit={handleSubmit((user) =>
-        userLogin(user as { username: string; password: string })
-      )}
+      onSubmit={handleSubmit((user) => userLogin(user))}
     >
       <p className="text-3xl font-bold">Log in to Openrice</p>
       <p>
@@ -59,7 +65,7 @@ function LoginPage() {
       <Controller
         name="username"
         control={control}
-        defaultValue={""}
+        rules={{ required: true }}
         render={({ field }) => (
           <TextInput
             label="Username"
@@ -73,7 +79,7 @@ function LoginPage() {
       <Controller
         name="password"
         control={control}
-        defaultValue={""}
+        rules={{ required: true }}
         render={({ field }) => (
           <TextInput
             label="Password"

@@ -20,6 +20,7 @@ export default {
         1: "1px",
       },
       width: {
+        100: "26rem",
         120: "30rem",
       },
       minWidth: {
