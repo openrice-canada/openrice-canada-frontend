@@ -8,7 +8,6 @@ export const selectInputColourStyles: StylesConfig<Category, false> = {
     backgroundColor: "white",
     "&:hover": {
       borderColor: "#333333",
-      borderWidth: "0.15rem",
     },
   }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
