@@ -115,38 +115,57 @@ const ProfilePage: React.FC = () => {
     if (user?.user_id) {
       if (profile.username.length > 2) {
         if (profile.password === "" && profile.confirmPassword === "") {
-          dispatch(
-            updateUserProfileThunk({
-              userID: user.user_id,
-              profile: {
-                username: profile.username,
-                email: profile.email,
-                role: profile.role,
-              },
-              fileExtension: profile.photo
-                ? fileTypeToExtension[profile.photo.type]
-                : "",
-            })
-          );
+          profile.photo
+            ? dispatch(
+                updateUserProfileThunk({
+                  userID: user.user_id,
+                  profile: {
+                    username: profile.username,
+                    email: profile.email,
+                    role: profile.role,
+                  },
+                  fileExtension: fileTypeToExtension[profile.photo.type],
+                })
+              )
+            : dispatch(
+                updateUserProfileThunk({
+                  userID: user.user_id,
+                  profile: {
+                    username: profile.username,
+                    email: profile.email,
+                    role: profile.role,
+                  },
+                })
+              );
         } else if (
           profile.password !== "" &&
           profile.password.length > 2 &&
           profile.password === profile.confirmPassword
         ) {
-          dispatch(
-            updateUserProfileThunk({
-              userID: user.user_id,
-              profile: {
-                username: profile.username,
-                email: profile.email,
-                role: profile.role,
-                password: profile.password,
-              },
-              fileExtension: profile.photo
-                ? fileTypeToExtension[profile.photo.type]
-                : "",
-            })
-          );
+          profile.photo
+            ? dispatch(
+                updateUserProfileThunk({
+                  userID: user.user_id,
+                  profile: {
+                    username: profile.username,
+                    email: profile.email,
+                    role: profile.role,
+                    password: profile.password,
+                  },
+                  fileExtension: fileTypeToExtension[profile.photo.type],
+                })
+              )
+            : dispatch(
+                updateUserProfileThunk({
+                  userID: user.user_id,
+                  profile: {
+                    username: profile.username,
+                    email: profile.email,
+                    role: profile.role,
+                    password: profile.password,
+                  },
+                })
+              );
         } else if (
           profile.password === "" ||
           profile.password.length <= 2 ||
