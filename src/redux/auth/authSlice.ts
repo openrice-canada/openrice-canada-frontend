@@ -53,7 +53,7 @@ export const updateUserProfileThunk = createAsyncThunk(
   }: {
     userID: string;
     profile: UpdateUserDto;
-    fileExtension: string;
+    fileExtension?: string;
   }) => {
     const response = await updateUserProfile(userID, profile, fileExtension);
     return response;

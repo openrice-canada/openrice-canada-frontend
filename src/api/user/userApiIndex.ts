@@ -13,7 +13,7 @@ export const getUserList = async (): Promise<User[]> => {
 export const updateUserProfile = async (
   userID: string,
   updateUserDto: UpdateUserDto,
-  fileExtension: string
+  fileExtension?: string
 ): Promise<UpdateUserInfoExtended> => {
   return apiClient.put(`/profile/${userID}`, { updateUserDto, fileExtension });
 };
