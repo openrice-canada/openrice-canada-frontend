@@ -14,15 +14,6 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "@supabase/supabase-js": "^2.38.4",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.57",
-    "@types/react": "^18.2.24",
-    "@types/react-dom": "^18.2.8",
-    "@types/react-router-dom": "^5.3.3",
-    "@vercel/analytics": "^1.1.1",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
@@ -48,9 +39,17 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "@types/google.maps": "^3.54.3",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.57",
+    "@types/react": "^18.2.24",
     "@types/react-datepicker": "^4.19.1",
+    "@types/react-dom": "^18.2.8",
     "@types/uuid": "^9.0.7",
+    "@vercel/analytics": "^1.1.1",
     "tailwindcss": "^3.3.3"
   },
   "eslintConfig": {
