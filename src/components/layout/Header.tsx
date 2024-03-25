@@ -7,9 +7,9 @@ import {
   IoPersonAddOutline,
 } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, IRootState } from "../../store";
-import { getCurrentUserThunk } from "../../redux/auth/authSlice";
 import { enqueueSnackbar } from "notistack";
+import { getCurrentUserThunk } from "../../redux/auth/authSlice";
+import { AppDispatch, IRootState } from "../../store";
 
 const Header = () => {
   const navigate = useNavigate();

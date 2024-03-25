@@ -60,7 +60,11 @@ export const createRestaurantThunk = createAsyncThunk(
 const restaurantSlice = createSlice({
   name: "restaurant",
   initialState,
-  reducers: {},
+  reducers: {
+    resetRestaurant: (state) => {
+      state.restaurant = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getRestaurantsByQueryThunk.fulfilled, (state, action) => {
       if (action.payload) {
@@ -82,4 +86,5 @@ const restaurantSlice = createSlice({
   },
 });
 
+export const { resetRestaurant } = restaurantSlice.actions;
 export default restaurantSlice.reducer;
