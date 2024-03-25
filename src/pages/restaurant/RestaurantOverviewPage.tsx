@@ -82,8 +82,10 @@ const RestaurantOverviewPage: React.FC = () => {
     fetchRestaurantReview();
     fetchReviewPhotos();
     fetchMenuPhotos();
-    setLoading(false);
-  }, [id, dispatch]);
+    if (restaurantDetail?.restaurant_id || !id || !isUUID(id)) {
+      setLoading(false);
+    }
+  }, [id, dispatch, restaurantDetail]);
 
   const openPopUp = (image: string, imageID: string) => {
     setSelectedImage({ id: imageID, photo_url: image });
@@ -129,9 +131,9 @@ const RestaurantOverviewPage: React.FC = () => {
   };
   const buttons = ["Reviews", "Photos", "Menus"];
 
-  return !restaurantDetail && loading ? (
+  return loading ? (
     <RestaurantDetailSkeletonLoader />
-  ) : !restaurantDetail && !loading ? (
+  ) : !restaurantDetail ? (
     <ErrorPage />
   ) : (
     restaurantDetail && (

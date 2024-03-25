@@ -48,7 +48,7 @@ const RestaurantHomePage = () => {
 
   useEffect(() => {
     if (
-      restaurants.length > 0 &&
+      restaurants.length > 6 &&
       (!searchParams.get("search") || !searchParams.get("dish"))
     ) {
       setLoading(false);
@@ -103,7 +103,7 @@ const RestaurantHomePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
           {loading &&
             Array.from({
-              length: 10,
+              length: 15,
             }).map((_, index) => (
               <RestaurantCardSkeletonLoader
                 key={`loader ${index}`}

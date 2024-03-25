@@ -1,7 +1,7 @@
 const RestaurantOverviewButton: React.FC<{
   button: string;
-  active: boolean;
-  setActive: React.Dispatch<React.SetStateAction<string>>;
+  active?: boolean;
+  setActive?: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ button, active, setActive }) => {
   return (
     <h1
@@ -9,7 +9,15 @@ const RestaurantOverviewButton: React.FC<{
         active && "text-orange-400"
       }`}
     >
-      <button onClick={() => setActive(button)}>{button}</button>
+      <button
+        onClick={() => {
+          if (setActive) {
+            setActive(button);
+          }
+        }}
+      >
+        {button}
+      </button>
     </h1>
   );
 };
