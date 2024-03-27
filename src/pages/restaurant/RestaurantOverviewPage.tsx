@@ -57,31 +57,16 @@ const RestaurantOverviewPage: React.FC = () => {
   const menuPhotos = useSelector((state: IRootState) => state.photo.menuPhotos);
 
   useEffect(() => {
-    const fetchRestaurantDetail = async () => {
+    const fetchRestaurant = async () => {
       if (!id || !isUUID(id)) return;
       dispatch(getRestaurantThunk(id));
-    };
-
-    const fetchRestaurantReview = async () => {
-      if (!id || !isUUID(id)) return;
       dispatch(getReviewsThunk(id));
-    };
-
-    const fetchReviewPhotos = async () => {
-      if (!id || !isUUID(id)) return;
       dispatch(getReviewPhotosThunk(id));
-    };
-
-    const fetchMenuPhotos = async () => {
-      if (!id || !isUUID(id)) return;
       dispatch(getMenuPhotosThunk(id));
     };
 
     setLoading(true);
-    fetchRestaurantDetail();
-    fetchRestaurantReview();
-    fetchReviewPhotos();
-    fetchMenuPhotos();
+    fetchRestaurant();
     if (restaurantDetail?.restaurant_id || !id || !isUUID(id)) {
       setLoading(false);
     }
